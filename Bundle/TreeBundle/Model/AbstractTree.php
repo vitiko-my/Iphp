@@ -7,7 +7,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @ORM\MappedSuperclass
- * Comment 1 2222
+ * Comment 1 2222 55555
  */
 abstract class AbstractTree
 {
@@ -75,7 +75,7 @@ abstract class AbstractTree
      * @ORM\OrderBy({"lft" = "ASC"})
      */
     protected $children;
-    
+
     public function __construct()
     {
         $this->children = new \Doctrine\Common\Collections\ArrayCollection();
