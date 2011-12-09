@@ -7,7 +7,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @ORM\MappedSuperclass
- * Comment
+ * Comment 1
  */
 abstract class AbstractTree
 {
