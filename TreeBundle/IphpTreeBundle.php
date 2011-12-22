@@ -1,6 +1,6 @@
 <?php
 
-namespace Iphp\Bundle\TreeBundle;
+namespace Iphp\TreeBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 

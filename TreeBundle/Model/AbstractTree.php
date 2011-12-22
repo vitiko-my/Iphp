@@ -1,6 +1,6 @@
 <?php
 
-namespace Iphp\Bundle\TreeBundle\Model;
+namespace Iphp\TreeBundle\Model;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;

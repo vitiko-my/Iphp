@@ -1,6 +1,6 @@
 <?php
 
-namespace Iphp\Bundle\TreeBundle\DependencyInjection;
+namespace Iphp\TreeBundle\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;

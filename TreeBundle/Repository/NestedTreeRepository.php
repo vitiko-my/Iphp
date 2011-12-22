@@ -1,6 +1,6 @@
 <?php
 
-namespace Iphp\Bundle\TreeBundle\Repository;
+namespace Iphp\TreeBundle\Repository;
 
 use Gedmo\Tree\Entity\Repository\NestedTreeRepository as GedmoNestedTreeRepository,
 Gedmo\Tool\Wrapper\EntityWrapper,
