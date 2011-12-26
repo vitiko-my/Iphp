@@ -1,0 +1,22 @@
+{% extends 'SonataAdminBundle:CRUD:base_list.html.twig' %}
+
+
+{% block table_body %}
+  <tbody>
+   {% for object in admin.datagrid.results %}
+     <tr>
+       {% for field_description in admin.list.elements %}
+           {{ object|render_list_element(field_description) }}
+          
+       {% endfor %}
+     </tr>
+     <tr>
+
+
+     </tr>
+   {% endfor %}
+   </tbody>
+
+
+
+{% endblock %}

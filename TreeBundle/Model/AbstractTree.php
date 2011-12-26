@@ -7,9 +7,8 @@ use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @ORM\MappedSuperclass
- * Comment 1 2222 55555 ЛЯЛЯЛЯЛЯ
  */
-abstract class AbstractTree
+abstract class AbstractTree implements TreeNodeInterface
 {
 
     /**

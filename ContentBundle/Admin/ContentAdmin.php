@@ -51,22 +51,25 @@ class ContentAdmin extends Admin
                 ->with('Основные')
                 ->add('enabled', null, array('required' => false, 'label' => 'Показывать на сайте'))
                 ->add('author', 'sonata_type_model', array(), array('edit' => 'list', 'label' => 'Автор'))
-                ->add('images', 'sonata_type_model', array(), array( 'edit' => 'inline'/*,
+                ->add('images', 'sonata_type_model', array(), array('edit' => 'inline' /*,
                                                                   'inline' => 'table'*/))
-                ->add('title',null, array( 'label' => 'Заголовок'))
-                ->add('abstract',null, array( 'label' => 'Анонс'))
+                ->add('title', null, array('label' => 'Заголовок'))
+                ->add('abstract', null, array('label' => 'Анонс'))
                 ->add('contentFormatter', 'sonata_formatter_type_selector', array(
                                                                                  'source' => 'rawContent',
-                                                                                 'target' => 'content'
+                                                                                 'target' => 'content',
+                                                                                 'label' => 'Форматирование'
                                                                             ))
-                ->add('rawContent')
+                ->add('rawContent', null, array('label' => 'Текст'))
                 ->end()
 
-                ->with('Options', array('collapsed' => true))
-                ->add('commentsCloseAt')
-                ->add('commentsEnabled', null, array('required' => false))
+               // ->with('Options', array('collapsed' => true))
+              //  ->add('commentsCloseAt')
+              //  ->add('commentsEnabled', null, array('required' => false))
         // ->add('commentsDefaultStatus', 'choice', array('choices' => Comment::getStatusList(), 'expanded' => true))
-                ->end();
+             //   ->end();
+
+        ;
     }
 
     /**
