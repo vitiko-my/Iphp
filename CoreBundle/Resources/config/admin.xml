@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <!-- POST -->
+        <parameter key="iphp.core.admin.rubric.class">Iphp\CoreBundle\Admin\RubricAdmin</parameter>
+        <parameter key="iphp.core.admin.rubric.controller">IphpTreeBundle:CRUD</parameter>
+        <parameter key="iphp.core.admin.rubric.entity">Application\Iphp\CoreBundle\Entity\Rubric</parameter>
+        <parameter key="iphp.core.admin.rubric.translation_domain">admin-messages</parameter>
+
+    </parameters>
+
+    <services>
+
+        <service id="iphp.core.admin.rubric" class="%iphp.core.admin.rubric.class%">
+            <tag name="sonata.admin" manager_type="orm" group="Структура" label="Рубрики" />
+            <argument />
+            <argument>%iphp.core.admin.rubric.entity%</argument>
+            <argument>%iphp.core.admin.rubric.controller%</argument>
+
+            <call method="setUserManager">
+                <argument type="service" id="fos_user.user_manager" />
+            </call>
+
+            <call method="setTranslationDomain">
+                <argument>%iphp.core.admin.rubric.translation_domain%</argument>
+            </call>
+        </service>
+
+    </services>
+
+</container>

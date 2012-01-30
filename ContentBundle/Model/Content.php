@@ -42,6 +42,9 @@ abstract class Content implements ContentInterface
 
     protected $images;
 
+
+    protected $rubric;
+
     /**
      * Set title
      *
@@ -412,5 +415,15 @@ abstract class Content implements ContentInterface
     public function getImages()
     {
         return $this->images;
+    }
+
+    public function setRubric($rubric)
+    {
+        $this->rubric = $rubric;
+    }
+
+    public function getRubric()
+    {
+        return $this->rubric;
     }
 }

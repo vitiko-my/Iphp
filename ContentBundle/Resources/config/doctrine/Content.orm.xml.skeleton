@@ -33,5 +33,15 @@
         </many-to-one>
 
 
+
+  <many-to-one
+            field="rubric"
+            target-entity="Application\Iphp\CoreBundle\Entity\Rubric"
+           >
+            <cascade>
+                <cascade-persist />
+
+            </cascade>
+  </many-to-one>
     </entity>
 </doctrine-mapping>

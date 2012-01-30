@@ -50,7 +50,9 @@ class ContentAdmin extends Admin
         $formMapper
                 ->with('Основные')
                 ->add('enabled', null, array('required' => false, 'label' => 'Показывать на сайте'))
-                ->add('author', 'sonata_type_model', array(), array('edit' => 'list', 'label' => 'Автор'))
+
+                ->add('rubric', 'sonata_type_model', array('label' => 'Рубрика', 'required' => true), array('edit' => 'list'))
+                ->add('author', 'sonata_type_model', array( 'label' => 'Автор'), array('edit' => 'list'))
                 ->add('images', 'sonata_type_model', array(), array('edit' => 'inline' /*,
                                                                   'inline' => 'table'*/))
                 ->add('title', null, array('label' => 'Заголовок'))
@@ -61,13 +63,11 @@ class ContentAdmin extends Admin
                                                                                  'label' => 'Форматирование'
                                                                             ))
                 ->add('rawContent', null, array('label' => 'Текст'))
-                ->end()
-
-               // ->with('Options', array('collapsed' => true))
-              //  ->add('commentsCloseAt')
-              //  ->add('commentsEnabled', null, array('required' => false))
-        // ->add('commentsDefaultStatus', 'choice', array('choices' => Comment::getStatusList(), 'expanded' => true))
-             //   ->end();
+                ->end()// ->with('Options', array('collapsed' => true))
+            //  ->add('commentsCloseAt')
+            //  ->add('commentsEnabled', null, array('required' => false))
+            // ->add('commentsDefaultStatus', 'choice', array('choices' => Comment::getStatusList(), 'expanded' => true))
+            //   ->end();
 
         ;
     }
