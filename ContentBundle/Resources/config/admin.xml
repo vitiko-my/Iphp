@@ -6,9 +6,9 @@
     <parameters>
         <!-- POST -->
         <parameter key="iphp.content.admin.content.class">Iphp\ContentBundle\Admin\ContentAdmin</parameter>
-        <parameter key="iphp.content.admin.post.controller">SonataAdminBundle:CRUD</parameter>
-        <parameter key="iphp.content.admin.post.entity">Application\Iphp\ContentBundle\Entity\Content</parameter>
-        <parameter key="iphp.content.admin.post.translation_domain">IphpContentBundle</parameter>
+        <parameter key="iphp.content.admin.content.controller">SonataAdminBundle:CRUD</parameter>
+        <parameter key="iphp.content.admin.content.entity">Application\Iphp\ContentBundle\Entity\Content</parameter>
+        <parameter key="iphp.content.admin.content.translation_domain">admin-messages</parameter>
 
     </parameters>
 
@@ -17,8 +17,8 @@
         <service id="iphp.content.admin.content" class="%iphp.content.admin.content.class%">
             <tag name="sonata.admin" manager_type="orm" group="Контент" label="Материалы" />
             <argument />
-            <argument>%iphp.content.admin.post.entity%</argument>
-            <argument>%iphp.content.admin.post.controller%</argument>
+            <argument>%iphp.content.admin.content.entity%</argument>
+            <argument>%iphp.content.admin.content.controller%</argument>
 
             <call method="setUserManager">
                 <argument type="service" id="fos_user.user_manager" />
@@ -30,7 +30,7 @@
 
 
             <call method="setTranslationDomain">
-                <argument>%iphp.content.admin.post.translation_domain%</argument>
+                <argument>%iphp.content.admin.content.translation_domain%</argument>
             </call>
         </service>
 

@@ -24,8 +24,8 @@ class ContentIndexModule extends Module
 
     protected function registerRoutes()
     {
-        $this->addRoute(new Route('/', array('_controller' => 'IphpContentBundle:Content:index')), 'index');
-        $this->addRoute(new Route('/{id}/', array('_controller' => 'IphpContentBundle:Content:contentById')), 'contentById');
+        $this->addRoute(new Route('/', array('_controller' => 'IphpContentBundle:Content:index')), 'index')
+             ->addRoute(new Route('/{id}/', array('_controller' => 'IphpContentBundle:Content:contentById')), 'contentById');
     }
 
 }

@@ -2,7 +2,7 @@
 
 namespace Iphp\CoreBundle\Entity;
 
-use Gedmo\Tree\Entity\Repository\NestedTreeRepository;
+use Iphp\TreeBundle\Repository\NestedTreeRepository;
 
 class BaseRubricRepository extends NestedTreeRepository
 {

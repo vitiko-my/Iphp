@@ -33,11 +33,11 @@ class ContentAdmin extends Admin
     protected function configureShowField(ShowMapper $showMapper)
     {
         $showMapper
-                ->add('author')
-                ->add('enabled')
-                ->add('title')
-                ->add('abstract')
-                ->add('content');
+        // ->add('author')
+                ->add('enabled', null, array( 'label' => 'Показывать на сайте'))
+                ->add('title', null, array('label' => 'Заголовок'))
+                ->add('abstract', null, array('label' => 'Анонс'))
+                ->add('content', null, array('label' => 'Текст'));
     }
 
     /**
@@ -51,17 +51,26 @@ class ContentAdmin extends Admin
                 ->with('Основные')
                 ->add('enabled', null, array('required' => false, 'label' => 'Показывать на сайте'))
 
-                ->add('rubric', 'sonata_type_model', array('label' => 'Рубрика', 'required' => true), array('edit' => 'list'))
-                ->add('author', 'sonata_type_model', array( 'label' => 'Автор'), array('edit' => 'list'))
-                ->add('images', 'sonata_type_model', array(), array('edit' => 'inline' /*,
-                                                                  'inline' => 'table'*/))
+        //  ->add('rubric', 'sonata_type_model', array('label' => 'Рубрика', 'required' => true), array('edit' => 'list'))
+
+
+                ->add('rubric', null,
+            array(
+                'label' => 'Рубрика',
+                'property' => 'titleLevelIndented'))
+
+
+        // ->add('author', 'sonata_type_model', array( 'label' => 'Автор'), array('edit' => 'list'))
+        //  ->add('images', 'sonata_type_model', array(), array('edit' => 'inline' /*,
+        //                                                    'inline' => 'table' */))
                 ->add('title', null, array('label' => 'Заголовок'))
                 ->add('abstract', null, array('label' => 'Анонс'))
-                ->add('contentFormatter', 'sonata_formatter_type_selector', array(
-                                                                                 'source' => 'rawContent',
-                                                                                 'target' => 'content',
-                                                                                 'label' => 'Форматирование'
-                                                                            ))
+                ->add('contentFormatter', 'sonata_formatter_type_selector',
+            array(
+                'source' => 'rawContent',
+                'target' => 'content',
+                'label' => 'Форматирование'
+            ))
                 ->add('rawContent', null, array('label' => 'Текст'))
                 ->end()// ->with('Options', array('collapsed' => true))
             //  ->add('commentsCloseAt')
@@ -80,10 +89,10 @@ class ContentAdmin extends Admin
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-                ->addIdentifier('title')
-                ->add('author')
-                ->add('enabled')
-                ->add('commentsEnabled');
+                ->addIdentifier('title', null, array('label' => 'Заголовок'))
+                ->add('rubric', null, array('label' => 'Рубрика'))
+                ->add('enabled', null, array('label' => 'Показывать на сайте'));
+        // ->add('commentsEnabled');
     }
 
     /**
@@ -136,8 +145,8 @@ class ContentAdmin extends Admin
         $id = $admin->getRequest()->get('id');
 
         $menu->addChild(
-            $this->trans('sidemenu.link_viewcontent'),
-            array('uri' => $admin->generateUrl('edit', array('id' => $id)))
+            $this->trans('Content Show'),
+            array('uri' => $admin->generateUrl('show', array('id' => $id)))
         );
 
         /*   $menu->addChild(

@@ -54,7 +54,7 @@ abstract class Content implements ContentInterface
     {
         $this->title = $title;
 
-        $this->setSlug(self::slugify($title));
+       $this->setSlug(self::slugify($title));
     }
 
 

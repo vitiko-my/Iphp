@@ -2,38 +2,51 @@
 namespace Iphp\TreeBundle\Admin;
 
 use Sonata\AdminBundle\Admin\Admin;
+use Sonata\AdminBundle\Route\RouteCollection;
+use Iphp\TreeBundle\Model\TreeNodeIterator;
 
 
 class TreeAdmin extends Admin
 {
+
+
 
     function getListTemplate()
     {
         return 'IphpTreeBundle:CRUD:tree.html.twig';
     }
 
-
-/*    public function configure()
+    protected function configureRoutes(RouteCollection $collection)
     {
-       $this->templates['list'] = 'IphpTreeBundle:CRUD:tree.html.twig';
-    }*/
+        $collection->add('chpos', '{id}/chpos/{parent}/{after}',
+            array('_controller' => 'IphpTreeBundle:CRUD:changePosition'));
 
-/*    public function listAction()
+    }
+
+
+    public function changePosition($node, $parent, $after)
     {
-        if (false === $this->admin->isGranted('LIST')) {
-            throw new AccessDeniedException();
-        }
+        $this->preUpdate($node);
+        $this->getModelManager()->changePosition($node, $parent, $after);
+        $this->postUpdate($node);
+    }
 
-        $datagrid = $this->admin->getDatagrid();
-        $formView = $datagrid->getForm()->createView();
 
-        // set the theme for the current Admin Form
-        $this->get('twig')->getExtension('form')->setTheme($formView, $this->admin->getFilterTheme());
 
-        return $this->render($this->admin->getListTemplate(), array(
-            'action'   => 'list',
-            'form'     => $formView,
-            'datagrid' => $datagrid
-        ));
-    }*/
+
+
+
+    public function getTreeIterator()
+    {
+        $qb = $this->getDatagrid()->getQuery()->getQueryBuilder();
+
+        $qb->orderBy('o.left');
+       //$proxyQuery->setSortBy('left');
+
+      //  print    $qb->getQuery()->getResult();
+       return new TreeNodeIterator($qb->getQuery()->getResult());
+    }
+
+
+
 }

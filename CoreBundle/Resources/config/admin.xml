@@ -27,6 +27,18 @@
             <call method="setTranslationDomain">
                 <argument>%iphp.core.admin.rubric.translation_domain%</argument>
             </call>
+
+
+            <call method="setModelManager">
+                <argument type="service" id="sonata.admin.manager.orm.tree" />
+            </call>
+
+            <!--
+            <call method="setDatagridBuilder">
+                <argument type="service" id="sonata.admin.builder.orm_datagrid.tree" />
+            </call>
+-->
+
         </service>
 
     </services>

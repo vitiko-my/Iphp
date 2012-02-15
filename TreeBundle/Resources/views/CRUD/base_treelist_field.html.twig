@@ -11,7 +11,8 @@ file that was distributed with this source code.
 
 <td class="sonata-ba-list-field sonata-ba-list-field-{{ field_description.type }}" objectId="{{ admin.id(object) }}"
 
- style="padding-left:{{ object.level*30+10 }}px"
+    style="{% if field_description.getOption('width')%}width:{{field_description.getOption('width')}} {% endif%}"
+{# style="padding-left:{{ object.level*30+10 }}px" #}
 >
 
 

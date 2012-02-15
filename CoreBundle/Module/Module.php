@@ -31,8 +31,12 @@ abstract class Module
     protected $name;
 
 
-    public function __construct()
+
+    protected $rubric;
+
+    public function __construct(\Application\Iphp\CoreBundle\Entity\Rubric $rubric = null)
     {
+        $this->rubric = $rubric;
         $this->routeCollection = new RouteCollection();
 
         $this->initialization();
@@ -52,8 +56,16 @@ abstract class Module
 
     protected function addRoute(Route $route, $name = '')
     {
-      $this->routeCollection->add ($name, $route);
+      //print '<br>--'.$this->prepareRubricPath($this->rubric->getFullPath()).'_'.$name;
+      $this->routeCollection->add (
+          $this->rubric ?  $this->prepareRubricPath($this->rubric->getFullPath()).'_'.$name : $name, $route);
       return $this;
+    }
+
+
+    protected function prepareRubricPath($path)
+    {
+        return str_replace (array ('/','-'),'_',substr ($path,1,-1));
     }
 
     public function getRoutes()

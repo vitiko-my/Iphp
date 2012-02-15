@@ -7,8 +7,6 @@ namespace Iphp\CoreBundle\Admin;
 use Iphp\TreeBundle\Admin\TreeAdmin;
 
 
-
-
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
@@ -25,6 +23,11 @@ class RubricAdmin extends TreeAdmin
      */
     protected $userManager;
 
+
+    public function getNewInstance()
+    {
+        return parent::getNewInstance()->setStatus(true);
+    }
 
     /**
      * @param \Sonata\AdminBundle\Show\ShowMapper $showMapper
@@ -49,17 +52,21 @@ class RubricAdmin extends TreeAdmin
     {
         $formMapper
                 ->with('Основные')
-                ->add('status', null, array('required' => false, 'label' => 'Показывать на сайте'))
+                ->add('status', 'checkbox', array('required' => false, 'label' => 'Показывать на сайте'))
 
                 ->add('title', null, array('label' => 'Заголовок'))
-                ->add('parent', null, array(
-                                           'label' => 'Родительская рубрика',
-                                           'property' => 'titleLevelIndented',
-                                           /*    'required' => true*/),
-                      array('template' => 'dsadas'))
+                ->add('parent', null,
+                  array(
+                  'label' => 'Родительская рубрика',
+                  'property' => 'titleLevelIndented'))
                 ->add('path', 'text', array('label' => 'Директория'))
                 ->add('abstract', null, array('label' => 'Анонс'))
-                ->add('controllerName', null, array('label' => 'Название контроллера'))
+                ->add('controllerName', null, array('label' => 'Название контроллера или бандла'))
+                ->add('controllerChooser', 'choice',
+                   array('label' => 'Выберите модуль',
+                         'property_path' => false,
+                     )
+        )
                 ->end()// ->with('Options', array('collapsed' => true))
             //  ->add('commentsCloseAt')
             //  ->add('commentsEnabled', null, array('required' => false))
@@ -77,11 +84,13 @@ class RubricAdmin extends TreeAdmin
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
+        // ->add('status', null, array('label' => 'Показывать', 'width' => '30px'))
                 ->addIdentifier('title', null, array(
-                                                    'label' => 'Заголовок',
-                                                    'template' => 'IphpTreeBundle:CRUD:base_treelist_field.html.twig '))
-                ->add('fullPath', null, array('label' => 'Путь'))
-                ->add('controllerName', null, array('label' => 'Контроллер'));
+            'label' => 'Заголовок',
+            'template' => 'IphpTreeBundle:CRUD:base_treelist_field.html.twig '))
+                ->add('fullPath', null, array('label' => 'Путь', 'width' => '300px',
+            'template' => 'IphpTreeBundle:CRUD:base_treelist_field.html.twig '))/* ->add('controllerName', null, array('label' => 'Контроллер',  'width' => '100px'))*/
+        ;
 
     }
 

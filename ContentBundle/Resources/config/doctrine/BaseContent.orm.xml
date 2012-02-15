@@ -4,7 +4,7 @@
 
 
         <field name="title"             type="string"       column="title"      />
-        <field name="abstract"          type="text"         column="abstract"   />
+        <field name="abstract"          type="text"         column="abstract"   nullable="true"/>
         <field name="content"           type="text"         column="content"    />
         <field name="rawContent"        type="text"         column="raw_content"  />
         <field name="contentFormatter"  type="string"       column="content_formatter" />

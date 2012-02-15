@@ -24,7 +24,16 @@ class IphpCoreExtension extends Extension
        // $loader->load('services.xml');
 
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
-        $loader->load('admin.xml');
+
+        $loader->load('twig.xml');
+        if (substr ($container->getParameter('kernel.environment'),0,5) == 'admin')
+        {
+         $loader->load('admin.xml');
+        }
+        else
+        {
+          $loader->load('front.xml');
+        }
       //  $loader->load('orm.xml');
       //  $loader->load('twig.xml');
       //  $loader->load('form.xml');

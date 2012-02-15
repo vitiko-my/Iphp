@@ -33,6 +33,8 @@ abstract class Rubric implements RubricInterface, \Iphp\TreeBundle\Model\TreeNod
 
     protected $parent;
 
+    protected $parentId;
+
     protected $children;
 
 
@@ -116,6 +118,7 @@ abstract class Rubric implements RubricInterface, \Iphp\TreeBundle\Model\TreeNod
     public function setStatus($status)
     {
         $this->status = $status;
+        return $this;
     }
 
     /**
@@ -286,6 +289,11 @@ abstract class Rubric implements RubricInterface, \Iphp\TreeBundle\Model\TreeNod
     public function getControllerName()
     {
         return $this->controllerName;
+    }
+
+    public function getParentId()
+    {
+        return $this->parentId;
     }
 
 

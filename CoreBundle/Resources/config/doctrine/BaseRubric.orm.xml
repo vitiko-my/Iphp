@@ -12,9 +12,11 @@
 
 
         <field name="path" type="string"  column="path" nullable="false" />
+        <field name="parentId" type="integer"  column="parent_id" nullable="true" />
+
         <field name="fullPath" type="string" column="full_path" nullable="false" />
 
-        <field name="status" type="integer" column="status" default="false"/>
+        <field name="status" type="boolean"      column="status"        default="false" />
 
 
         <field name="controllerName" type="string" column="controller" nullable="true" />

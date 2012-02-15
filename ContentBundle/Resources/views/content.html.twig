@@ -1,0 +1,15 @@
+{% extends '::base.html.twig' %}
+
+
+{% block body %}
+
+<h1>{{ content.title }}</h1>
+
+
+<div style="padding:5px">
+{{ content.content|raw}}
+</div>
+
+
+
+{% endblock body %}
