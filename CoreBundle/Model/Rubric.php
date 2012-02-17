@@ -14,6 +14,8 @@ abstract class Rubric implements RubricInterface, \Iphp\TreeBundle\Model\TreeNod
 
     protected $fullPath;
 
+    protected $redirectUrl;
+
     protected $status;
 
     protected $controllerName;
@@ -294,6 +296,17 @@ abstract class Rubric implements RubricInterface, \Iphp\TreeBundle\Model\TreeNod
     public function getParentId()
     {
         return $this->parentId;
+    }
+
+    public function setRedirectUrl($redirectUrl)
+    {
+        $this->redirectUrl = $redirectUrl;
+        return $this;
+    }
+
+    public function getRedirectUrl()
+    {
+        return $this->redirectUrl;
     }
 
 

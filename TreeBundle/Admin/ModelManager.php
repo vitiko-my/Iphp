@@ -24,6 +24,10 @@ class ModelManager extends \Sonata\DoctrineORMAdminBundle\Model\ModelManager
 
 
 
+                print 'Set'.$node->getTitle().' (parent: '.$node->getParentId().') after '.
+                         $afterNode->getTitle().' (parent: '.$afterNode->getParentId().') ';
+
+
                 if (!$afterNode )   throw new ModelManagerException ('Не найден узел c id='.$after);
 
                 if ($afterNode->getParentId() != $node->getParentId())

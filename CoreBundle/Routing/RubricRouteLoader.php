@@ -19,7 +19,6 @@ use Symfony\Component\Config\Loader\Loader;
 use Symfony\Component\Config\Loader\LoaderResolverInterface;
 
 
-
 /*
 use Symfony\Component\Config\Loader\FileLoader;
 use Symfony\Component\Config\Resource\FileResource;
@@ -30,6 +29,10 @@ use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 
 use Symfony\Component\Yaml\Yaml;
 */
+
+use Symfony\Component\HttpKernel\Kernel;
+use Doctrine\ORM\EntityManager;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class RubricRouteLoader implements LoaderInterface
 {
@@ -51,16 +54,13 @@ class RubricRouteLoader implements LoaderInterface
      */
     protected $moduleFactory;
 
-    public function __construct(
-        \Symfony\Component\HttpKernel\Kernel $kernel,
-        \Doctrine\ORM\EntityManager $em,
-        $container)
+    public function __construct(Kernel $kernel, EntityManager $em, ContainerInterface $container)
     {
         $this->kernel = $kernel;
         $this->em = $em;
         $this->container = $container;
 
-        $this->moduleFactory = new  \Iphp\CoreBundle\Module\ModuleFactory();
+        $this->moduleManager = $container->get('iphp.core.module.manager');
     }
 
 
@@ -71,11 +71,7 @@ class RubricRouteLoader implements LoaderInterface
      */
     public function supports($resource, $type = null)
     {
-        if ($type == 'iphp_rubric') {
-            return true;
-        }
-
-        return false;
+        return ($type == 'iphp_rubric');
     }
 
     /**
@@ -89,59 +85,30 @@ class RubricRouteLoader implements LoaderInterface
 
         //print 'Грузим роуты';
 
-        $logger = $this->container->get ('logger');
-
+        $logger = $this->container->get('logger');
         $logger->info('Загрузка рубрик для построения роутинга');
 
-
         $a = microtime(true);
-
         $rubrics = $this->em->getRepository('ApplicationIphpCoreBundle:Rubric')
                 ->createQueryBuilder('r')
                 ->orderBy('r.level', 'DESC')
                 ->getQuery()->getResult();
 
 
-        /*        $pattern = '/catalog/';
-      $defaults = array(            '_controller' => 'InformikaCatalogBundle:Navigation:chose',        );
-      $route = new Route($pattern, $defaults);
-      $routes->add('InformikaCatalogBundle_navigation', $route);
-
-       return $routes;*/
-
-        foreach ($rubrics as $rubric)
-        {
-          //  print '<br>' . $rubric->getFullPath();
-
-
+        foreach ($rubrics as $rubric) {
             $controller = $rubric->getControllerName();
-
-          //  print ':' . $controller;
-
-
             $rubricRoutes = null;
-            //В контроллере можеть быть:
-            // Название бандла - пытаемся использовать роутинг из бандла: файд routing.xml или из контроллеров
-            if ($controller) {
 
-                if (substr($controller, -6) == 'Bundle') {
-                    $rubricRoutes = $this->loadFromBundle($controller);
-                }
-                if (substr($controller, -6) == 'Module') {
-
-
-                    $module = $this->moduleFactory->getModuleFromRubric ($rubric);
-
-                    if ($module)
-                    $rubricRoutes = $module->getRoutes();
-                }
-
-
+            //В контроллере можеть быть: Класс модуля
+            if ($controller && substr($controller, -6) == 'Module') {
+                $module = $this->moduleManager->getModuleFromRubric($rubric);
+                //print '--'.$rubric.' '.get_class ($module);
+                if ($module) $rubricRoutes = $module->getRoutes();
             }
 
 
             if ($rubricRoutes) {
-             //   print 'Префикс для коллекции:' . substr($rubric->getFullPath(), 0, -1);
+                //   print 'Префикс для коллекции:' . substr($rubric->getFullPath(), 0, -1);
                 foreach ($rubricRoutes as $route)
                 {
                     // print_r ($route->getDefaults());
@@ -153,9 +120,9 @@ class RubricRouteLoader implements LoaderInterface
 
 
         /*$pattern = '/extra';
-        $defaults = array(            '_controller' => 'AcmeRoutingBundle:Demo:extraRoute',        );
-        $route = new Route($pattern, $defaults);
-        $routes->add('extraRoute', $route);*/
+       $defaults = array(            '_controller' => 'AcmeRoutingBundle:Demo:extraRoute',        );
+       $route = new Route($pattern, $defaults);
+       $routes->add('extraRoute', $route);*/
 
 
         /* foreach ($this->adminServiceIds as $id) {
@@ -174,61 +141,22 @@ class RubricRouteLoader implements LoaderInterface
        $collection->addResource(new FileResource($reflection->getFileName()));*/
 
 
-        $b = microtime(true)-$a;
+        $b = microtime(true) - $a;
 
-        $logger->info('Загрузили роуты за'.$b.' с');
+        $logger->info('Загрузили роуты за' . $b . ' с');
 
         return $routes;
     }
 
 
-    public function getResolver()
+    public
+    function getResolver()
     {
     }
 
-    public function setResolver(LoaderResolverInterface $resolver)
+    public
+    function setResolver(LoaderResolverInterface $resolver)
     { // irrelevant to us, since we don't need a resolver
-    }
-
-
-
-
-
-    function loadFromBundle($bundleName)
-    {
-        $bundleRoutes = null;
-        $bundle = $this->kernel->getBundle($bundleName);
-
-        if ($bundle) {
-            //  var_dump ($bundle);
-
-            $bundleDir = $bundle->getPath();
-
-
-            //Пробуем Resources/config/routing.yml
-
-            $ymlConfigFile = $bundleDir . '/Resources/config/routing.yml';
-            if (file_exists($ymlConfigFile)) {
-                //print 'Есть routing.yml!';
-
-
-                //$bundleRoutes = new \Symfony\Component\Routing\Loader\YamlFileLoader ();
-                // $bundleRoutes = Yaml::parse( $ymlConfigFile);
-
-                $loader = $this->container->get('routing.loader');
-                $bundleRoutes = $loader->load($ymlConfigFile);
-
-
-                //  var_dump($bundleRoutes);
-            }
-
-        }
-        else
-        {
-            die ('Нет бандла ' . $bundleName);
-        }
-
-        return $bundleRoutes;
     }
 
 

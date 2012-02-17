@@ -57,8 +57,24 @@ class ContentController extends Controller
     }
 
 
+    function listAction()
+    {
+        $contents = $this->getRepository()->findByRubric ($this->getCurrentRubric());
+
+
+        return $this->render('IphpContentBundle::list.html.twig',
+                                     array('contents' => $contents));
+
+    }
+
     public function contentByIdAction($id)
     {
-        die ('Yopty2222! - ' . $id);
+        $content = $this->getRepository()->findByRubricAndSlug ($this->getCurrentRubric(), $id);
+
+        if (!$content) throw $this->createNotFoundException('Материал с кодом "'.$id.'" не найден');
+
+        return $this->render('IphpContentBundle::content.html.twig',
+                                             array('content' => $content));
+
     }
 }

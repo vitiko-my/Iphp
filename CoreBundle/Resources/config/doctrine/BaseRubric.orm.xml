@@ -16,6 +16,9 @@
 
         <field name="fullPath" type="string" column="full_path" nullable="false" />
 
+
+        <field name="redirectUrl" type="string" column="redirect_url" nullable="true" />
+
         <field name="status" type="boolean"      column="status"        default="false" />
 
 

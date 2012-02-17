@@ -61,10 +61,15 @@ class RubricAdmin extends TreeAdmin
                   'property' => 'titleLevelIndented'))
                 ->add('path', 'text', array('label' => 'Директория'))
                 ->add('abstract', null, array('label' => 'Анонс'))
-                ->add('controllerName', null, array('label' => 'Название контроллера или бандла'))
-                ->add('controllerChooser', 'choice',
+                ->add('redirectUrl', null, array('label' => 'URL редирект'))
+                ->add('controllerName'
+
+                /*, null, array('label' => 'Название контроллера или бандла'))
+                ->add('module'*/
+            , 'modulechoice',
                    array('label' => 'Выберите модуль',
-                         'property_path' => false,
+                        // 'property_path' => false,
+                         'empty_value' => ' ',
                      )
         )
                 ->end()// ->with('Options', array('collapsed' => true))

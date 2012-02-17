@@ -1,7 +1,10 @@
 <?php
 
-
 namespace Iphp\CoreBundle\Model;
+
+
+use Doctrine\ORM\EntityManager;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class RubricFactory
 {
@@ -9,7 +12,9 @@ class RubricFactory
     protected $request;
 
 
-    public function __construct(\Doctrine\ORM\EntityManager $em,  \Symfony\Component\DependencyInjection\ContainerInterface $container)
+    protected $currentRubric = -1;
+
+    public function __construct(EntityManager $em, ContainerInterface $container)
     {
       $this->em = $em;
       $this->request = $container->hasScope('request') && $container->isScopeActive('request') ?
@@ -30,10 +35,17 @@ class RubricFactory
 
     public function getCurrent()
     {
-        if (!$this->request && !$this->request->get('_rubric')) return null;
-        return $this->getByPath($this->request->get('_rubric'));
+        if ($this->currentRubric === -1)
+        $this->currentRubric = $this->request && $this->request->get('_rubric') ?
+                $this->getByPath($this->request->get('_rubric')) :  null;
+        return $this->currentRubric;
     }
 
+
+    public function generatePath($rubric, $absolute = false)
+    {
+        return $this->request->getBaseUrl().$rubric->getFullPath();
+    }
 
 
 

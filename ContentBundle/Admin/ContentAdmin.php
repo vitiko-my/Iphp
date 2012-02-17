@@ -65,12 +65,12 @@ class ContentAdmin extends Admin
         //                                                    'inline' => 'table' */))
                 ->add('title', null, array('label' => 'Заголовок'))
                 ->add('abstract', null, array('label' => 'Анонс'))
-                ->add('contentFormatter', 'sonata_formatter_type_selector',
+          /*      ->add('contentFormatter', 'sonata_formatter_type_selector',
             array(
                 'source' => 'rawContent',
                 'target' => 'content',
                 'label' => 'Форматирование'
-            ))
+            ))*/
                 ->add('rawContent', null, array('label' => 'Текст'))
                 ->end()// ->with('Options', array('collapsed' => true))
             //  ->add('commentsCloseAt')
@@ -188,7 +188,9 @@ class ContentAdmin extends Admin
      */
     public function prePersist($content)
     {
-        $content->setContent($this->getPoolFormatter()->transform($content->getContentFormatter(), $content->getRawContent()));
+        $content->setContentFormatter('raw');
+
+         $content->setContent($this->getPoolFormatter()->transform($content->getContentFormatter(), $content->getRawContent()));
     }
 
     /**
@@ -196,6 +198,7 @@ class ContentAdmin extends Admin
      */
     public function preUpdate($content)
     {
+        $content->setContentFormatter('raw');
         $content->setContent($this->getPoolFormatter()->transform($content->getContentFormatter(), $content->getRawContent()));
     }
 }

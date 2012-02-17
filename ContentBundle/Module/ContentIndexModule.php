@@ -8,7 +8,7 @@
 namespace Iphp\ContentBundle\Module;
 
 use Iphp\CoreBundle\Module\Module;
-use Symfony\Component\Routing\Route;
+
 
 /**
  * Модуль - материал в индексе рубрики
@@ -16,16 +16,15 @@ use Symfony\Component\Routing\Route;
 class ContentIndexModule extends Module
 {
 
-
-    protected function initialization()
+    function __construct()
     {
-        $this->setName('Контент - индекс рубрики');
+        $this->setName('Материал - индекс рубрики');
     }
 
     protected function registerRoutes()
     {
-        $this->addRoute(new Route('/', array('_controller' => 'IphpContentBundle:Content:index')), 'index')
-             ->addRoute(new Route('/{id}/', array('_controller' => 'IphpContentBundle:Content:contentById')), 'contentById');
+        $this->addRoute('index', '/', array('_controller' => 'IphpContentBundle:Content:index'));
+        //    ->addRoute('contentById','/{id}/', array('_controller' => 'IphpContentBundle:Content:contentById'));
     }
 
 }

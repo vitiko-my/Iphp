@@ -1,0 +1,20 @@
+{% extends '::base.html.twig' %}
+
+
+{% block body %}
+
+<h1>{{ iphp.rubric }}</h1>
+
+
+<div style="padding:5px">
+
+{% for content in contents %}
+
+    <li><a href="{{ cpath (content) }}">{{ content }}</a></li>
+
+{% endfor %}
+</div>
+
+
+
+{% endblock body %}
