@@ -11,15 +11,11 @@ class CRUDController extends SonataCRUDController
 
     public function changePositionAction($id, $parent, $after)
     {
- ;
+
         $node = $this->admin->getObject($id);
 
         if ($parent == 0) $parent = 1;
 
-
-        $this->admin->changePosition($node, $parent, $after);
-
-        exit();
 
         try {
             $this->admin->changePosition($node, $parent, $after);

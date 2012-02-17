@@ -156,8 +156,8 @@ $(document).ready(function(){
 
                 url = urlTpl.replace ('_id_', itemId).replace ('_parent_',parentItemId).replace ('_after_',prevItemId);
 
-                alert (url);
-               return;
+               // alert (url);
+
 
                  $.get(url, function(data) {
                   $('#alertmsgajaxtxt').html(data);

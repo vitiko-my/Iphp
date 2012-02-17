@@ -48,6 +48,7 @@ abstract class Rubric implements RubricInterface, \Iphp\TreeBundle\Model\TreeNod
     public function setTitle($title)
     {
         $this->title = $title;
+        return $this;
     }
 
 
@@ -198,6 +199,8 @@ abstract class Rubric implements RubricInterface, \Iphp\TreeBundle\Model\TreeNod
     }
 
 
+
+
     /**
      * Get lft
      *
@@ -245,6 +248,7 @@ abstract class Rubric implements RubricInterface, \Iphp\TreeBundle\Model\TreeNod
     public function setParent(\Iphp\TreeBundle\Model\TreeNodeInterface $parent = null)
     {
         $this->parent = $parent;
+        return $this;
     }
 
     public function getParent()

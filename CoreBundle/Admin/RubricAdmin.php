@@ -68,7 +68,7 @@ class RubricAdmin extends TreeAdmin
                 ->add('module'*/
             , 'modulechoice',
                    array('label' => 'Выберите модуль',
-                        // 'property_path' => false,
+                        'required' => false,
                          'empty_value' => ' ',
                      )
         )

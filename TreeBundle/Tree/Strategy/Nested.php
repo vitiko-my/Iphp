@@ -9,6 +9,30 @@ use Doctrine\ORM\QueryBuilder;
 
 class Nested extends BaseNested implements Strategy
 {
+
+    //protected $nodePositions;
+    /**
+     * Set node position strategy
+     *
+     * @param string $oid
+     * @param string $position
+     */
+    /*
+    public function setNodePosition($oid, $position)
+    {
+        $valid = array(
+            self::FIRST_CHILD,
+            self::LAST_CHILD,
+            self::NEXT_SIBLING,
+            self::PREV_SIBLING
+        );
+        if (!in_array($position, $valid, false)) {
+            throw new \Gedmo\Exception\InvalidArgumentException("Position: {$position} is not valid in nested set tree");
+        }
+        $this->nodePositions[$oid] = $position;
+    }
+*/
+
     public function processScheduledInsertion($em, $node)
     {
         parent::processScheduledInsertion($em, $node);
@@ -100,6 +124,8 @@ class Nested extends BaseNested implements Strategy
         if (isset($this->nodePositions[$oid])) {
             $position = $this->nodePositions[$oid];
         }
+
+      //  print "\n".$position." ".$node->getTitle()."(".$oid.")";
         $level = 0;
         $treeSize = $right - $left + 1;
         $newRootId = null;
@@ -115,7 +141,10 @@ class Nested extends BaseNested implements Strategy
             if (isset($config['level'])) {
                 $level = $wrappedParent->getPropertyValue($config['level']);
             }
+
+
             switch ($position) {
+
                 case self::PREV_SIBLING:
                     $newParent = $wrappedParent->getPropertyValue($config['parent']);
                     if (is_null($newParent) && (isset($config['root']) || $isNewNode)) {
