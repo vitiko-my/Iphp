@@ -5,7 +5,7 @@ namespace Iphp\CoreBundle\Admin;
 
 
 use Iphp\TreeBundle\Admin\TreeAdmin;
-
+use Sonata\AdminBundle\Admin\Admin;
 
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
@@ -50,27 +50,34 @@ class RubricAdmin extends TreeAdmin
      */
     protected function configureFormFields(FormMapper $formMapper)
     {
-        $formMapper
-                ->with('Основные')
-                ->add('status', 'checkbox', array('required' => false, 'label' => 'Показывать на сайте'))
+        $rubric = $this->getSubject();
+        $formMapper->with('Основные');
 
-                ->add('title', null, array('label' => 'Заголовок'))
-                ->add('parent', null,
-                  array(
-                  'label' => 'Родительская рубрика',
-                  'property' => 'titleLevelIndented'))
-                ->add('path', 'text', array('label' => 'Директория'))
-                ->add('abstract', null, array('label' => 'Анонс'))
+        $isRoot = $rubric->getLevel() === 0;
+
+        if (!$isRoot)
+            $formMapper->add('status', 'checkbox', array('required' => false, 'label' => 'Показывать на сайте'));
+
+        $formMapper->add('title', null, array('label' => 'Заголовок'));
+
+
+        if (!$isRoot) $formMapper->add('parent', null,
+            array('label' => 'Родительская рубрика',
+                'property' => 'titleLevelIndented'))
+                ->add('path', 'text', array('label' => 'Директория'));
+
+
+        $formMapper->add('abstract', null, array('label' => 'Анонс'))
                 ->add('redirectUrl', null, array('label' => 'URL редирект'))
                 ->add('controllerName'
 
-                /*, null, array('label' => 'Название контроллера или бандла'))
-                ->add('module'*/
+            /*, null, array('label' => 'Название контроллера или бандла'))
+            ->add('module'*/
             , 'modulechoice',
-                   array('label' => 'Выберите модуль',
-                        'required' => false,
-                         'empty_value' => ' ',
-                     )
+            array('label' => 'Выберите модуль',
+                'required' => false,
+                'empty_value' => ' ',
+            )
         )
                 ->end()// ->with('Options', array('collapsed' => true))
             //  ->add('commentsCloseAt')
@@ -112,7 +119,7 @@ class RubricAdmin extends TreeAdmin
     }
 
 
-/*    protected function configureSideMenu(MenuItemInterface $menu, $action, Admin $childAdmin = null)
+    protected function configureSideMenu(MenuItemInterface $menu, $action, Admin $childAdmin = null)
     {
         if (!$childAdmin && !in_array($action, array('edit'))) {
             return;
@@ -122,12 +129,19 @@ class RubricAdmin extends TreeAdmin
 
         $id = $admin->getRequest()->get('id');
 
+
         $menu->addChild(
-            $this->trans('sidemenu.link_viewcontent'),
-            array('uri' => $admin->generateUrl('edit', array('id' => $id)))
+            $this->trans('sidemenu.link_list_blocks'),
+            array('uri' => $admin->generateUrl('iphp.core.admin.block.list', array('id' => $id)))
         );
 
-    }*/
+
+        $menu->addChild(
+            $this->trans('view_rubric'),
+            array('uri' => $this->getSubject()->getFullPath(), 'target' => '_blank')
+        );
+
+    }
 
     public function setUserManager($userManager)
     {

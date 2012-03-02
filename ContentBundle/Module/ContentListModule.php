@@ -19,6 +19,7 @@ class ContentListModule extends Module
     function __construct()
     {
         $this->setName('Материалы - список');
+        $this->allowMultiple = true;
     }
 
     protected function registerRoutes()

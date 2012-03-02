@@ -20,6 +20,51 @@
                 <target>Удаление рубрики</target>
            </trans-unit>
 
+           <trans-unit id="sidemenu.link_list_blocks">
+                <source>sidemenu.link_list_blocks</source>
+                <target>Блоки</target>
+           </trans-unit>
+
+          <trans-unit id="view_rubric">
+                <source>view_rubric</source>
+                <target>Просмотр рубрики на сайте</target>
+           </trans-unit>
+
+          <trans-unit id="breadcrumb.link_block_list">
+                <source>breadcrumb.link_block_list</source>
+                <target>Блоки</target>
+           </trans-unit>
+
+
+          <trans-unit id="filter.label_enabled">
+                <source>filter.label_enabled</source>
+                <target>Включен</target>
+          </trans-unit>
+
+          <trans-unit id="filter.label_type">
+                <source>filter.label_type</source>
+                <target>Поиск по типу</target>
+          </trans-unit>
+          <trans-unit id="block_type">
+                <source>block_type</source>
+                <target>Тип блока</target>
+          </trans-unit>
+
+          <trans-unit id="block_enabled">
+                           <source>block_enabled</source>
+                           <target>Показывать блок</target>
+          </trans-unit>
+
+          <trans-unit id="updated_at">
+             <source>updated_at</source>
+              <target>Дата и время обновления</target>
+          </trans-unit>
+
+          <trans-unit id="block_position">
+                       <source>block_position</source>
+                        <target>Порядковый номер блока</target>
+          </trans-unit>
+
 
         </body>
     </file>

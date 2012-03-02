@@ -19,6 +19,7 @@ class RubricIndexModule extends Module
     function __construct()
     {
         $this->setName('Рубрика - список подрубрик');
+        $this->allowMultiple = true;
     }
 
     protected function registerRoutes()

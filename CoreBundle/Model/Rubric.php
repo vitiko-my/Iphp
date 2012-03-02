@@ -3,6 +3,8 @@
 
 namespace Iphp\CoreBundle\Model;
 
+use Sonata\BlockBundle\Model\BlockInterface;
+
 
 abstract class Rubric implements RubricInterface, \Iphp\TreeBundle\Model\TreeNodeInterface
 {
@@ -39,11 +41,14 @@ abstract class Rubric implements RubricInterface, \Iphp\TreeBundle\Model\TreeNod
 
     protected $children;
 
+    protected $blocks;
+
 
     /**
      * Set title
      *
      * @param string $title
+     * @return \Iphp\CoreBundle\Model\Rubric
      */
     public function setTitle($title)
     {
@@ -199,8 +204,6 @@ abstract class Rubric implements RubricInterface, \Iphp\TreeBundle\Model\TreeNod
     }
 
 
-
-
     /**
      * Get lft
      *
@@ -311,6 +314,22 @@ abstract class Rubric implements RubricInterface, \Iphp\TreeBundle\Model\TreeNod
     public function getRedirectUrl()
     {
         return $this->redirectUrl;
+    }
+
+    /**
+     * Add blocks
+     *
+     * @param \Sonata\BlockBundle\Model\BlockInterface $blocs
+     */
+    public function addBlocks(BlockInterface $blocs)
+    {
+        $this->blocks[] = $blocs;
+    }
+
+
+    public function getBlocks()
+    {
+        return $this->blocks;
     }
 
 

@@ -11,6 +11,7 @@ use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Config\Definition\Processor;
 //use Symfony\Component\DependencyInjection\Definition;
 
+use Sonata\EasyExtendsBundle\Mapper\DoctrineCollector;
 
 class IphpCoreExtension extends Extension
 {
@@ -36,6 +37,8 @@ class IphpCoreExtension extends Extension
           $loader->load('front.xml');
         }
 
+        $this->registerDoctrineMapping($config);
+
       //  $loader->load('twig.xml');
       //  $loader->load('form.xml');
 
@@ -43,4 +46,86 @@ class IphpCoreExtension extends Extension
       //  $container->setDefinition('sonata.news.blog', $blog);
     }
 
+
+    /**
+         * @param array $config
+         * @return void
+         */
+        public function registerDoctrineMapping(array $config)
+        {
+            print 'Extends!';
+
+            if (!class_exists($config['class']['rubric'])) {
+                return;
+            }
+
+            $collector = DoctrineCollector::getInstance();
+
+            $collector->addAssociation($config['class']['rubric'], 'mapOneToMany', array(
+                        'fieldName'     => 'blocks',
+                        'targetEntity'  => $config['class']['block'],
+                        'cascade' => array(
+                            'remove',
+                            'persist',
+                            'refresh',
+                            'merge',
+                            'detach',
+                        ),
+                        'mappedBy'      => 'rubric',
+                        'orphanRemoval' => false,
+                        'orderBy'       => array(
+                            'position'  => 'ASC',
+                        ),
+                    ));
+
+
+            $collector->addAssociation($config['class']['block'], 'mapOneToMany', array(
+                        'fieldName' => 'children',
+                        'targetEntity' => $config['class']['block'],
+                        'cascade' => array(
+                            'remove',
+                            'persist',
+                        ),
+                        'mappedBy' => 'parent',
+                        'orphanRemoval' => true,
+                        'orderBy' => array(
+                            'position' => 'ASC',
+                        ),
+                    ));
+
+                    $collector->addAssociation($config['class']['block'], 'mapManyToOne', array(
+                        'fieldName' => 'parent',
+                        'targetEntity' => $config['class']['block'],
+                        'cascade' => array(
+                        ),
+                        'mappedBy' => NULL,
+                        'inversedBy' => NULL,
+                        'joinColumns' => array(
+                            array(
+                                'name' => 'parent_id',
+                                'referencedColumnName' => 'id',
+                                'onDelete' => 'CASCADE',
+                            ),
+                        ),
+                        'orphanRemoval' => false,
+                    ));
+
+                    $collector->addAssociation($config['class']['block'], 'mapManyToOne', array(
+                        'fieldName' => 'rubric',
+                        'targetEntity' => $config['class']['rubric'],
+                        'cascade' => array(
+                            'persist',
+                        ),
+                        'mappedBy' => NULL,
+                        'inversedBy' => NULL,
+                        'joinColumns' => array(
+                            array(
+                                'name' => 'rubric_id',
+                                'referencedColumnName' => 'id',
+                                'onDelete' => 'CASCADE',
+                            ),
+                        ),
+                        'orphanRemoval' => false,
+                    ));
+        }
 }

@@ -32,6 +32,7 @@ abstract class Module
     protected $moduleManager;
 
 
+    protected $allowMultiple = false;
 
     /**
      * Коллекция роутов для модуля
@@ -71,9 +72,18 @@ abstract class Module
 
 
 
-    protected function importRoutes ($resource)
+    protected function importRoutes ($resource, $type = null)
     {
-      foreach ($this->moduleManager->loadRoutes ($resource) as $name => $route)
+      //print '-'.$resource.'--'.$type;
+      $routes = $this->moduleManager->loadRoutes ($resource, $type);
+
+
+     // print 'В итоге роуты ресурса '.$resource;
+      //var_dump ($routes);
+
+      //exit();
+      if ($routes)
+      foreach ($routes->all()  as $name => $route)
       $this->routeCollection->add($name, $route);
     }
 
@@ -94,10 +104,14 @@ abstract class Module
 
         $route = new Route ($pattern,$defaults,$requirements,$options);
         //$name = $name ? $name : $this->suggestRouteName($route);
-        $this->routeCollection->add (
-            $this->rubric ? $this->prepareRubricPath($this->rubric->getFullPath()) . '_' . $name : $name,
-            $route);
+        $this->routeCollection->add ( $this->prepareRouteName ($name) ,    $route);
         return $this;
+    }
+
+    protected  function prepareRouteName ($name)
+    {
+      return ($this->allowMultiple && $this->rubric ?
+              $this->prepareRubricPath($this->rubric->getFullPath()) . '_' : '') . $name;
     }
 
 
@@ -122,5 +136,12 @@ abstract class Module
     public function getName()
     {
         return $this->name;
+    }
+
+
+
+    public function isAllowMultiple()
+    {
+        return $this->allowMultiple ? true : false;
     }
 }

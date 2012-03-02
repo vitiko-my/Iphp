@@ -66,17 +66,27 @@ class RubricRepositoryFunctionalTest extends WebTestCase
         print ' ==> '.$rubric1.',left:'.$rubric1->getLeft();*/
 
         $rubric3 = $repo->find(4);
+
+        $this->assertEquals ($rubric3->getLeft(),6);
+        $this->assertEquals ($rubric3->getRight(),7);
        //    print "\n".$rubric3.',left:'.$rubric3->getLeft();
 
 
 
         $rubric1 = $repo->find(2);
+
+        $this->assertEquals ($rubric1->getLeft(),2);
+        $this->assertEquals ($rubric1->getRight(),3);
         //               print ' '.$rubric1.',left:'.$rubric1->getLeft();
        // $rubric1->setParent ($repo->find(1));
 
 
        $repo->persistAsNextSiblingOf ($rubric1,$rubric3 );
-       $this->_em->flush();
+        $this->_em->flush();
+
+        $repo->clear();
+
+
 
 
     /*    $repo->persistAsFirstChild( $rubric3 );
@@ -88,7 +98,9 @@ class RubricRepositoryFunctionalTest extends WebTestCase
                null, /* starting from root nodes */
               false, /* load all children, not only direct */
             array('decorate' => true)));
+        $rubric1 = $repo->find(2);
 
+         $this->assertEquals ($rubric1->getLeft(),6);
 
     }
 }

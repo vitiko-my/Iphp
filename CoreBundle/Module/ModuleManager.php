@@ -34,9 +34,17 @@ class ModuleManager  extends ContainerAware
         return $modules;
     }
 
-    function loadRoutes ($resource)
+    function loadRoutes ($resource, $type = null)
     {
-        return $this->container->get ('routing.loader')->load ($resource);
+     return $this->getRoutingLoader()->load ($resource, $type);
+    }
+
+    /**
+     * @return \Symfony\Bundle\FrameworkBundle\Routing\DelegatingLoader
+     */
+    function getRoutingLoader()
+    {
+        return $this->container->get ('routing.loader');
     }
 
     function bundleModuleDir($bundle)

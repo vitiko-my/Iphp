@@ -19,6 +19,7 @@ class ContentIndexModule extends Module
     function __construct()
     {
         $this->setName('Материал - индекс рубрики');
+        $this->allowMultiple = true;
     }
 
     protected function registerRoutes()

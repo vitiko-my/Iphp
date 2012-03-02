@@ -26,8 +26,16 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('iphp_core');
+        $node = $treeBuilder->root('iphp_core')->children();
 
+
+        $node->arrayNode('class')
+                        ->addDefaultsIfNotSet()
+                        ->children()
+                            ->scalarNode('rubric')->defaultValue('Application\\Iphp\\CoreBundle\\Entity\\Rubric')->end()
+                            ->scalarNode('block')->defaultValue('Application\\Iphp\\CoreBundle\\Entity\\Block')->end()
+                        ->end()
+                    ->end();
         return $treeBuilder;
     }
 }

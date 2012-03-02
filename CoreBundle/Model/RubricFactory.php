@@ -44,7 +44,7 @@ class RubricFactory
 
     public function generatePath($rubric, $absolute = false)
     {
-        return $this->request->getBaseUrl().$rubric->getFullPath();
+        return $this->request->getBaseUrl().(is_string($rubric) ? $rubric : $rubric->getFullPath());
     }
 
 

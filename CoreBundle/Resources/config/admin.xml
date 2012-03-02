@@ -4,11 +4,18 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <parameters>
-        <!-- POST -->
+        <!-- RUBRIC -->
         <parameter key="iphp.core.admin.rubric.class">Iphp\CoreBundle\Admin\RubricAdmin</parameter>
         <parameter key="iphp.core.admin.rubric.controller">IphpTreeBundle:CRUD</parameter>
         <parameter key="iphp.core.admin.rubric.entity">Application\Iphp\CoreBundle\Entity\Rubric</parameter>
         <parameter key="iphp.core.admin.rubric.translation_domain">admin-messages</parameter>
+
+        <!-- BLOCK -->
+        <parameter key="iphp.core.admin.block.class">Iphp\CoreBundle\Admin\BlockAdmin</parameter>
+        <parameter key="iphp.core.admin.block.controller">IphpCoreBundle:BlockAdmin</parameter>
+        <parameter key="iphp.core.admin.block.entity">Application\Iphp\CoreBundle\Entity\Block</parameter>
+        <parameter key="iphp.core.admin.block.translation_domain">admin-messages</parameter>
+
 
     </parameters>
 
@@ -19,6 +26,11 @@
             <argument />
             <argument>%iphp.core.admin.rubric.entity%</argument>
             <argument>%iphp.core.admin.rubric.controller%</argument>
+
+
+            <call method="addChild">
+             <argument type="service" id="iphp.core.admin.block" />
+            </call>
 
             <call method="setUserManager">
                 <argument type="service" id="fos_user.user_manager" />
@@ -38,11 +50,35 @@
                 <argument type="service" id="sonata.admin.builder.orm_datagrid.tree" />
             </call>
 -->
-
         </service>
 
 
-        <service id="iphp.core.form.type.modulechoce" class="Iphp\CoreBundle\Form\Type\ModuleChoiceType">
+        <service id="iphp.core.admin.block" class="%iphp.core.admin.block.class%">
+            <tag name="sonata.admin" manager_type="orm" show_in_dashboard="true" group="Структура" label="Блоки"
+                 label_translator_strategy="sonata.admin.label.strategy.underscore"/>
+            <argument />
+            <argument>%iphp.core.admin.block.entity%</argument>
+            <argument>%iphp.core.admin.block.controller%</argument>
+
+
+
+
+            <call method="setCacheManager">
+               <argument type="service" id="sonata.cache.manager" />
+            </call>
+
+            <call method="setBlockManager">
+               <argument type="service" id="sonata.block.manager" />
+            </call>
+
+            <call method="setTranslationDomain">
+               <argument>%iphp.core.admin.block.translation_domain%</argument>
+            </call>
+        </service>
+
+
+
+        <service id="iphp.core.form.type.modulechoice" class="Iphp\CoreBundle\Form\Type\ModuleChoiceType">
             <argument type="service" id="iphp.core.module.manager" />
             <tag name="form.type" alias="modulechoice" />
         </service>
