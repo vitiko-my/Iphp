@@ -12,6 +12,8 @@ abstract class Block extends BaseBlock
 {
     protected $rubric;
 
+    protected $title;
+
     /**
      * Add children
      *
@@ -50,5 +52,16 @@ abstract class Block extends BaseBlock
         if (is_object($this->children)) {
             $this->children->setInitialized(true);
         }
+    }
+
+    public function setTitle($title)
+    {
+        $this->title = $title;
+        return $this;
+    }
+
+    public function getTitle()
+    {
+        return $this->title;
     }
 }

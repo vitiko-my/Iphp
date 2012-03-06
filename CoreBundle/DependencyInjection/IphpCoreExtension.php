@@ -53,7 +53,7 @@ class IphpCoreExtension extends Extension
          */
         public function registerDoctrineMapping(array $config)
         {
-            print 'Extends!';
+           // print 'Extends!';
 
             if (!class_exists($config['class']['rubric'])) {
                 return;

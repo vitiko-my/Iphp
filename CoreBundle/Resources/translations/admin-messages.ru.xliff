@@ -1,69 +1,88 @@
 <?xml version="1.0"?>
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
-    <file source-language="ru" datatype="plaintext" original="" >
+    <file source-language="ru" datatype="plaintext" original="">
         <body>
-           <trans-unit id="Rubric List">
+            <trans-unit id="Rubric List">
                 <source>Rubric List</source>
                 <target>Рубрики</target>
             </trans-unit>
-           <trans-unit id="Rubric Create">
+            <trans-unit id="Rubric Create">
                 <source>Rubric Create</source>
                 <target>Новая рубрика</target>
-           </trans-unit>
-           <trans-unit id="Rubric Edit">
+            </trans-unit>
+            <trans-unit id="Rubric Edit">
                 <source>Rubric Edit</source>
                 <target>Редактирование рубрики</target>
-           </trans-unit>
+            </trans-unit>
 
-           <trans-unit id="Rubric Delete">
+            <trans-unit id="Rubric Delete">
                 <source>Rubric Delete</source>
                 <target>Удаление рубрики</target>
-           </trans-unit>
+            </trans-unit>
 
-           <trans-unit id="sidemenu.link_list_blocks">
+            <trans-unit id="sidemenu.link_list_blocks">
                 <source>sidemenu.link_list_blocks</source>
                 <target>Блоки</target>
-           </trans-unit>
+            </trans-unit>
 
-          <trans-unit id="view_rubric">
+            <trans-unit id="view_rubric">
                 <source>view_rubric</source>
                 <target>Просмотр рубрики на сайте</target>
-           </trans-unit>
+            </trans-unit>
 
-          <trans-unit id="breadcrumb.link_block_list">
-                <source>breadcrumb.link_block_list</source>
+            <trans-unit id="Block List">
+                <source>Block List</source>
                 <target>Блоки</target>
-           </trans-unit>
+            </trans-unit>
+
+            <trans-unit id="Block Edit">
+                <source>Block Edit</source>
+                <target>Редактирование блока</target>
+            </trans-unit>
 
 
-          <trans-unit id="filter.label_enabled">
-                <source>filter.label_enabled</source>
+            <trans-unit id="Enabled">
+                <source>Enabled</source>
                 <target>Включен</target>
-          </trans-unit>
+            </trans-unit>
 
-          <trans-unit id="filter.label_type">
-                <source>filter.label_type</source>
-                <target>Поиск по типу</target>
-          </trans-unit>
-          <trans-unit id="block_type">
-                <source>block_type</source>
-                <target>Тип блока</target>
-          </trans-unit>
+            <trans-unit id="Type">
+                <source>Type</source>
+                <target>Тип</target>
+            </trans-unit>
 
-          <trans-unit id="block_enabled">
-                           <source>block_enabled</source>
-                           <target>Показывать блок</target>
-          </trans-unit>
 
-          <trans-unit id="updated_at">
-             <source>updated_at</source>
-              <target>Дата и время обновления</target>
-          </trans-unit>
+            <trans-unit id="Updated At">
+                <source>Updated At</source>
+                <target>Дата и время обновления</target>
+            </trans-unit>
 
-          <trans-unit id="block_position">
-                       <source>block_position</source>
-                        <target>Порядковый номер блока</target>
-          </trans-unit>
+            <trans-unit id="Position">
+                <source>Position</source>
+                <target>Порядковый номер</target>
+            </trans-unit>
+
+            <trans-unit id="Title">
+                <source>Title</source>
+                <target>Название</target>
+            </trans-unit>
+
+
+            <trans-unit id="Settings">
+                <source>Settings</source>
+                <target>Настройки</target>
+            </trans-unit>
+
+
+            <trans-unit id="Content">
+                <source>Content</source>
+                <target>Содержание</target>
+            </trans-unit>
+
+            <trans-unit id="Rubric">
+                <source>Rubric</source>
+                <target>Рубрика</target>
+            </trans-unit>
 
 
         </body>

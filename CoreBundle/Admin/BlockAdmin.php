@@ -47,10 +47,13 @@ class BlockAdmin extends Admin
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-                ->addIdentifier('type', null, array('label' => 'block_type'))
-                ->add('enabled', null, array('label' => 'block_enabled'))
-                ->add('updatedAt', null, array('label' => 'updated_at'))
-                ->add('position');
+                ->addIdentifier('title')
+                ->addIdentifier('type')
+                ->add('rubric')
+                ->add('position')
+                ->add('enabled')
+                ->add('updatedAt');
+
     }
 
     /**
@@ -62,7 +65,7 @@ class BlockAdmin extends Admin
         $datagridMapper
                 ->add('enabled')
                 ->add('type')
-                ->add('rubric' /*,'hidden'*/);
+                ->add('rubric' /* ,null, array ('field_type' => 'rubricchoice') */);
     }
 
     /**
@@ -75,9 +78,12 @@ class BlockAdmin extends Admin
 
 
         $formMapper
-                ->add('type', 'sonata_block_service_choice', array('label' => 'block_type'))
-                ->add('enabled', null, array('label' => 'block_enabled'))
-                ->add('position', null, array('label' => 'block_position'));
+
+                ->add('title')
+                ->add('type', 'sonata_block_service_choice' )
+                ->add('enabled')
+                ->add('rubric','rubricchoice')
+                ->add('position');
 
         if ($block->getType()) {
 
