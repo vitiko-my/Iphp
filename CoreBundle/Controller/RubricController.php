@@ -17,20 +17,20 @@ class RubricController extends Controller
     /**
      *  TODO: есть дублирование с ContentController
      */
-    protected function getRubricFactory()
+    protected function getRubricManager()
     {
-        return $this->container->get('iphp.core.rubric.fabric');
+        return $this->container->get('iphp.core.rubric.manager');
     }
 
     protected function getCurrentRubric()
     {
-        return $this->getRubricFactory()->getCurrent();
+        return $this->getRubricManager()->getCurrent();
     }
 
 
     public function indexSubrubricsAction()
     {
-        $rubrics = $this->getRubricFactory()->getCurrent()->getChildren();
+        $rubrics = $this->getRubricManager()->getCurrent()->getChildren();
 
         return $this->render('IphpCoreBundle::indexSubrubrics.html.twig', array('rubrics' => $rubrics));
     }

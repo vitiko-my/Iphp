@@ -1,17 +1,22 @@
 <?php
 
-namespace Iphp\CoreBundle\DependencyInjection;
+namespace Iphp\CoreBundle\Twig;
 
+use Iphp\CoreBundle\Manager\RubricManager;
 
 class TwigExtension extends \Twig_Extension
 {
+    /**
+     * @var \Twig_Environment
+     */
     protected $twigEnviroment;
 
+    /**
+     * @var \Iphp\CoreBundle\Manager\RubricManager
+     */
     protected $rubricManager;
 
-    public function __construct(
-        \Twig_Environment $twigEnviroment,
-        \Iphp\CoreBundle\Model\RubricFactory $rubricManager)
+    public function __construct(\Twig_Environment $twigEnviroment,  RubricManager $rubricManager)
     {
         $this->twigEnviroment = $twigEnviroment;
         $this->rubricManager = $rubricManager;
@@ -58,25 +63,4 @@ class TwigExtension extends \Twig_Extension
 }
 
 
-class TemplateHelper
-{
-    protected $rubricManager;
 
-
-    public function __construct(\Iphp\CoreBundle\Model\RubricFactory $rubricManager)
-    {
-
-
-        //Напрямую инжектировать в сервис request нельзя т.к. он может быть неактивным
-
-        $this->rubricManager = $rubricManager;
-    }
-
-    public function getRubric()
-    {
-        // return 'Rubrica '.$this->request->get ('_rubric');
-
-
-        return $this->rubricManager->getCurrent();
-    }
-}

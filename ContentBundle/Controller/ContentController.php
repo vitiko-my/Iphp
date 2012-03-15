@@ -34,14 +34,14 @@ class ContentController extends Controller
     }
 
 
-    protected function getRubricFactory()
+    protected function getRubricManager()
     {
-        return $this->container->get('iphp.core.rubric.fabric');
+        return $this->container->get('iphp.core.rubric.manager');
     }
 
     protected function getCurrentRubric()
     {
-        return $this->getRubricFactory()->getCurrent();
+        return $this->getRubricManager()->getCurrent();
     }
 
 

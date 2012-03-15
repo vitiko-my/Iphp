@@ -23,13 +23,13 @@ class IphpContentExtension extends Extension
        // $loader->load('services.xml');
 
 
+        $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         if (substr ($container->getParameter('kernel.environment'),0,5) == 'admin')
         {
-            $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
-            $loader->load('admin.xml');
+         $loader->load('admin.xml');
         }
 
-
+        $loader->load('block.xml');
 
       //  $loader->load('orm.xml');
       //  $loader->load('twig.xml');

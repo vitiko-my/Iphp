@@ -71,7 +71,7 @@ class ContentAdmin extends Admin
                 'target' => 'content',
                 'label' => 'Форматирование'
             ))*/
-                ->add('rawContent', null, array('label' => 'Текст'))
+                ->add('rawContent', 'genemu_tinymce', array('label' => 'Текст!'))
                 ->end()// ->with('Options', array('collapsed' => true))
             //  ->add('commentsCloseAt')
             //  ->add('commentsEnabled', null, array('required' => false))
