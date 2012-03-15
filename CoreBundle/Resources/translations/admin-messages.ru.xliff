@@ -2,6 +2,7 @@
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
     <file source-language="ru" datatype="plaintext" original="">
         <body>
+            <!-- РУБРИКИ -->
             <trans-unit id="Rubric List">
                 <source>Rubric List</source>
                 <target>Рубрики</target>
@@ -20,6 +21,19 @@
                 <target>Удаление рубрики</target>
             </trans-unit>
 
+
+            <trans-unit id="Parent Rubric">
+                <source>Parent Rubric</source>
+                <target>Родительская рубрика</target>
+            </trans-unit>
+
+            <trans-unit id="Rubric">
+                <source>Rubric</source>
+                <target>Рубрика</target>
+            </trans-unit>
+
+
+            <!-- БЛОКИ -->
             <trans-unit id="sidemenu.link_list_blocks">
                 <source>sidemenu.link_list_blocks</source>
                 <target>Блоки</target>
@@ -40,7 +54,18 @@
                 <target>Редактирование блока</target>
             </trans-unit>
 
+            <trans-unit id="Parent Block">
+                <source>Parent Block</source>
+                <target>Родительский блок</target>
+            </trans-unit>
 
+            <trans-unit id="Children Blocks">
+                <source>Children Blocks</source>
+                <target>Вложенные блоки</target>
+            </trans-unit>
+
+
+            <!-- ОБЩИЕ ТЕРМИНЫ -->
             <trans-unit id="Enabled">
                 <source>Enabled</source>
                 <target>Включен</target>
@@ -79,9 +104,16 @@
                 <target>Содержание</target>
             </trans-unit>
 
-            <trans-unit id="Rubric">
-                <source>Rubric</source>
-                <target>Рубрика</target>
+
+            <trans-unit id="Keywords">
+                <source>Keywords</source>
+                <target>Ключевые слова</target>
+            </trans-unit>
+
+
+            <trans-unit id="Link">
+                <source>Link</source>
+                <target>Ссылка</target>
             </trans-unit>
 
 

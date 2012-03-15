@@ -61,10 +61,9 @@ class RubricAdmin extends TreeAdmin
         $formMapper->add('title', null, array('label' => 'Заголовок'));
 
 
-        if (!$isRoot) $formMapper->add('parent', null,
-            array('label' => 'Родительская рубрика',
-                'property' => 'titleLevelIndented'))
-                ->add('path', 'text', array('label' => 'Директория'));
+        if (!$isRoot)
+            $formMapper->add('parent', 'rubricchoice', array('label' => 'Parent Rubric'))
+                    ->add('path', 'text', array('label' => 'Директория'));
 
 
         $formMapper->add('abstract', null, array('label' => 'Анонс'))
@@ -142,6 +141,16 @@ class RubricAdmin extends TreeAdmin
         );
 
     }
+
+
+    public function postUpdate($object)
+    {
+        //TODO: DIRTY HACK!!
+        print realpath(__DIR__.'/../../../../app/cache/frontdev');
+        exit();
+    }
+
+
 
     public function setUserManager($userManager)
     {

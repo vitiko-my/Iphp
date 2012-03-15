@@ -23,6 +23,8 @@ class TwigExtension extends \Twig_Extension
         return array(
             // 'strtr' => new \Twig_Filter_Function('strtr'),
             'rpath' => new \Twig_Function_Method($this, 'getRubricPath'),
+            'sonata_block_by_name' => new \Twig_Function_Method($this, 'sonataBlockByName'),
+
 
             //Вынести в ContentBundle
             'cpath' => new \Twig_Function_Method($this, 'getContentPath'),
@@ -35,10 +37,15 @@ class TwigExtension extends \Twig_Extension
         return $this->rubricManager->generatePath($rubric);
     }
 
+    public function sonataBlockByName ($blockName)
+    {
+       return 'Ищем '.$blockName;
+    }
+
 
     public function getContentPath($content)
     {
-       return $this->rubricManager->generatePath($content->getRubric()).$content->getSlug();
+        return $this->rubricManager->generatePath($content->getRubric()) . $content->getSlug();
     }
 
     /**

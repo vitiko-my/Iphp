@@ -14,6 +14,8 @@ abstract class Block extends BaseBlock
 
     protected $title;
 
+    protected $keywords;
+
     /**
      * Add children
      *
@@ -36,6 +38,8 @@ abstract class Block extends BaseBlock
     {
         $this->rubric = $rubric;
     }
+
+
 
     /**
      * Get rubric
@@ -64,4 +68,22 @@ abstract class Block extends BaseBlock
     {
         return $this->title;
     }
+
+    public function setKeywords($keywords)
+    {
+        $this->keywords = $keywords;
+        return $this;
+    }
+
+    public function getKeywords()
+    {
+        return $this->keywords;
+    }
+
+
+    public function __toString()
+    {
+            return $this->getTitle() ?  $this->getTitle() : 'block (id:'.$this->getId().')';
+    }
+
 }

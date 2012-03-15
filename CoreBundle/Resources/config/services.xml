@@ -6,9 +6,14 @@
 
     <services>
 
-         <service id="iphp.core.module.manager" class="Iphp\CoreBundle\Module\ModuleManager">
-            <argument type="service" id="service_container" />
+        <service id="iphp.core.module.manager" class="Iphp\CoreBundle\Module\ModuleManager">
+            <argument type="service" id="service_container"/>
+        </service>
 
+        <!-- Сервис получения данных о рубрике по пути к рубрике -->
+        <service id="iphp.core.rubric.fabric" class="Iphp\CoreBundle\Model\RubricFactory">
+            <argument type="service" id="doctrine.orm.entity_manager"/>
+            <argument type="service" id="service_container"/>
         </service>
 
     </services>

@@ -50,9 +50,10 @@ class BlockAdmin extends Admin
                 ->addIdentifier('title')
                 ->addIdentifier('type')
                 ->add('rubric')
+                ->add('parent', null, array('label' => 'Parent Block'))
                 ->add('position')
-                ->add('enabled')
-                ->add('updatedAt');
+                ->add('enabled')//   ->add('keywords')
+        ;
 
     }
 
@@ -80,14 +81,15 @@ class BlockAdmin extends Admin
         $formMapper
 
                 ->add('title')
-                ->add('type', 'sonata_block_service_choice' )
+                ->add('type', 'sonata_block_service_choice', array('context' => 'cms'), array('value_strategy' => 1))
                 ->add('enabled')
-                ->add('rubric','rubricchoice')
+                ->add('parent', 'parentblock_choice', array('label' => 'Parent Block', 'required' => false))
+                ->add('rubric', 'rubricchoice', array('required' => false))
                 ->add('position');
 
         if ($block->getType()) {
 
-            $service = $this->blockManager->getBlockService($block);
+            $service = $this->blockManager->get($block);
 
             if ($block->getId() > 0) {
                 $service->buildEditForm($formMapper, $block);
@@ -111,7 +113,7 @@ class BlockAdmin extends Admin
 
         // As block can be nested, we only need to validate the main block, no the children
         $this->inValidate = true;
-        $this->blockManager->validateBlock($errorElement, $block);
+        $this->blockManager->validate($errorElement, $block);
         $this->inValidate = false;
     }
 
@@ -119,12 +121,13 @@ class BlockAdmin extends Admin
      * @param $id
      * @return object
      */
+
     public function getObject($id)
     {
         $subject = parent::getObject($id);
 
         if ($subject) {
-            $service = $this->blockManager->getBlockService($subject);
+            $service = $this->blockManager->get($subject);
             $subject->setSettings(array_merge($service->getDefaultSettings(), $subject->getSettings()));
 
             $service->load($subject);
@@ -139,19 +142,25 @@ class BlockAdmin extends Admin
         $object->setChildren($object->getChildren());
         //  $object->getPage()->setEdited(true);
 
-        $this->blockManager->getBlockService($object)->preUpdate($object);
+        $parent = $object->getParent();
+        if ($parent) $object->setRubric($parent->getRubric());
+
+        $this->blockManager->get($object)->preUpdate($object);
     }
 
     public function postUpdate($object)
     {
-        $service = $this->blockManager->getBlockService($object);
-
+        $service = $this->blockManager->get($object);
         $this->cacheManager->invalidate($service->getCacheKeys($object));
     }
 
     public function prePersist($object)
     {
-        $this->blockManager->getBlockService($object)->prePersist($object);
+        $parent = $object->getParent();
+        if ($parent) $object->setRubric($parent->getRubric());
+
+        $this->blockManager->get($object)->prePersist($object);
+
 
         // $object->getPage()->setEdited(true);
 
@@ -161,7 +170,8 @@ class BlockAdmin extends Admin
 
     public function postPersist($object)
     {
-        $service = $this->blockManager->getBlockService($object);
+        $service = $this->blockManager->get($object);
+
 
         $this->cacheManager->invalidate($service->getCacheKeys($object));
     }

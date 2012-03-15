@@ -36,7 +36,7 @@ class IphpCoreExtension extends Extension
         {
           $loader->load('front.xml');
         }
-
+        $loader->load('block.xml');
         $this->registerDoctrineMapping($config);
 
       //  $loader->load('twig.xml');

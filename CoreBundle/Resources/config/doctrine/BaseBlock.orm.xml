@@ -3,6 +3,8 @@
     <mapped-superclass name="Iphp\CoreBundle\Entity\BaseBlock">
 
         <field name="title"    type="string"   length="255" nullable="null" />
+        <field name="keywords"    type="string"   length="255" nullable="null" />
+
 
         <field name="type"          type="string"     column="type" length="64" />
 

@@ -333,4 +333,11 @@ abstract class Rubric implements RubricInterface, \Iphp\TreeBundle\Model\TreeNod
     }
 
 
+    public function getBlock ($blockName)
+    {
+
+        foreach ($this->getBlocks() as $block)
+            if ($block->getTitle() == $blockName) return $block;
+    }
+
 }
