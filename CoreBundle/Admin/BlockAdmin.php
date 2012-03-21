@@ -81,6 +81,7 @@ class BlockAdmin extends Admin
         $formMapper
 
                 ->add('title')
+        //iphp_block_service_choice
                 ->add('type', 'sonata_block_service_choice', array('context' => 'cms'), array('value_strategy' => 1))
                 ->add('enabled')
                 ->add('parent', 'parentblock_choice', array('label' => 'Parent Block', 'required' => false))

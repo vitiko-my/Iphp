@@ -44,6 +44,15 @@ abstract class Rubric implements RubricInterface, \Iphp\TreeBundle\Model\TreeNod
     protected $blocks;
 
 
+    protected $contents;
+
+
+    public function __construct()
+    {
+        $this->contents = new \Doctrine\Common\Collections\ArrayCollection;
+
+    }
+
     /**
      * Set title
      *
@@ -333,11 +342,31 @@ abstract class Rubric implements RubricInterface, \Iphp\TreeBundle\Model\TreeNod
     }
 
 
-    public function getBlock ($blockName)
+    public function getBlock($blockName)
     {
 
         foreach ($this->getBlocks() as $block)
             if ($block->getTitle() == $blockName) return $block;
     }
+
+
+    public function setContents($contents)
+    {
+        $this->contents = $contents;
+        return $this;
+    }
+
+    public function getContents()
+    {
+        return $this->contents;
+    }
+
+
+    function addContents(\Application\Iphp\ContentBundle\Entity\Content $content)
+    {
+        $content->setRubric($this);
+        $this->contents[] = $content;
+    }
+
 
 }

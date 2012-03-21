@@ -117,6 +117,14 @@
             </trans-unit>
 
 
+            <trans-unit id="Author">
+                <source>Author</source>
+                <target>Автор</target>
+            </trans-unit>
+
+
+
+
         </body>
     </file>
 </xliff>

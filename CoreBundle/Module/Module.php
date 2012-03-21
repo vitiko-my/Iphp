@@ -144,4 +144,10 @@ abstract class Module
     {
         return $this->allowMultiple ? true : false;
     }
+
+
+    public function getAdminExtension()
+    {
+
+    }
 }

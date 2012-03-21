@@ -20,9 +20,12 @@ abstract class ContentBlockService extends BaseBlockService
 
     protected $em;
 
+    /**
+     * @return \Iphp\ContentBundle\Entity\BaseContentRepository
+     */
     protected function getRepository()
     {
-       return $this->em->getRepository ('ApplicationIphpContentBundle:Content');
+        return $this->em->getRepository('ApplicationIphpContentBundle:Content');
     }
 
 
@@ -32,11 +35,12 @@ abstract class ContentBlockService extends BaseBlockService
     }
 
     /**
-     * @param string $alias
-     * @return \Iphp\ContentBundle\Entity\ContentQueryBuilder
+     * @param array
      */
-    protected function createQueryBuilder ($alias = 'c')
+    protected function getContents(\Closure $prepareQueryBuilder)
     {
-      return $this->getRepository()->createQueryBuilder ($alias);
+        return $this->getRepository()->createQuery('c', $prepareQueryBuilder)->getResult();
     }
+
+
 }

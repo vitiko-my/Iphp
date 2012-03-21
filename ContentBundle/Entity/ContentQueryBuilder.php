@@ -44,36 +44,42 @@ class ContentQueryBuilder extends QueryBuilder
         $this->prepareFromRubric();
 
         if ($this->fromRubric) {
-           $children = $this->getRubricRepository()->children($this->fromRubric);
+            $children = $this->getRubricRepository()->children($this->fromRubric);
 
             foreach ($children as $pos => $child)
-            $this->orWhere ('c.rubric = :fromChild'.$pos)->setParameter('fromChild'.$pos, $child);
+                $this->orWhere('c.rubric = :fromChild' . $pos)->setParameter('fromChild' . $pos, $child);
         }
 
         return $this;
     }
 
 
-
-    function whereSlug ($slug)
+    function whereSlug($slug)
     {
-      $this->andWhere('c.slug = :slug')->setParameter('slug',$slug);
-      return $this;
+        $this->andWhere('c.slug = :slug')->setParameter('slug', $slug);
+        return $this;
     }
-
-
 
 
     protected function prepareFromRubric()
     {
         if ($this->fromRubric || !$this->fromRubricId) return;
 
-        $this->fromRubric =  $this->getRubricRepository()->find($this->fromRubricId);
+        $this->fromRubric = $this->getRubricRepository()->find($this->fromRubricId);
     }
 
 
     protected function getRubricRepository()
     {
         return $this->getEntityManager()->getRepository('ApplicationIphpCoreBundle:Rubric');
+    }
+
+
+    public function whereEnabled($enabled = true)
+    {
+        if ($enabled === null) return $this;
+        $enabled = (bool)$enabled;
+        $this->andWhere('c.enabled = :contentEnabled')->setParameter('contentEnabled', $enabled);
+        return $this;
     }
 }

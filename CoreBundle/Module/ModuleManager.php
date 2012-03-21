@@ -80,9 +80,11 @@ class ModuleManager  extends ContainerAware
     function getModuleFromRubric(\Application\Iphp\CoreBundle\Entity\Rubric $rubric)
     {
         $moduleClassName = $rubric->getControllerName();
-        $module = $this->getModuleInstance($moduleClassName );
+        if (!$moduleClassName) return null;
 
+        $module = $this->getModuleInstance($moduleClassName );
         if (!$module) return null;
+
         return $module->setRubric ($rubric);
     }
 

@@ -13,6 +13,7 @@ use Sonata\FormatterBundle\Formatter\Pool as FormatterPool;
 use Knp\Menu\ItemInterface as MenuItemInterface;
 
 
+
 class ContentAdmin extends Admin
 {
     /**
@@ -30,6 +31,15 @@ class ContentAdmin extends Admin
      *
      * @return void
      */
+
+
+/*    function configure()
+    {
+        $this->configurationPool->getAdminByAdminCode('iphp.core.admin.rubric')
+                ->addExtension( new RubricAdminExtension);
+    }*/
+
+
     protected function configureShowField(ShowMapper $showMapper)
     {
         $showMapper
@@ -47,6 +57,7 @@ class ContentAdmin extends Admin
      */
     protected function configureFormFields(FormMapper $formMapper)
     {
+
         $formMapper
                 ->with('Основные')
                 ->add('enabled', null, array('required' => false, 'label' => 'Показывать на сайте'))
@@ -71,7 +82,7 @@ class ContentAdmin extends Admin
                 'target' => 'content',
                 'label' => 'Форматирование'
             ))*/
-                ->add('rawContent', 'genemu_tinymce', array('label' => 'Текст!'))
+                ->add('content', 'genemu_tinymce', array('label' => 'Текст'))
                 ->end()// ->with('Options', array('collapsed' => true))
             //  ->add('commentsCloseAt')
             //  ->add('commentsEnabled', null, array('required' => false))
@@ -188,9 +199,9 @@ class ContentAdmin extends Admin
      */
     public function prePersist($content)
     {
-        $content->setContentFormatter('raw');
+       // $content->setContentFormatter('raw');
 
-         $content->setContent($this->getPoolFormatter()->transform($content->getContentFormatter(), $content->getRawContent()));
+     //    $content->setContent($this->getPoolFormatter()->transform($content->getContentFormatter(), $content->getRawContent()));
     }
 
     /**
@@ -198,7 +209,7 @@ class ContentAdmin extends Admin
      */
     public function preUpdate($content)
     {
-        $content->setContentFormatter('raw');
-        $content->setContent($this->getPoolFormatter()->transform($content->getContentFormatter(), $content->getRawContent()));
+      //  $content->setContentFormatter('raw');
+      //  $content->setContent($this->getPoolFormatter()->transform($content->getContentFormatter(), $content->getRawContent()));
     }
 }

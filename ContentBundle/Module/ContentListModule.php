@@ -25,7 +25,7 @@ class ContentListModule extends Module
     protected function registerRoutes()
     {
         $this->addRoute('index', '/', array('_controller' => 'IphpContentBundle:Content:list'))
-             ->addRoute('contentById', '/{id}/', array('_controller' => 'IphpContentBundle:Content:contentById'));
+             ->addRoute('contentBySlug', '/{slug}/', array('_controller' => 'IphpContentBundle:Content:contentBySlug'));
     }
 
 }

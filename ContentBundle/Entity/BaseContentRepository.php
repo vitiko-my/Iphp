@@ -7,15 +7,12 @@ use Doctrine\ORM\EntityRepository;
 
 class BaseContentRepository extends EntityRepository
 {
-    function rubricIndex($rubric)
+    public function rubricIndex($rubric)
     {
-        return $this->createQueryBuilder('c')
-
-                ->where('c.rubric = ?1')
-                ->setMaxResults(1)
-                ->setParameter(1, $rubric->getId())
-
-                ->getQuery()->getOneOrNullResult();
+        return $this->createQuery('c', function ($qb) use ($rubric)
+        {
+            $qb->fromRubric($rubric)->setMaxResults(1);
+        })->getOneOrNullResult();
     }
 
 
@@ -23,25 +20,25 @@ class BaseContentRepository extends EntityRepository
      * @param string $alias
      * @return \Iphp\ContentBundle\Entity\ContentQueryBuilder
      */
-    function createQueryBuilder($alias = 'c')
+    public function createQueryBuilder($alias = 'c', \Closure $prepareQueryBuidler = null)
     {
         $qb = new ContentQueryBuilder($this->_em);
+        $qb->select($alias)->from($this->_entityName, $alias);
 
-        $qb->select($alias)
-                ->from($this->_entityName, $alias);
-
+        if ($prepareQueryBuidler) $prepareQueryBuidler($qb);
         return $qb;
     }
 
 
-    function findByRubricAndSlug($rubric, $slug)
+    /**
+     * @param Closure $prepareQueryBuidler
+     * @param string $alias
+     * @return \Doctrine\ORM\Query
+     */
+    public function createQuery($alias = 'c', \Closure $prepareQueryBuidler = null)
     {
-
-       // print $this->createQueryBuilder('c')->fromRubric($rubric)->whereSlug($slug)
-       //                 ->getQuery()->getSql();
-        return $this->createQueryBuilder('c')->fromRubric($rubric)->whereSlug($slug)
-                ->getQuery()->getOneOrNullResult();
+        return $this->createQueryBuilder($alias,$prepareQueryBuidler)->getQuery();
     }
+
+
 }
-
-

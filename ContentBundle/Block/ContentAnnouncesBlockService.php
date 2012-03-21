@@ -35,16 +35,15 @@ class ContentAnnouncesBlockService extends ContentBlockService
     }
 
 
-    public function prepareContents($settings)
+    public function prepareContents(array $settings)
     {
-        //print_r($settings);
-        $query = $this->createQueryBuilder()
-                ->fromRubric($settings['rubric_id'])
-                ->withSubrubrics($settings['withSubrubrics'])->getQuery();
+        return $this->getContents(function ($qb) use ($settings)
+        {
+            $qb->fromRubric($settings['rubric_id'])
+                    ->withSubrubrics( (bool) $settings['withSubrubrics']);
 
-        //print $query->getSQL();
-
-        return $query->getResult();
+            if ($settings['entriesNum']) $qb->setMaxResults ($settings['entriesNum']);
+        });
     }
 
 

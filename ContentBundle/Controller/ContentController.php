@@ -9,8 +9,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Application\Iphp\CoreBundle\Entity\Rubric;
 
 
-
-
 //use Symfony\Component\HttpFoundation\RedirectResponse;
 
 
@@ -53,28 +51,49 @@ class ContentController extends Controller
 
 
         return $this->render('IphpContentBundle::content.html.twig',
-                             array('content' => $content));
+            array('content' => $content));
     }
 
+
+    function getPaginator()
+    {
+        return $this->get('knp_paginator');
+    }
+
+    function paginate($query, $itemPerPage)
+    {
+        return $this->getPaginator()->paginate(
+            $query,
+            $this->get('request')->query->get('page', 1) /*page number*/,
+            $itemPerPage/*limit per page*/
+        );
+    }
 
     function listAction()
     {
-        $contents = $this->getRepository()->findByRubric ($this->getCurrentRubric());
+        $rubric = $this->getCurrentRubric();
+        $query = $this->getRepository()->createQuery('c', function ($qb) use ($rubric)
+        {
+            $qb->fromRubric($rubric)->whereEnabled();
+        });
 
-
-        return $this->render('IphpContentBundle::list.html.twig',
-                                     array('contents' => $contents));
-
+        return $this->render(
+            'IphpContentBundle::list.html.twig',
+            array('contents' => $this->paginate($query, 20)));
     }
 
-    public function contentByIdAction($id)
+    public function contentBySlugAction($slug)
     {
-        $content = $this->getRepository()->findByRubricAndSlug ($this->getCurrentRubric(), $id);
+        $rubric = $this->getCurrentRubric();
+        $content = $this->getRepository()->createQuery('c', function ($qb) use ($rubric, $slug)
+        {
+            $qb->fromRubric($rubric)->whereSlug($slug)->whereEnabled();
+        })->getOneOrNullResult();
 
-        if (!$content) throw $this->createNotFoundException('Материал с кодом "'.$id.'" не найден');
+        if (!$content) throw $this->createNotFoundException('Материал с кодом "' . $slug . '" не найден');
 
         return $this->render('IphpContentBundle::content.html.twig',
-                                             array('content' => $content));
+            array('content' => $content));
 
     }
 }

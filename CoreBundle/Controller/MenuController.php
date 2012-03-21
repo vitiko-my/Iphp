@@ -18,7 +18,7 @@ class MenuController extends RubricController
         $rubrics = $this->getRubricsRepository()->getTreeRecordset(
             function($qb)
             {
-                $qb->andWhere('r.level > 0')->orderBy('r.left', 'ASC');
+                $qb->andWhere('r.level > 0')->andWhere ('r.status = 1')->orderBy('r.left', 'ASC');
             });
 
         return $this->render($template, array('rubrics' => $rubrics, 'currentRubric' => $rubric));

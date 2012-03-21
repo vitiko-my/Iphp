@@ -4,28 +4,30 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <parameters>
-        <!-- POST -->
+
         <parameter key="iphp.content.admin.content.class">Iphp\ContentBundle\Admin\ContentAdmin</parameter>
         <parameter key="iphp.content.admin.content.controller">SonataAdminBundle:CRUD</parameter>
         <parameter key="iphp.content.admin.content.entity">Application\Iphp\ContentBundle\Entity\Content</parameter>
         <parameter key="iphp.content.admin.content.translation_domain">admin-messages</parameter>
+
+
 
     </parameters>
 
     <services>
 
         <service id="iphp.content.admin.content" class="%iphp.content.admin.content.class%">
-            <tag name="sonata.admin" manager_type="orm" group="Контент" label="Материалы" />
-            <argument />
+            <tag name="sonata.admin" manager_type="orm" group="Контент" label="Материалы"/>
+            <argument/>
             <argument>%iphp.content.admin.content.entity%</argument>
             <argument>%iphp.content.admin.content.controller%</argument>
 
             <call method="setUserManager">
-                <argument type="service" id="fos_user.user_manager" />
+                <argument type="service" id="fos_user.user_manager"/>
             </call>
 
             <call method="setPoolFormatter">
-                <argument type="service" id="sonata.formatter.pool" />
+                <argument type="service" id="sonata.formatter.pool"/>
             </call>
 
 

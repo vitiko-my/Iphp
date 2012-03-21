@@ -45,6 +45,10 @@
                 <argument type="service" id="sonata.admin.manager.orm.tree"/>
             </call>
 
+            <call method="setRubricManager">
+                <argument type="service" id="iphp.core.rubric.manager"/>
+            </call>
+
             <!--
             <call method="setDatagridBuilder">
                 <argument type="service" id="sonata.admin.builder.orm_datagrid.tree" />
@@ -85,9 +89,19 @@
         </service>
 
         <service id="iphp.core.form.type.parentblock_choice" class="Iphp\CoreBundle\Form\Type\ParentBlockChoiceType">
-                    <argument type="service" id="doctrine.orm.entity_manager"/>
-                    <tag name="form.type" alias="parentblock_choice"/>
-                </service>
+            <argument type="service" id="doctrine.orm.entity_manager"/>
+            <tag name="form.type" alias="parentblock_choice"/>
+        </service>
+
+
+        <!-- TODO: непонятно как получить список сервисов в ServiceFormType который экстентид стандартный -->
+        <!-- в стандартном в SonataBlockExtension происходит наполнение -->
+        <!--
+        <service id="iphp.core.form.type.block" class="Iphp\CoreBundle\Form\Type\BlockServiceListType">
+            <tag name="form.type" alias="iphp_block_service_choice"/>
+            <argument type="service" id="sonata.block.manager"/>
+        </service>
+        -->
 
     </services>
 

@@ -54,7 +54,8 @@ abstract class Content implements ContentInterface
     {
         $this->title = $title;
 
-       $this->setSlug(self::slugify($title));
+
+        return $this;
     }
 
 
@@ -131,6 +132,7 @@ abstract class Content implements ContentInterface
     public function setAbstract($abstract)
     {
         $this->abstract = $abstract;
+        return $this;
     }
 
     /**
@@ -151,6 +153,7 @@ abstract class Content implements ContentInterface
     public function setContent($content)
     {
         $this->content = $content;
+        return $this;
     }
 
     /**
@@ -171,6 +174,7 @@ abstract class Content implements ContentInterface
     public function setEnabled($enabled)
     {
         $this->enabled = $enabled;
+        return $this;
     }
 
     /**
@@ -231,6 +235,7 @@ abstract class Content implements ContentInterface
     public function setCreatedAt(\DateTime $createdAt = null)
     {
         $this->createdAt = $createdAt;
+        return $this;
     }
 
     /**
@@ -251,6 +256,7 @@ abstract class Content implements ContentInterface
     public function setUpdatedAt(\DateTime $updatedAt = null)
     {
         $this->updatedAt = $updatedAt;
+        return $this;
     }
 
     /**
@@ -270,8 +276,11 @@ abstract class Content implements ContentInterface
             $this->setPublicationDateStart(new \DateTime);
         }
 
-        $this->setCreatedAt(new \DateTime);
-        $this->setUpdatedAt(new \DateTime);
+        if (!$this->getCreatedAt())  $this->setCreatedAt(new \DateTime);
+        if (!$this->getUpdatedAt()) $this->setUpdatedAt(new \DateTime);
+
+        if (!$this->getSlug())
+        $this->setSlug(/*$this->getCreatedAt()->format ('Y-m-d').'-'.*/self::slugify($this->getTitle()));
     }
 
     public function preUpdate()
@@ -400,6 +409,7 @@ abstract class Content implements ContentInterface
     public function setRawContent($rawContent)
     {
         $this->rawContent = $rawContent;
+        return $this;
     }
 
     public function getRawContent()
@@ -420,6 +430,7 @@ abstract class Content implements ContentInterface
     public function setRubric($rubric)
     {
         $this->rubric = $rubric;
+        return $this;
     }
 
     public function getRubric()

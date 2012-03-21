@@ -23,6 +23,11 @@ class RubricAdmin extends TreeAdmin
      */
     protected $userManager;
 
+    /**
+     * @var \Iphp\CoreBundle\Manager\RubricManager
+     */
+    protected $rubricManager;
+
 
     public function getNewInstance()
     {
@@ -56,14 +61,15 @@ class RubricAdmin extends TreeAdmin
         $isRoot = $rubric->getLevel() === 0;
 
         if (!$isRoot)
-            $formMapper->add('status', 'checkbox', array('required' => false, 'label' => 'Показывать на сайте'));
+            $formMapper->add('status', 'checkbox', array('required' => false, 'label' => 'Показывать в меню'));
 
         $formMapper->add('title', null, array('label' => 'Заголовок'));
 
 
         if (!$isRoot)
             $formMapper->add('parent', 'rubricchoice', array('label' => 'Parent Rubric'))
-                    ->add('path', 'text', array('label' => 'Директория'));
+                    ->add('path', 'text', array('label' => 'Директория'))
+                    ->setHelps(array('path' => 'На основе директорий строится адресация разделов сайта'));
 
 
         $formMapper->add('abstract', null, array('label' => 'Анонс'))
@@ -85,6 +91,15 @@ class RubricAdmin extends TreeAdmin
             //   ->end();
 
         ;
+
+
+        $module = $this->configurationPool->getContainer()->get('iphp.core.module.manager')
+                ->getModuleFromRubric($rubric);
+
+        if ($module) {
+            $moduleAdminExtension = $module->getAdminExtension();
+            if ($moduleAdminExtension) $moduleAdminExtension->configureFormFields($formMapper);
+        }
     }
 
     /**
@@ -145,11 +160,13 @@ class RubricAdmin extends TreeAdmin
 
     public function postUpdate($object)
     {
-        //TODO: DIRTY HACK!!
-        print realpath(__DIR__.'/../../../../app/cache/frontdev');
-        exit();
+        $this->rubricManager->clearCache();
     }
 
+    public function postPersist($object)
+    {
+        $this->rubricManager->clearCache();
+    }
 
 
     public function setUserManager($userManager)
@@ -160,6 +177,24 @@ class RubricAdmin extends TreeAdmin
     public function getUserManager()
     {
         return $this->userManager;
+    }
+
+    /**
+     * @param \Iphp\CoreBundle\Manager\RubricManager $rubricManager
+     * @return RubricAdmin
+     */
+    public function setRubricManager($rubricManager)
+    {
+        $this->rubricManager = $rubricManager;
+        return $this;
+    }
+
+    /**
+     * @return \Iphp\CoreBundle\Manager\RubricManager
+     */
+    public function getRubricManager()
+    {
+        return $this->rubricManager;
     }
 
 }
