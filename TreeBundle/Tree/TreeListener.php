@@ -44,7 +44,7 @@ class TreeListener extends BaseTreeListener
         return $this->myStrategyInstances[$this->myStrategies[$class]];
     }
 
-    private function getStrategiesUsedForObjects(array $classes)
+    protected function getStrategiesUsedForObjects(array $classes)
     {
         $strategies = array();
         foreach ($classes as $name => $opt) {
