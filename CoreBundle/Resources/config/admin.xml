@@ -22,7 +22,7 @@
     <services>
 
         <service id="iphp.core.admin.rubric" class="%iphp.core.admin.rubric.class%">
-            <tag name="sonata.admin" manager_type="orm" group="Структура" label="Рубрики"/>
+            <tag name="sonata.admin" manager_type="orm" group="Сайт" label="Рубрики"/>
             <argument/>
             <argument>%iphp.core.admin.rubric.entity%</argument>
             <argument>%iphp.core.admin.rubric.controller%</argument>
@@ -58,7 +58,7 @@
 
 
         <service id="iphp.core.admin.block" class="%iphp.core.admin.block.class%">
-            <tag name="sonata.admin" manager_type="orm" show_in_dashboard="true" group="Структура" label="Блоки"/>
+            <tag name="sonata.admin" manager_type="orm" show_in_dashboard="true" group="Сайт" label="Блоки"/>
             <argument/>
             <argument>%iphp.core.admin.block.entity%</argument>
             <argument>%iphp.core.admin.block.controller%</argument>
@@ -94,14 +94,20 @@
         </service>
 
 
-        <!-- TODO: непонятно как получить список сервисов в ServiceFormType который экстентид стандартный -->
-        <!-- в стандартном в SonataBlockExtension происходит наполнение -->
-        <!--
+        <!-- TODO:  в BlockBundle/ServiceFormType происходит наполнение списком сервисов блоков
+         в SonataBlockExtension. Пока получается через вызов сервиса  sonata.block.form.type.block
+         (который наполнен как сказано выше -->
+
         <service id="iphp.core.form.type.block" class="Iphp\CoreBundle\Form\Type\BlockServiceListType">
             <tag name="form.type" alias="iphp_block_service_choice"/>
             <argument type="service" id="sonata.block.manager"/>
+
+            <call method="setBlocksSource">
+                <argument type="service" id="sonata.block.form.type.block"/>
+            </call>
+
         </service>
-        -->
+
 
     </services>
 

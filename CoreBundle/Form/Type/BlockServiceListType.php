@@ -12,6 +12,12 @@ use Sonata\BlockBundle\Block\BlockServiceManagerInterface;
 class BlockServiceListType extends BaseServiceListType
 {
 
+    protected $blocksSource;
+
+    function setBlocksSource($blocksSource)
+    {
+        $this->blocksSource = $blocksSource;
+    }
 
     /**
      * @param array $options
@@ -19,6 +25,8 @@ class BlockServiceListType extends BaseServiceListType
      */
     public function getDefaultOptions(array $options)
     {
+        //TODO: наигрязнейший хак
+        $this->contexts = array ('cms' => 1,'admin' => 1);
         $options = parent::getDefaultOptions($options);
 
         if (!isset($options['value_strategy'])) $options['value_strategy'] = 1;
@@ -33,11 +41,13 @@ class BlockServiceListType extends BaseServiceListType
      */
     protected function getBlockTypes($context)
     {
-        $types = array();
-        foreach ($this->contexts[$context] as $service) {
-            $types[$service] = sprintf('%s -! %s', $this->manager->getService($service)->getName(), $service);
-        }
 
-        return $types;
+        return $this->blocksSource->getBlockTypes($context);
+        /*      $types = array();
+       foreach ($this->contexts[$context] as $service) {
+           $types[$service] = sprintf('%s -! %s', $this->manager->getService($service)->getName(), $service);
+       }
+
+       return $types;*/
     }
 }

@@ -26,7 +26,17 @@ class RubricManager extends ContainerAware
 
     public function getByPath($rubricPath)
     {
-        return $this->getRepository()->findOneByFullPath($rubricPath);
+        $key = 'rubricCache_'.$rubricPath;
+
+     /*   if (apc_exists($key)) {
+           echo "Foo exists: ";
+            return unserialize (apc_fetch($key));
+        }*/
+
+        $rubric = $this->getRepository()->findOneByFullPath($rubricPath);
+
+      //  apc_store($key, serialize($rubric ));
+        return $rubric;
     }
 
 
@@ -78,6 +88,8 @@ class RubricManager extends ContainerAware
                 if (file_exists($cachedFile)) unlink ($cachedFile);
             }
         }
+
+        apc_clear_cache('user');
         //exit();
 
     }

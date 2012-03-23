@@ -16,7 +16,7 @@
     <services>
 
         <service id="iphp.content.admin.content" class="%iphp.content.admin.content.class%">
-            <tag name="sonata.admin" manager_type="orm" group="Контент" label="Материалы"/>
+            <tag name="sonata.admin" manager_type="orm" group="Сайт" label="Материалы"/>
             <argument/>
             <argument>%iphp.content.admin.content.entity%</argument>
             <argument>%iphp.content.admin.content.controller%</argument>

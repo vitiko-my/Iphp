@@ -1,4 +1,4 @@
-<?
+<?php
 namespace Iphp\TreeBundle\Tree\Strategy;
 
 
@@ -10,6 +10,7 @@ use Doctrine\ORM\EntityManager;
 use Gedmo\Tree\TreeListener;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Doctrine\ORM\Query;
+use Doctrine\ORM\QueryBuilder;
 use Gedmo\Mapping\Event\AdapterInterface;
 
 class Nested implements Strategy

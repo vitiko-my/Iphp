@@ -47,7 +47,7 @@ class ContentController extends Controller
     {
         $content = $this->getRubricIndex($this->getCurrentRubric());
 
-        if (!$content) throw $this->createNotFoundException('Индексный материал не найден');
+        //if (!$content) throw $this->createNotFoundException('Индексный материал не найден');
 
 
         return $this->render('IphpContentBundle::content.html.twig',
