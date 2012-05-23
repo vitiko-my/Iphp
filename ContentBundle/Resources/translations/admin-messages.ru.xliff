@@ -8,16 +8,16 @@
             </trans-unit>
            <trans-unit id="Content Create">
                 <source>Content Create</source>
-                <target>Новая рубрика</target>
+                <target>Новый материал</target>
            </trans-unit>
            <trans-unit id="Content Edit">
                 <source>Content Edit</source>
-                <target>Редактирование рубрики</target>
+                <target>Редактирование материала</target>
            </trans-unit>
 
            <trans-unit id="Content Delete">
                 <source>Content Delete</source>
-                <target>Удаление рубрики</target>
+                <target>Удаление материала</target>
            </trans-unit>
 
     <trans-unit id="Content Show">

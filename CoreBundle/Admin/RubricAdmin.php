@@ -113,9 +113,9 @@ class RubricAdmin extends TreeAdmin
         // ->add('status', null, array('label' => 'Показывать', 'width' => '30px'))
                 ->addIdentifier('title', null, array(
             'label' => 'Заголовок',
-            'template' => 'IphpTreeBundle:CRUD:base_treelist_field.html.twig '))
+            'template' => 'IphpTreeBundle:CRUD:base_treelist_field.html.twig'))
                 ->add('fullPath', null, array('label' => 'Путь', 'width' => '300px',
-            'template' => 'IphpTreeBundle:CRUD:base_treelist_field.html.twig '))/* ->add('controllerName', null, array('label' => 'Контроллер',  'width' => '100px'))*/
+            'template' => 'IphpTreeBundle:CRUD:base_treelist_field.html.twig'))/* ->add('controllerName', null, array('label' => 'Контроллер',  'width' => '100px'))*/
         ;
 
     }

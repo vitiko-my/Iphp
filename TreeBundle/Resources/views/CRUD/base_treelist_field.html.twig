@@ -10,11 +10,9 @@ file that was distributed with this source code.
 #}
 
 <td class="sonata-ba-list-field sonata-ba-list-field-{{ field_description.type }}" objectId="{{ admin.id(object) }}"
-
     style="{% if field_description.getOption('width')%}width:{{field_description.getOption('width')}} {% endif%}"
 {# style="padding-left:{{ object.level*30+10 }}px" #}
 >
-
 
     {% if field_description.options.identifier is defined and admin.isGranted(['EDIT', 'SHOW']) %}
 
@@ -30,4 +28,5 @@ file that was distributed with this source code.
     {% else %}
         {{ block('field') }}
     {% endif %}
+
 </td>
