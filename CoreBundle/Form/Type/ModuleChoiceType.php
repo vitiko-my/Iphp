@@ -20,7 +20,7 @@ class ModuleChoiceType extends AbstractType
     }
 
 
-    public function getDefaultOptions(array $options)
+    public function getDefaultOptions()
     {
         $moduleOptions = array();
         foreach ($this->moduleManager->modules() as $module)

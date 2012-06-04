@@ -40,13 +40,18 @@ class RubricManager extends ContainerAware
     }
 
 
+
+
+
     /**
      * @return \Doctrine\ORM\EntityRepository
      */
-    protected function getRepository()
+    public function getRepository()
     {
         return $this->em->getRepository('ApplicationIphpCoreBundle:Rubric');
     }
+
+
 
     /**
      * @return \Application\Iphp\CoreBundle\Entity\Rubric
@@ -79,7 +84,7 @@ class RubricManager extends ContainerAware
         $cacheDir = realpath($cacheDir.'/../');
 
 
-        foreach (array ('frontdev','frontprod')  as $env)
+        foreach (array ('frontdev','frontprod','dev','prod')  as $env)
         {
             foreach (array ('UrlGenerator','UrlMatcher') as $file)
             {

@@ -23,7 +23,7 @@ class ParentBlockChoiceType extends AbstractType
     }
 
 
-    public function getDefaultOptions(array $options)
+    public function getDefaultOptions()
     {
 
         $qb = $this->em->getRepository('ApplicationIphpCoreBundle:Block')->createQueryBuilder('b');

@@ -34,4 +34,10 @@ class RubricController extends Controller
 
         return $this->render('IphpCoreBundle::indexSubrubrics.html.twig', array('rubrics' => $rubrics));
     }
+
+
+    public function indexSiteAction()
+    {
+        return $this->render('IphpCoreBundle::indexSite.html.twig', array());
+    }
 }

@@ -35,7 +35,8 @@ class Configuration implements ConfigurationInterface
                             ->scalarNode('rubric')->defaultValue('Application\\Iphp\\CoreBundle\\Entity\\Rubric')->end()
                             ->scalarNode('block')->defaultValue('Application\\Iphp\\CoreBundle\\Entity\\Block')->end()
                         ->end()
-                    ->end();
+                    ->end()
+             ->booleanNode ('separate_admin_env')->defaultTrue()->end();
         return $treeBuilder;
     }
 }

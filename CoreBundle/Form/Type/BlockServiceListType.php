@@ -23,11 +23,11 @@ class BlockServiceListType extends BaseServiceListType
      * @param array $options
      * @return array
      */
-    public function getDefaultOptions(array $options)
+    public function getDefaultOptions()
     {
         //TODO: наигрязнейший хак
         $this->contexts = array ('cms' => 1,'admin' => 1);
-        $options = parent::getDefaultOptions($options);
+        $options = parent::getDefaultOptions();
 
         if (!isset($options['value_strategy'])) $options['value_strategy'] = 1;
         if (!isset($options['index_strategy'])) $options['index_strategy'] = 1;

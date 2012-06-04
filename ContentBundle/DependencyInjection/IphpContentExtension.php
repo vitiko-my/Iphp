@@ -25,7 +25,7 @@ class IphpContentExtension extends Extension
 
 
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
-        if (substr($container->getParameter('kernel.environment'), 0, 5) == 'admin') {
+        if (array_key_exists ('SonataAdminBundle', $container->getParameter('kernel.bundles')))  {
             $loader->load('admin.xml');
         }
 
