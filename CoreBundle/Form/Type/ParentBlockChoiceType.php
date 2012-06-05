@@ -41,7 +41,7 @@ class ParentBlockChoiceType extends AbstractType
 
     }
 
-    public function getParent(array $options)
+    public function getParent()
     {
         return 'choice';
     }

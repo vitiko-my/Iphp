@@ -1,0 +1,27 @@
+ {% extends 'SonataAdminBundle::standard_layout.html.twig' %}
+ {% block footer %}
+   <div class="pull-right clearfix">
+      <span class="label"><a href="http://informika.ru" rel="noreferrer" style="text-decoration: none; color: black">Informika</a></span>
+   </div>
+ {% endblock %}
+
+
+ {% block javascripts %}
+
+    {{ parent() }}
+    <script src="{{ asset('asset/tiny_mce/jquery.tinymce.js') }}"></script>
+    {% if form is defined %}{{ form_javascript(form) }}{% endif %}
+ {% endblock %}
+
+
+ {% block stylesheets %}
+    {{ parent() }}
+    {% if form is defined %}{{ form_stylesheet(form) }}{% endif %}
+     <style>
+         label.label_hidden { display: none }
+         .mceLayout { width: 500px}
+     </style>
+ {% endblock %}
+
+
+

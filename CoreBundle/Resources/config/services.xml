@@ -16,6 +16,14 @@
             <argument type="service" id="service_container"/>
         </service>
 
+
+        <!--
+        <service id="iphp.core.orm.listener.updatedBy" class="Iphp\CoreBundle\Listener\UpdatedByListener">
+            <tag name="doctrine.event_listener" event="preUpdate"/>
+            <tag name="doctrine.event_listener" event="prePersist"/>
+            <argument type="service" id="service_container"/>
+        </service>
+        -->
     </services>
 
 </container>

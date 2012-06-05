@@ -1,11 +1,12 @@
 {% extends 'SonataAdminBundle:CRUD:base_list.html.twig' %}
 
 
+
 {% block notice %}
 {{ parent() }}
 
 
-<div id="alertmsgajax" class="alert-message warning" style="display:none"><div id="alertmsgajaxtxt"
+<div id="alertmsgajax" class="alert alert-block" style="display:none"><div id="alertmsgajaxtxt"
      style="margin:0px;background:url('/bundles/iphpcore/images/loading.gif') no-repeat 0px 5px; padding-left:25px">Сохранение изменений</div></div>
 {% endblock %}
 
@@ -16,11 +17,13 @@
 
 {% block list_table %}
 
+<script src="/asset/js/nestedsort.js"></script>
+
   {% set batchactions = admin.batchactions %}
 
   {% if treeIterator.count > 0 %}
 
-    <script src="/nestedsort.js"></script>
+
     <style>
 
 		ol.sortable, ol.sortable ol {

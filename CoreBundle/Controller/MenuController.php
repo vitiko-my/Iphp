@@ -19,12 +19,12 @@ class MenuController extends RubricController
         $key = 'menuCache'.$this->get('kernel')->getEnvironment();
 
        // print $key;
-        if (apc_exists($key)) {
+   /*     if (apc_exists($key)) {
            // echo "Foo exists: ";
             $content = apc_fetch($key);
 
             return new \Symfony\Component\HttpFoundation\Response( $content);
-        }
+        }*/
 
 
         $rubrics = $this->getRubricsRepository()->getTreeRecordset(
@@ -36,7 +36,7 @@ class MenuController extends RubricController
         $response = $this->render($template, array('rubrics' => $rubrics, 'currentRubric' => $rubric));
 
         $content = $response->getContent();
-        apc_store($key, $content);
+      //  apc_store($key, $content);
 
         return $response;
     }

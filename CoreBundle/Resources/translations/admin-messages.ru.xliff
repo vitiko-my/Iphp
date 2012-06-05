@@ -82,6 +82,16 @@
                 <target>Дата и время обновления</target>
             </trans-unit>
 
+            <trans-unit id="Updated By">
+                <source>Updated By</source>
+                <target>Обновил</target>
+            </trans-unit>
+
+            <trans-unit id="Created By">
+                <source>Created By</source>
+                <target>Создал</target>
+            </trans-unit>
+
             <trans-unit id="Position">
                 <source>Position</source>
                 <target>Порядковый номер</target>
@@ -92,6 +102,10 @@
                 <target>Название</target>
             </trans-unit>
 
+            <trans-unit id="Code">
+                <source>Code</source>
+                <target>Код</target>
+            </trans-unit>
 
             <trans-unit id="Settings">
                 <source>Settings</source>
@@ -123,6 +137,20 @@
             </trans-unit>
 
 
+            <trans-unit id="Description">
+                <source>Description</source>
+                <target>Описание</target>
+            </trans-unit>
+
+            <trans-unit id="Address">
+                <source>Address</source>
+                <target>Адрес</target>
+            </trans-unit>
+
+            <trans-unit id="Phone">
+                <source>Phone</source>
+                <target>Телефон</target>
+            </trans-unit>
 
 
         </body>
