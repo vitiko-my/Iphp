@@ -65,7 +65,7 @@ class RubricChoiceType extends AbstractType
 
     }
 
-    public function getParent()
+    public function getParent(array $options)
     {
         return 'choice';
     }

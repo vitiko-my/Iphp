@@ -33,7 +33,7 @@ class ModuleChoiceType extends AbstractType
         return  array ('choices' => $moduleOptions);
     }
 
-    public function getParent()
+    public function getParent(array $options)
     {
         return 'choice';
     }

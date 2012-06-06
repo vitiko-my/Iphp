@@ -153,6 +153,33 @@
             </trans-unit>
 
 
+            <trans-unit id="Announce">
+                <source>Announce</source>
+                <target>Анонс</target>
+            </trans-unit>
+
+
+            <trans-unit id="Start Date">
+                <source>Start Date</source>
+                <target>Дата начала</target>
+            </trans-unit>
+
+            <trans-unit id="End Date">
+                <source>End Date</source>
+                <target>Дата завершения</target>
+            </trans-unit>
+
+
+            <trans-unit id="Source">
+                <source>Source</source>
+                <target>Источник</target>
+            </trans-unit>
+
+
+            <trans-unit id="Image">
+                <source>Image</source>
+                <target>Изображение</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>
