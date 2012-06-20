@@ -24,7 +24,7 @@ class SiteIndexModule extends Module
 
     protected function registerRoutes()
     {
-        $this->addRoute('site_index', '/', array('_controller' => 'IphpCoreBundle:Rubric:indexSite'));
+        $this->addRoute('site_index', '/', array('_controller' => 'ApplicationIphpCoreBundle:Rubric:indexSite'));
         //    ->addRoute('contentById','/{id}/', array('_controller' => 'IphpContentBundle:Content:contentById'));
     }
 

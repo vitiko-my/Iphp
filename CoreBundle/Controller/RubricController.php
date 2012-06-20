@@ -40,4 +40,18 @@ class RubricController extends Controller
     {
         return $this->render('IphpCoreBundle::indexSite.html.twig', array());
     }
+
+
+    public function redirectAction()
+    {
+        $rubric = $this->getRubricManager()->getCurrent();
+
+       if (!$rubric->getRedirectUrl())
+       {
+           throw new \Exception ('redirect url not setted');
+       }
+
+        return new \Symfony\Component\HttpFoundation\RedirectResponse($rubric->getRedirectUrl());
+
+    }
 }

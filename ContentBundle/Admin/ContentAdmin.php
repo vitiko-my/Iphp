@@ -13,7 +13,6 @@ use Sonata\FormatterBundle\Formatter\Pool as FormatterPool;
 use Knp\Menu\ItemInterface as MenuItemInterface;
 
 
-
 class ContentAdmin extends Admin
 {
     /**
@@ -44,10 +43,11 @@ class ContentAdmin extends Admin
     {
         $showMapper
         // ->add('author')
-                ->add('enabled', null, array( 'label' => 'Показывать на сайте'))
+                ->add('enabled', null, array('label' => 'Показывать на сайте'))
                 ->add('title', null, array('label' => 'Заголовок'))
                 ->add('abstract', null, array('label' => 'Анонс'))
                 ->add('content', null, array('label' => 'Текст'));
+
     }
 
     /**
@@ -65,10 +65,7 @@ class ContentAdmin extends Admin
         //  ->add('rubric', 'sonata_type_model', array('label' => 'Рубрика', 'required' => true), array('edit' => 'list'))
 
 
-                ->add('rubric', null,
-            array(
-                'label' => 'Рубрика',
-                'property' => 'titleLevelIndented'))
+                ->add('rubric', 'rubricchoice')
 
 
         // ->add('author', 'sonata_type_model', array( 'label' => 'Автор'), array('edit' => 'list'))
@@ -76,13 +73,15 @@ class ContentAdmin extends Admin
         //                                                    'inline' => 'table' */))
                 ->add('title', null, array('label' => 'Заголовок'))
                 ->add('abstract', null, array('label' => 'Анонс'))
-          /*      ->add('contentFormatter', 'sonata_formatter_type_selector',
-            array(
-                'source' => 'rawContent',
-                'target' => 'content',
-                'label' => 'Форматирование'
-            ))*/
+        /*      ->add('contentFormatter', 'sonata_formatter_type_selector',
+        array(
+            'source' => 'rawContent',
+            'target' => 'content',
+            'label' => 'Форматирование'
+        ))*/
                 ->add('content', 'genemu_tinymce', array('label' => 'Текст'))
+                ->add('image', 'sonata_type_model', array(),
+            array('edit' => 'list', 'link_parameters' => array('context' => 'competition')))
                 ->end()// ->with('Options', array('collapsed' => true))
             //  ->add('commentsCloseAt')
             //  ->add('commentsEnabled', null, array('required' => false))
@@ -101,6 +100,9 @@ class ContentAdmin extends Admin
     {
         $listMapper
                 ->addIdentifier('title', null, array('label' => 'Заголовок'))
+                ->add('image', 'text', array(
+            'template' => 'IphpCoreBundle::image_preview.html.twig'
+        ))
                 ->add('rubric', null, array('label' => 'Рубрика'))
                 ->add('enabled', null, array('label' => 'Показывать на сайте'));
         // ->add('commentsEnabled');
@@ -199,9 +201,9 @@ class ContentAdmin extends Admin
      */
     public function prePersist($content)
     {
-       // $content->setContentFormatter('raw');
+        // $content->setContentFormatter('raw');
 
-     //    $content->setContent($this->getPoolFormatter()->transform($content->getContentFormatter(), $content->getRawContent()));
+        //    $content->setContent($this->getPoolFormatter()->transform($content->getContentFormatter(), $content->getRawContent()));
     }
 
     /**
@@ -209,7 +211,7 @@ class ContentAdmin extends Admin
      */
     public function preUpdate($content)
     {
-      //  $content->setContentFormatter('raw');
-      //  $content->setContent($this->getPoolFormatter()->transform($content->getContentFormatter(), $content->getRawContent()));
+        //  $content->setContentFormatter('raw');
+        //  $content->setContent($this->getPoolFormatter()->transform($content->getContentFormatter(), $content->getRawContent()));
     }
 }
