@@ -115,7 +115,14 @@ class ContentAdmin extends Admin
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
-                ->add ('rubric', null, array(), null, array('property' => 'TitleLevelIndented'))
+                ->add('rubric', null, array(), null, array(
+            'property' => 'TitleLevelIndented',
+            'query_builder' => function(\Doctrine\ORM\EntityRepository $er)
+            {
+                return $er->createQueryBuilder('r')
+                        ->orderBy('r.left', 'ASC');
+            }
+        ))
                 ->add('title')
                 ->add('enabled')
                 ->add('author');
