@@ -3,22 +3,26 @@
 
 {% block body %}
 
+
+{% block list_title %}
 <h1>{{ iphp.rubric }}</h1>
+{% endblock list_title %}
 
 
+{% block list_contents %}
 <div style="padding:5px">
-
-{% for content in contents %}
-
+    {% for content in contents %}
     <li><a href="{{ cpath (content) }}">{{ content }}</a></li>
-
-{% endfor %}
+    {% endfor %}
 </div>
 
-
+{% block list_pagination %}
 <div>
-
     {{ contents.render()|raw }}
-
 </div>
+{% endblock list_pagination %}
+
+{% endblock list_contents %}
+
+
 {% endblock body %}

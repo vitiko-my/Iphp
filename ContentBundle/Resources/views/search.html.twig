@@ -1,0 +1,17 @@
+{% extends 'IphpContentBundle::list.html.twig' %}
+
+
+
+
+
+{% block list_title %}
+<h1>{{ iphp.rubric }}</h1>
+
+
+
+<form action="{{ path ('contentsearch')}}">
+    <input type="text" name="search" value="{{ searchStr }}"> <input type="submit" value="Искать">
+</form>
+
+{% endblock list_title %}
+

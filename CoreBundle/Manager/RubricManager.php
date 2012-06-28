@@ -67,7 +67,15 @@ class RubricManager extends ContainerAware
 
     public function generatePath($rubric, $absolute = false)
     {
-        return $this->request->getBaseUrl() . (is_string($rubric) ? $rubric : $rubric->getFullPath());
+        return  $this->getBaseUrl().(is_string($rubric) ? $rubric : $rubric->getFullPath());
+    }
+
+
+
+    //Базовый url с именем контроллера (app_dev.php/ например)
+    public function getBaseUrl()
+    {
+        return $this->request->getBaseUrl();
     }
 
 

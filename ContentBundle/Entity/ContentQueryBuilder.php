@@ -82,4 +82,22 @@ class ContentQueryBuilder extends QueryBuilder
         $this->andWhere('c.enabled = :contentEnabled')->setParameter('contentEnabled', $enabled);
         return $this;
     }
+
+
+    protected function getSearchFields($params = array())
+    {
+        return array('c.title', 'c.abstract', 'c.content');
+    }
+
+    public function search($searchStr)
+    {
+        if (!$searchStr) return $this;
+        $searchExpr = $this->expr()->orx();
+
+        foreach ($this->getSearchFields() as $field)
+            $searchExpr->add ($this->expr()->like($field, $this->expr()->literal('%' . $searchStr . '%')));
+
+        $this->andWhere( $searchExpr);
+        return $this;
+    }
 }

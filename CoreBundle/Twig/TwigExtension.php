@@ -30,7 +30,7 @@ class TwigExtension extends \Twig_Extension
             'rpath' => new \Twig_Function_Method($this, 'getRubricPath'),
             'sonata_block_by_name' => new \Twig_Function_Method($this, 'sonataBlockByName'),
 
-
+            'entitypath' => new \Twig_Function_Method($this, 'getEntityUrl'),
             //Вынести в ContentBundle
             'cpath' => new \Twig_Function_Method($this, 'getContentPath'),
         );
@@ -51,6 +51,14 @@ class TwigExtension extends \Twig_Extension
     public function getContentPath($content)
     {
         return $this->rubricManager->generatePath($content->getRubric()) . $content->getSlug();
+    }
+
+    public function getEntityUrl ($entity, $rubric = null)
+    {
+        if (!method_exists($entity, 'getSitePath'))
+            throw new \Exception ('method '.get_class($entity).'->getSitePath() not defined');
+
+       return $this->rubricManager->getBaseUrl().$entity->getSitePath($rubric);
     }
 
     /**

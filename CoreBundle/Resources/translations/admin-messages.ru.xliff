@@ -32,6 +32,10 @@
                 <target>Рубрика</target>
             </trans-unit>
 
+            <trans-unit id="Rubrics">
+                <source>Rubrics</source>
+                <target>Рубрики</target>
+            </trans-unit>
 
             <!-- БЛОКИ -->
             <trans-unit id="sidemenu.link_list_blocks">

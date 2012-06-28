@@ -12,6 +12,9 @@ use Symfony\Component\Form\Extension\Core\ChoiceList\SimpleChoiceList;
 
 use Symfony\Component\Form\Exception\TransformationFailedException;
 
+use Symfony\Component\OptionsResolver\Options;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+
 
 class RubricChoiceType extends AbstractType
 {
@@ -27,45 +30,73 @@ class RubricChoiceType extends AbstractType
     }
 
 
-    public function getDefaultOptions()
+    public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
 
-
-        $entityChoiceList = new  EntityChoiceList (
-            $this->em,
-            'Application\Iphp\CoreBundle\Entity\Rubric',
-            'titleLevelIndented',
-            new ORMQueryBuilderLoader (
-                $this->em->getRepository('ApplicationIphpCoreBundle:Rubric')->createQueryBuilder('r')
-                        ->orderBy('r.left')));
-
-        if (isset($options['transform_to_id']) && $options['transform_to_id'])
-        {
-         $choices = $entityChoiceList->getChoices();
+        $em = $this->em;
 
 
-         //
-         foreach ( $choices as $key => $choice)
-         if (is_object($choice)) $choices[$key] = $choice->getTitleLevelIndented();
-       /*     print sizeof($choices);
-
-            print_r (array_keys($choices));
-            print get_class($choices[1]);
-            exit();*/
-         $choiceList = new SimpleChoiceList ($choices);
-        }
-        else $choiceList = $entityChoiceList;
-
-
-        return array(
+        $resolver->setDefaults(array(
             'transform_to_id' => false,
+            'module_likecondition' => false,
+            'display_method' => 'titleLevelIndented',
+            'display_transformer' => null,
+            'choices_afterload' => null,
+
+
             'empty_value' => '',
-            'choice_list' => $choiceList
-        );
+            'choice_list' => function (Options $options, $previousValue) use ($em)
+            {
+
+
+                $qb = $em->getRepository('ApplicationIphpCoreBundle:Rubric')
+                        ->createQueryBuilder('r')
+                        ->orderBy('r.left');
+
+                if ($options['module_likecondition']) {
+                    $qb->where($qb->expr()->like('r.controllerName', $qb->expr()->literal($options['module_likecondition'])));
+                }
+
+
+                $entityChoiceList = new  EntityChoiceList ($em,
+                    'Application\Iphp\CoreBundle\Entity\Rubric',
+                    $options['display_method'],
+                    new ORMQueryBuilderLoader ($qb));
+
+
+                $transformToSimple = $options['transform_to_id'];
+
+
+                $displayTransformer = $options['display_transformer'];
+                $choicesAfterLoad = $options['choices_afterload'];
+
+                if ($displayTransformer) $transformToSimple = true;
+
+
+
+                if ($transformToSimple) {
+                    $choices = $entityChoiceList->getChoices();
+                    foreach ($choices as $key => $choice)
+                        if (is_object($choice)) $choices[$key] =
+                                $displayTransformer ?
+                                        $displayTransformer($choice) : $choice->{'get' . $options['display_method']}();
+
+                    if ($choicesAfterLoad) $choicesAfterLoad ($choices);
+                    return new SimpleChoiceList ($choices);
+                }
+                else
+                {
+                    if ($choicesAfterLoad) $choicesAfterLoad ($entityChoiceList);
+                    return $entityChoiceList;
+                }
+            },
+
+
+        ));
 
     }
 
-    public function getParent(array $options)
+    public function getParent()
     {
         return 'choice';
     }

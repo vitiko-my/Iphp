@@ -5,27 +5,9 @@ namespace Iphp\CoreBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
-class RubricController extends Controller
+class RubricController extends RubricAwareController
 {
 
-    function getRubricsRepository()
-    {
-        return $this->getDoctrine()->getRepository('ApplicationIphpCoreBundle:Rubric');
-    }
-
-
-    /**
-     *  TODO: есть дублирование с ContentController
-     */
-    protected function getRubricManager()
-    {
-        return $this->container->get('iphp.core.rubric.manager');
-    }
-
-    protected function getCurrentRubric()
-    {
-        return $this->getRubricManager()->getCurrent();
-    }
 
 
     public function indexSubrubricsAction()
@@ -44,7 +26,7 @@ class RubricController extends Controller
 
     public function redirectAction()
     {
-        $rubric = $this->getRubricManager()->getCurrent();
+        $rubric = $this->getCurrentRubric();
 
        if (!$rubric->getRedirectUrl())
        {

@@ -3,20 +3,12 @@
 namespace Iphp\ContentBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-
 use Symfony\Component\HttpFoundation\Request;
-
 use Application\Iphp\CoreBundle\Entity\Rubric;
+use Iphp\CoreBundle\Controller\RubricAwareController;
 
 
-//use Symfony\Component\HttpFoundation\RedirectResponse;
-
-
-// these import the "@Route" and "@Template" annotations
-//use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-//use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-
-class ContentController extends Controller
+class ContentController extends RubricAwareController
 {
 
 
@@ -31,25 +23,11 @@ class ContentController extends Controller
         return $this->getRepository()->rubricIndex($rubric);
     }
 
-
-    protected function getRubricManager()
-    {
-        return $this->container->get('iphp.core.rubric.manager');
-    }
-
-    protected function getCurrentRubric()
-    {
-        return $this->getRubricManager()->getCurrent();
-    }
-
-
     public function indexAction()
     {
         $content = $this->getRubricIndex($this->getCurrentRubric());
 
         //if (!$content) throw $this->createNotFoundException('Индексный материал не найден');
-
-
         return $this->render('IphpContentBundle::content.html.twig',
             array('content' => $content));
     }
@@ -95,5 +73,21 @@ class ContentController extends Controller
         return $this->render('IphpContentBundle::content.html.twig',
             array('content' => $content));
 
+    }
+
+
+    function searchAction(Request $request)
+    {
+        $searchStr = $request->get ('search');
+
+
+        $query =    $searchStr  ? $this->getRepository()->createQuery('c', function ($qb) use($searchStr)
+        {
+            $qb->whereEnabled()->search ($searchStr);
+        }) : null;
+
+        return $this->render(
+            'IphpContentBundle::search.html.twig',
+            array('contents' => $query ? $this->paginate($query, 20) :  array(), 'searchStr' => $searchStr ));
     }
 }
