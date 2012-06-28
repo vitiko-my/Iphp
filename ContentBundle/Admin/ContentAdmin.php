@@ -115,6 +115,7 @@ class ContentAdmin extends Admin
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
+                ->add ('rubric', null, array(), null, array('property' => 'TitleLevelIndented'))
                 ->add('title')
                 ->add('enabled')
                 ->add('author');
