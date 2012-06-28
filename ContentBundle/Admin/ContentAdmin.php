@@ -31,7 +31,6 @@ class ContentAdmin extends Admin
      * @return void
      */
 
-
 /*    function configure()
     {
         $this->configurationPool->getAdminByAdminCode('iphp.core.admin.rubric')
