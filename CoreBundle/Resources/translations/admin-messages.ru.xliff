@@ -184,6 +184,12 @@
                 <source>Image</source>
                 <target>Изображение</target>
             </trans-unit>
+
+
+            <trans-unit id="Date">
+                            <source>Date</source>
+                            <target>Дата</target>
+                        </trans-unit>
         </body>
     </file>
 </xliff>

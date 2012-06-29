@@ -52,7 +52,8 @@ class ContentController extends RubricAwareController
         $rubric = $this->getCurrentRubric();
         $query = $this->getRepository()->createQuery('c', function ($qb) use ($rubric)
         {
-            $qb->fromRubric($rubric)->whereEnabled();
+            $qb->fromRubric($rubric)->whereEnabled()
+                    ->addOrderBy ('c.date','DESC')->addOrderBy ('c.updatedAt','DESC');
         });
 
         return $this->render(

@@ -19,6 +19,8 @@
         <field name="commentsCloseAt"   type="datetime"  column="comments_close_at" nullable="true"/>
         <field name="commentsDefaultStatus"   type="integer"  column="comments_default_status" nullable="true"/>
 
+
+        <field name="date"    type="datetime"   column="date" nullable="true"/>
         <field name="createdAt"    type="datetime"   column="created_at" />
         <field name="updatedAt"    type="datetime"   column="updated_at" />
 
@@ -29,6 +31,10 @@
             <lifecycle-callback type="prePersist" method="prePersist"/>
             <lifecycle-callback type="preUpdate" method="preUpdate"/>
         </lifecycle-callbacks>
+
+
+
+
 
     </mapped-superclass>
 </doctrine-mapping>
