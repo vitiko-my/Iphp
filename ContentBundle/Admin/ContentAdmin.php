@@ -71,8 +71,8 @@ class ContentAdmin extends Admin
         //  ->add('images', 'sonata_type_model', array(), array('edit' => 'inline' /*,
         //                                                    'inline' => 'table' */))
                 ->add('title', null, array('label' => 'Заголовок'))
-                ->add ('date', 'genemu_jquerydate', array(
-                                                     'required' => false, 'widget' => 'single_text'  ))
+                ->add('date', 'genemu_jquerydate', array(
+            'required' => false, 'widget' => 'single_text'))
                 ->add('abstract', null, array('label' => 'Анонс'))
         /*      ->add('contentFormatter', 'sonata_formatter_type_selector',
         array(
@@ -101,6 +101,7 @@ class ContentAdmin extends Admin
     {
         $listMapper
                 ->addIdentifier('title', null, array('label' => 'Заголовок'))
+                ->add('date')
                 ->add('image', 'text', array(
             'template' => 'IphpCoreBundle::image_preview.html.twig'
         ))
@@ -127,6 +128,7 @@ class ContentAdmin extends Admin
         ))
                 ->add('title')
                 ->add('enabled')
+                ->add('date')
                 ->add('author');
     }
 
