@@ -57,15 +57,14 @@ class RubricAdmin extends TreeAdmin
         $rubric = $this->getSubject();
         $formMapper->with('Основные');
 
-        $isRoot = $rubric->getLevel() === 0;
 
-        if (!$isRoot)
-            $formMapper->add('status', 'checkbox', array('required' => false, 'label' => 'Показывать в меню'));
+        $this->addMenuRelatedFields($rubric,$formMapper);
+
 
         $formMapper->add('title', null, array('label' => 'Заголовок'));
 
 
-        if (!$isRoot)
+        if (!$rubric->isRoot())
             $formMapper->add('parent', 'rubricchoice', array('label' => 'Parent Rubric'))
                     ->add('path', 'text', array('label' => 'Директория'))
                     ->setHelps(array('path' => 'На основе директорий строится адресация разделов сайта'));
@@ -92,6 +91,19 @@ class RubricAdmin extends TreeAdmin
         ;
 
 
+        $this->configureModuleFormFields($rubric, $formMapper);
+    }
+
+
+    protected  function addMenuRelatedFields($rubric,$formMapper)
+    {
+        if (!$rubric->isRoot())
+            $formMapper->add('status', 'checkbox', array('required' => false, 'label' => 'Показывать в меню'));
+    }
+
+
+    protected function configureModuleFormFields($rubric, $formMapper)
+    {
         $module = $this->configurationPool->getContainer()->get('iphp.core.module.manager')
                 ->getModuleFromRubric($rubric);
 
@@ -100,6 +112,7 @@ class RubricAdmin extends TreeAdmin
             if ($moduleAdminExtension) $moduleAdminExtension->configureFormFields($formMapper);
         }
     }
+
 
     /**
      * @param \Sonata\AdminBundle\Datagrid\ListMapper $listMapper

@@ -2,8 +2,9 @@
 namespace Iphp\ContentBundle\Entity;
 
 use Doctrine\ORM\QueryBuilder;
+use Iphp\CoreBundle\Entity\BaseEntityQueryBuilder;
 
-class ContentQueryBuilder extends QueryBuilder
+class ContentQueryBuilder extends BaseEntityQueryBuilder
 {
 
     /**
@@ -16,6 +17,12 @@ class ContentQueryBuilder extends QueryBuilder
      * @var integer
      */
     protected $fromRubricId;
+
+
+    public function getDefaultAlias()
+    {
+        return 'p';
+    }
 
     function fromRubric($rubric)
     {

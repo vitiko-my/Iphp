@@ -18,18 +18,6 @@
             <gedmo:tree-parent/>
         </many-to-one>
 
-
-       <one-to-many field="children" target-entity="Application\Iphp\CoreBundle\Entity\Rubric" mapped-by="parent" />
-
        <gedmo:tree type="nested"/>
-
-       <indexes>
-            <index name="lftrgt" columns="lft,rgt"/>
-            <index name="lvl" columns="lvl"/>
-            <index name="created_at" columns="created_at"/>
-            <index name="updated_at" columns="updated_at"/>
-            <index name="full_path" columns="full_path"/>
-       </indexes>
-
     </entity>
 </doctrine-mapping>

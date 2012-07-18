@@ -3,6 +3,7 @@
 namespace Iphp\CoreBundle\Twig;
 
 use Iphp\CoreBundle\Manager\RubricManager;
+use Symfony\Component\Security\Core\SecurityContextInterface;
 
 class TwigExtension extends \Twig_Extension
 {
@@ -16,10 +17,19 @@ class TwigExtension extends \Twig_Extension
      */
     protected $rubricManager;
 
-    public function __construct(\Twig_Environment $twigEnviroment,  RubricManager $rubricManager)
+    /**
+     * @var \Symfony\Component\Security\Core\SecurityContextInterface;
+     */
+    protected  $securityContext;
+
+    public function __construct(\Twig_Environment $twigEnviroment,
+                                RubricManager $rubricManager,
+                                SecurityContextInterface $securityContext)
     {
         $this->twigEnviroment = $twigEnviroment;
         $this->rubricManager = $rubricManager;
+        $this->securityContext = $securityContext;
+
         $twigEnviroment->addGlobal('iphp', new TemplateHelper($rubricManager));
     }
 
@@ -27,12 +37,17 @@ class TwigExtension extends \Twig_Extension
     {
         return array(
             // 'strtr' => new \Twig_Filter_Function('strtr'),
-            'rpath' => new \Twig_Function_Method($this, 'getRubricPath'),
+
             'sonata_block_by_name' => new \Twig_Function_Method($this, 'sonataBlockByName'),
 
             'entitypath' => new \Twig_Function_Method($this, 'getEntityUrl'),
-            //Вынести в ContentBundle
+            'inlineedit' => new \Twig_Function_Method($this, 'getInlineEditStr', array('is_safe' => array('html'))),
+
+
+            //Заменить entitypath
+            'rpath' => new \Twig_Function_Method($this, 'getRubricPath'),
             'cpath' => new \Twig_Function_Method($this, 'getContentPath'),
+
         );
     }
 
@@ -42,9 +57,9 @@ class TwigExtension extends \Twig_Extension
         return $this->rubricManager->generatePath($rubric);
     }
 
-    public function sonataBlockByName ($blockName)
+    public function sonataBlockByName($blockName)
     {
-       return 'Ищем '.$blockName;
+        return 'Ищем ' . $blockName;
     }
 
 
@@ -53,13 +68,32 @@ class TwigExtension extends \Twig_Extension
         return $this->rubricManager->generatePath($content->getRubric()) . $content->getSlug();
     }
 
-    public function getEntityUrl ($entity, $rubric = null)
+    public function getEntityUrl($entity, $arg1 = null, $arg2 = null, $arg3 = null)
     {
-        if (!method_exists($entity, 'getSitePath'))
-            throw new \Exception ('method '.get_class($entity).'->getSitePath() not defined');
 
-       return $this->rubricManager->getBaseUrl().$entity->getSitePath($rubric);
+        /*        $args = func_get_args();
+
+        print_r ($args);
+        print '--';
+        exit();*/
+
+        if (!method_exists($entity, 'getSitePath')) {
+            return 'method ' . get_class($entity) . '->getSitePath() not defined';
+            throw new \Exception ('method ' . get_class($entity) . '->getSitePath() not defined');
+        }
+
+
+        return $this->rubricManager->getBaseUrl() . $entity->getSitePath($arg1, $arg2, $arg3);
     }
+
+
+    public function getInlineEditStr($entity)
+    {
+        return $this->securityContext->isGranted(array ('ROLE_ADMIN'/*,'ROLE_SUPER_ADMIN'*/)) ?
+        '<a href="#" onClick="return inlineEdit (\'' . addslashes(get_class($entity)) . '\',' . $entity->getId() .
+                ')">edit</a>' : '';
+    }
+
 
     /**
      * @return string
@@ -68,6 +102,12 @@ class TwigExtension extends \Twig_Extension
     {
         return 'iphpp';
     }
+
+
+/*    public function getUser()
+    {
+        return $this->securityContext->getToken()->getUser();
+    }*/
 }
 
 

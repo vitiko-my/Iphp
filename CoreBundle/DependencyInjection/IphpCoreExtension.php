@@ -63,6 +63,58 @@ class IphpCoreExtension extends Extension
 
         $collector = DoctrineCollector::getInstance();
 
+
+        $collector->addAssociation($config['class']['rubric'], 'mapOneToMany', array(
+            'fieldName' => 'children',
+            'targetEntity' => $config['class']['rubric'],
+            'cascade' => array(
+                'remove',
+                'persist',
+                'refresh',
+                'merge',
+                'detach',
+            ),
+            'mappedBy' => 'parent',
+            'orphanRemoval' => false,
+            'orderBy' => array(
+                'left' => 'ASC',
+            ),
+        ));
+
+        $collector->addIndex($config['class']['rubric'], 'lftrgt', array ('lft','rgt'));
+        $collector->addIndex($config['class']['rubric'], 'lvl', array ('lvl'));
+        $collector->addIndex($config['class']['rubric'], 'created_at', array ('created_at'));
+        $collector->addIndex($config['class']['rubric'], 'updated_at', array ('updated_at'));
+        $collector->addIndex($config['class']['rubric'], 'full_path', array ('full_path'));
+        /*
+        $collector->addAssociation($config['class']['rubric'], 'mapManyToOne', array(
+            'fieldName' => 'parent',
+            'targetEntity' => $config['class']['rubric'],
+            'cascade' => array(
+            ),
+            'mappedBy' => NULL,
+            'inversedBy' => NULL,
+            'joinColumns' => array(
+                array(
+                    'name' => 'parent_id',
+                    'referencedColumnName' => 'id',
+                    'onDelete' => 'SET NULL',
+                ),
+            ),
+            'orphanRemoval' => false,
+        ));
+
+
+
+
+        <many-to-one field="parent" target-entity="Application\Iphp\CoreBundle\Entity\Rubric">
+                    <join-column name="parent_id" referenced-column-name="id" on-delete="SET NULL"/>
+                    <gedmo:tree-parent/>
+                </many-to-one>
+
+      */
+
+
         $collector->addAssociation($config['class']['rubric'], 'mapOneToMany', array(
             'fieldName' => 'blocks',
             'targetEntity' => $config['class']['block'],

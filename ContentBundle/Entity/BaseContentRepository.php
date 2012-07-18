@@ -2,10 +2,10 @@
 
 namespace Iphp\ContentBundle\Entity;
 
-use Doctrine\ORM\EntityRepository;
 
+use Iphp\CoreBundle\Entity\BaseEntityRepository;
 
-class BaseContentRepository extends EntityRepository
+class BaseContentRepository extends BaseEntityRepository
 {
     public function rubricIndex($rubric)
     {
@@ -15,30 +15,9 @@ class BaseContentRepository extends EntityRepository
         })->getOneOrNullResult();
     }
 
-
-    /**
-     * @param string $alias
-     * @return \Iphp\ContentBundle\Entity\ContentQueryBuilder
-     */
-    public function createQueryBuilder($alias = 'c', \Closure $prepareQueryBuidler = null)
+    protected function getDefaultQueryBuilder(\Doctrine\ORM\EntityManager $em)
     {
-        $qb = new ContentQueryBuilder($this->_em);
-        $qb->select($alias)->from($this->_entityName, $alias);
-
-        if ($prepareQueryBuidler) $prepareQueryBuidler($qb);
-        return $qb;
+        return new ContentQueryBuilder($em);
     }
-
-
-    /**
-     * @param Closure $prepareQueryBuidler
-     * @param string $alias
-     * @return \Doctrine\ORM\Query
-     */
-    public function createQuery($alias = 'c', \Closure $prepareQueryBuidler = null)
-    {
-        return $this->createQueryBuilder($alias,$prepareQueryBuidler)->getQuery();
-    }
-
 
 }

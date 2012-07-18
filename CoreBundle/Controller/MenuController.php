@@ -16,28 +16,45 @@ class MenuController extends RubricController
     public function MenuAction($template = '', $rubric = '')
     {
 
-        $key = 'menuCache'.$this->get('kernel')->getEnvironment();
+       // $key = 'menuCache' . $this->get('kernel')->getEnvironment();
 
-       // print $key;
-   /*     if (apc_exists($key)) {
+        // print $key;
+        /*     if (apc_exists($key)) {
            // echo "Foo exists: ";
             $content = apc_fetch($key);
 
             return new \Symfony\Component\HttpFoundation\Response( $content);
         }*/
 
+        $response = $this->prepareResponse($template, $rubric);
 
-        $rubrics = $this->getRubricsRepository()->getTreeRecordset(
-            function($qb)
-            {
-                $qb->andWhere('r.level > 0')->andWhere ('r.status = 1')->orderBy('r.left', 'ASC');
-            });
-
-        $response = $this->render($template, array('rubrics' => $rubrics, 'currentRubric' => $rubric));
-
-        $content = $response->getContent();
-      //  apc_store($key, $content);
+        //$content = $response->getContent();
+        //  apc_store($key, $content);
 
         return $response;
+    }
+
+
+    protected function prepareResponse($template, $rubric)
+    {
+        return $this->render($template, array(
+            'rubrics' => $this->getRubricsForMenu(),
+            'currentRubric' => $rubric));
+    }
+
+
+    protected function getRubricsForMenu($queryBuilder = null)
+    {
+        if ($queryBuilder === null) $queryBuilder = $this->getDefaultQueryBuilder();
+
+        return $this->getRubricsRepository()->getTreeRecordset($queryBuilder);
+    }
+
+    public function getDefaultQueryBuilder()
+    {
+        return function ($qb)
+        {
+            $qb->andWhere('r.level > 0')->andWhere('r.status = 1')->orderBy('r.left', 'ASC');
+        };
     }
 }

@@ -245,6 +245,10 @@ abstract class Rubric implements RubricInterface, \Iphp\TreeBundle\Model\TreeNod
         return $this->root;
     }
 
+    public function isRoot()
+    {
+        return $this->level === 0;
+    }
 
     /**
      * Get lvl

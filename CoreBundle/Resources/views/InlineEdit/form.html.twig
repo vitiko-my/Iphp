@@ -1,0 +1,11 @@
+{% form_theme form 'form_table_layout.html.twig' %}
+<style>
+
+    textarea,input { width:350px}
+</style>
+
+<form action="{{ path('_inlineedit_form') }}?entityClassPath={{ entityClassPath}}&entityId={{ entityId }}" method="post" {{ form_enctype(form) }}>
+    {{ form_widget(form) }}
+
+    <input type="submit" />
+</form>
