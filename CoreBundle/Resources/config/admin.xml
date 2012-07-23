@@ -8,13 +8,13 @@
         <parameter key="iphp.core.admin.rubric.class">Iphp\CoreBundle\Admin\RubricAdmin</parameter>
         <parameter key="iphp.core.admin.rubric.controller">IphpTreeBundle:CRUD</parameter>
         <parameter key="iphp.core.admin.rubric.entity">Application\Iphp\CoreBundle\Entity\Rubric</parameter>
-        <parameter key="iphp.core.admin.rubric.translation_domain">admin-messages</parameter>
+        <parameter key="iphp.core.admin.rubric.translation_domain">messages</parameter>
 
         <!-- BLOCK -->
         <parameter key="iphp.core.admin.block.class">Iphp\CoreBundle\Admin\BlockAdmin</parameter>
         <parameter key="iphp.core.admin.block.controller">IphpCoreBundle:BlockAdmin</parameter>
         <parameter key="iphp.core.admin.block.entity">Application\Iphp\CoreBundle\Entity\Block</parameter>
-        <parameter key="iphp.core.admin.block.translation_domain">admin-messages</parameter>
+        <parameter key="iphp.core.admin.block.translation_domain">messages</parameter>
 
 
     </parameters>
@@ -36,10 +36,11 @@
                 <argument type="service" id="fos_user.user_manager"/>
             </call>
 
+            <!--
             <call method="setTranslationDomain">
                 <argument>%iphp.core.admin.rubric.translation_domain%</argument>
             </call>
-
+-->
 
             <call method="setModelManager">
                 <argument type="service" id="sonata.admin.manager.orm.tree"/>
@@ -72,9 +73,11 @@
                 <argument type="service" id="sonata.block.manager"/>
             </call>
 
+        <!--
             <call method="setTranslationDomain">
                 <argument>%iphp.core.admin.block.translation_domain%</argument>
             </call>
+            -->
         </service>
 
 

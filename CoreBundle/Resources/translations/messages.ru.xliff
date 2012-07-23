@@ -96,6 +96,13 @@
                 <target>Создал</target>
             </trans-unit>
 
+            <trans-unit id="Created At">
+                <source>Created At</source>
+                <target>Дата создания</target>
+            </trans-unit>
+
+
+
             <trans-unit id="Position">
                 <source>Position</source>
                 <target>Порядковый номер</target>
@@ -187,9 +194,9 @@
 
 
             <trans-unit id="Date">
-                            <source>Date</source>
-                            <target>Дата</target>
-                        </trans-unit>
+                <source>Date</source>
+                <target>Дата</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

@@ -8,7 +8,7 @@
         <parameter key="iphp.content.admin.content.class">Iphp\ContentBundle\Admin\ContentAdmin</parameter>
         <parameter key="iphp.content.admin.content.controller">SonataAdminBundle:CRUD</parameter>
         <parameter key="iphp.content.admin.content.entity">Application\Iphp\ContentBundle\Entity\Content</parameter>
-        <parameter key="iphp.content.admin.content.translation_domain">admin-messages</parameter>
+        <parameter key="iphp.content.admin.content.translation_domain">messages</parameter>
 
 
     </parameters>
@@ -31,9 +31,11 @@
             </call>
 -->
 
+            <!--
             <call method="setTranslationDomain">
                 <argument>%iphp.content.admin.content.translation_domain%</argument>
             </call>
+            -->
         </service>
 
     </services>
