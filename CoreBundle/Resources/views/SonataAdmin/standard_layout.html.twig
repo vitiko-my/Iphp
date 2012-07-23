@@ -12,8 +12,15 @@
     <script src="{{ asset('asset/tiny_mce/jquery.tinymce.js') }}"></script>
 
     {# для genemu#}
-    {% if form is defined %}{{ form_javascript(form) }}{% endif %}
-
+    {#{% if form is defined and  form_javascript%}{{ form_javascript(form) }}{% endif %}#}
+ {% block stylesheets %}
+    {{ parent() }}
+   {#{% if form is defined %}{{ form_stylesheet(form) }}{% endif %}#}
+     <style>
+         label.label_hidden { display: none }
+         .mceLayout { width: 500px}
+     </style>
+ {% endblock %}
 
    <script>
 
@@ -49,14 +56,7 @@
  {% endblock %}
 
 
- {% block stylesheets %}
-    {{ parent() }}
-    {% if form is defined %}{{ form_stylesheet(form) }}{% endif %}
-     <style>
-         label.label_hidden { display: none }
-         .mceLayout { width: 500px}
-     </style>
- {% endblock %}
+
 
 
 

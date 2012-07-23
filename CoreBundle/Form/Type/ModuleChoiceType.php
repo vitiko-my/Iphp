@@ -5,6 +5,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilder;
 
 use Iphp\CoreBundle\Module\ModuleManager;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class ModuleChoiceType extends AbstractType
 {
@@ -20,7 +21,7 @@ class ModuleChoiceType extends AbstractType
     }
 
 
-    public function getDefaultOptions()
+    public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $moduleOptions = array();
         foreach ($this->moduleManager->modules() as $module)
@@ -28,10 +29,12 @@ class ModuleChoiceType extends AbstractType
             $moduleOptions[get_class($module)] = $module->getName();
         }
 
-        //print_r ($moduleOptions);
-
-        return  array ('choices' => $moduleOptions);
+        $resolver->setDefaults(array(
+            'choices' => $moduleOptions
+        ));
     }
+
+
 
     public function getParent()
     {

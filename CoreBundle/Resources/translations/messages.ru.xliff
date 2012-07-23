@@ -102,7 +102,6 @@
             </trans-unit>
 
 
-
             <trans-unit id="Position">
                 <source>Position</source>
                 <target>Порядковый номер</target>
@@ -196,6 +195,11 @@
             <trans-unit id="Date">
                 <source>Date</source>
                 <target>Дата</target>
+            </trans-unit>
+
+            <trans-unit id="Slug">
+                <source>Slug</source>
+                <target>Код на сайте (slug)</target>
             </trans-unit>
         </body>
     </file>

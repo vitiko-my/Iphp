@@ -23,7 +23,7 @@ class BlockServiceListType extends BaseServiceListType
      * @param array $options
      * @return array
      */
-    public function getDefaultOptions()
+/*    public function getDefaultOptions()
     {
         //TODO: наигрязнейший хак
         $this->contexts = array ('cms' => 1,'admin' => 1);
@@ -34,7 +34,7 @@ class BlockServiceListType extends BaseServiceListType
 
 
         return $options;
-    }
+    }*/
 
     /**
      * @return array

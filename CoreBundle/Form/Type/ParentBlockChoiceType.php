@@ -9,6 +9,10 @@ use Doctrine\ORM\EntityManager;
 use Symfony\Bridge\Doctrine\Form\ChoiceList\ORMQueryBuilderLoader;
 use Symfony\Bridge\Doctrine\Form\ChoiceList\EntityChoiceList;
 
+
+use Symfony\Component\OptionsResolver\Options;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+
 class ParentBlockChoiceType extends AbstractType
 {
 
@@ -23,21 +27,30 @@ class ParentBlockChoiceType extends AbstractType
     }
 
 
-    public function getDefaultOptions()
+    public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
+        $em = $this->em;
+        $resolver->setDefaults(array(
 
-        $qb = $this->em->getRepository('ApplicationIphpCoreBundle:Block')->createQueryBuilder('b');
-        $qb->where(
-            $qb->expr()->like('b.type', $qb->expr()->literal('%container%'))
-        )->orderBy('b.title');
-
-        return array(
             'empty_value' => '',
-            'choice_list' => new  EntityChoiceList (
-                $this->em,
-                'Application\Iphp\CoreBundle\Entity\Block',
-                null,
-                new ORMQueryBuilderLoader ($qb)));
+            'choice_list' => function (Options $options, $previousValue) use ($em)
+            {
+
+                $qb = $em->getRepository('ApplicationIphpCoreBundle:Block')->createQueryBuilder('b');
+                $qb->where(
+                    $qb->expr()->like('b.type', $qb->expr()->literal('%container%'))
+                )->orderBy('b.title');
+
+
+                return new  EntityChoiceList (
+                    $em,
+                    'Application\Iphp\CoreBundle\Entity\Block',
+                    null,
+                    new ORMQueryBuilderLoader ($qb));
+            },
+
+
+        ));
 
     }
 
