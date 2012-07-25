@@ -30,12 +30,21 @@ class Configuration implements ConfigurationInterface
         $node = $treeBuilder->root('iphp_content')->children();
 
         $node->arrayNode('class')
-                        ->addDefaultsIfNotSet()
-                        ->children()
-                            ->scalarNode('rubric')->defaultValue('Application\\Iphp\\CoreBundle\\Entity\\Rubric')->end()
-                            ->scalarNode('content')->defaultValue('Application\\Iphp\\ContentBundle\\Entity\\Content')->end()
-                        ->end()
-                    ->end();
+                ->addDefaultsIfNotSet()
+                ->children()
+                    ->scalarNode('rubric')->defaultValue('Application\\Iphp\\CoreBundle\\Entity\\Rubric')->end()
+                    ->scalarNode('content')->defaultValue('Application\\Iphp\\ContentBundle\\Entity\\Content')->end()
+                    ->scalarNode('media')->defaultValue('Application\\Sonata\\MediaBundle\\Entity\\Media')->end()
+                    ->scalarNode('author')->defaultValue('Application\\Iphp\\UserBundle\\Entity\\User')->end()
+                ->end()
+                ->end();
+
+
+        /*$node->arrayNode ('field')
+            ->addDefaultsIfNotSet()
+            ->children()
+            ->arrayNode('exclude');*/
+
         return $treeBuilder;
     }
 }

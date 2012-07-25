@@ -81,6 +81,8 @@ class IphpCoreExtension extends Extension
             ),
         ));
 
+
+        //ИНДЕКСЫ
         $collector->addIndex($config['class']['rubric'], 'lftrgt', array ('lft','rgt'));
         $collector->addIndex($config['class']['rubric'], 'lvl', array ('lvl'));
         $collector->addIndex($config['class']['rubric'], 'created_at', array ('created_at'));

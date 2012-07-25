@@ -25,7 +25,7 @@ class IphpContentExtension extends Extension
 
 
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
-        if (array_key_exists ('SonataAdminBundle', $container->getParameter('kernel.bundles')))  {
+        if (array_key_exists('SonataAdminBundle', $container->getParameter('kernel.bundles'))) {
             $loader->load('admin.xml');
         }
 
@@ -50,51 +50,94 @@ class IphpContentExtension extends Extension
      */
     public function registerDoctrineMapping(array $config)
     {
-        // print 'Extends!';
-
-        if (!class_exists($config['class']['rubric'])) {
-            return;
-        }
-
         $collector = DoctrineCollector::getInstance();
 
-        $collector->addAssociation($config['class']['rubric'], 'mapOneToMany', array(
-            'fieldName' => 'contents',
-            'targetEntity' => $config['class']['content'],
-            'cascade' => array(
-                'remove',
-                'persist',
-                'refresh',
-                'merge',
-                'detach',
-            ),
-            'mappedBy' => 'rubric',
-            'orphanRemoval' => false,
-            'orderBy' => array(
-                'id' => 'ASC',
-            ),
+        if (class_exists($config['class']['rubric'])) {
+
+            //Связь рубрика - материалы ( getContents() )
+            $collector->addAssociation($config['class']['rubric'], 'mapOneToMany', array(
+                'fieldName' => 'contents',
+                'targetEntity' => $config['class']['content'],
+                'cascade' => array(
+                    'remove',
+                    'persist',
+                    'refresh',
+                    'merge',
+                    'detach',
+                ),
+                'mappedBy' => 'rubric',
+                'orphanRemoval' => false,
+                'orderBy' => array(
+                    'id' => 'ASC',
+                ),
+
+            ));
 
 
-        ));
+            //Связь материал - рубрика
+            $collector->addAssociation($config['class']['content'], 'mapManyToOne', array(
+                'fieldName' => 'rubric',
+                'targetEntity' => $config['class']['rubric'],
+                'cascade' => array(
+                    'persist',
+                ),
+                'mappedBy' => NULL,
+                'inversedBy' => NULL,
+                'joinColumns' => array(
+                    array(
+                        'name' => 'rubric_id',
+                        'referencedColumnName' => 'id',
+                        'onDelete' => 'SET NULL',
+                    ),
+                ),
+                'orphanRemoval' => false,
+            ));
+        }
 
 
-        $collector->addAssociation($config['class']['content'], 'mapManyToOne', array(
-                     'fieldName' => 'rubric',
-                     'targetEntity' => $config['class']['rubric'],
-                     'cascade' => array(
-                         'persist',
-                     ),
-                     'mappedBy' => NULL,
-                     'inversedBy' => NULL,
-                     'joinColumns' => array(
-                         array(
-                             'name' => 'rubric_id',
-                             'referencedColumnName' => 'id',
-                             'onDelete' => 'SET NULL',
-                         ),
-                     ),
-                     'orphanRemoval' => false,
-                 ));
+        if (class_exists($config['class']['media'])) {
+
+            $collector->addAssociation($config['class']['content'], 'mapManyToOne', array(
+                'fieldName' => 'image',
+                'targetEntity' => $config['class']['media'],
+                'cascade' => array(
+                    'persist',
+                ),
+                'mappedBy' => NULL,
+                'inversedBy' => NULL,
+                'joinColumns' => array(
+                    array(
+                        'name' => 'image_id',
+                        'referencedColumnName' => 'id',
+                        'onDelete' => 'SET NULL',
+                    ),
+                ),
+                'orphanRemoval' => false,
+            ));
+
+        }
+
+
+        if (class_exists($config['class']['author'])) {
+
+            $collector->addAssociation($config['class']['content'], 'mapManyToOne', array(
+                'fieldName' => 'author',
+                'targetEntity' => $config['class']['author'],
+                'cascade' => array(
+                    'persist',
+                ),
+                'mappedBy' => NULL,
+                'inversedBy' => NULL,
+                'joinColumns' => array(
+                    array(
+                        'name' => 'author_id',
+                        'referencedColumnName' => 'id',
+                        'onDelete' => 'SET NULL',
+                    ),
+                ),
+                'orphanRemoval' => false,
+            ));
+        }
     }
 
 }

@@ -12,38 +12,7 @@
             <generator strategy="AUTO"/>
         </id>
 
-        <many-to-one
-                field="image"
-                target-entity="Application\Sonata\MediaBundle\Entity\Media"
-                >
-            <cascade>
-                <cascade-all/>
-            </cascade>
-        </many-to-one>
 
-
-        <many-to-one
-                field="author"
-                target-entity="Eduru\UserBundle\Entity\User"
-                >
-            <cascade>
-                <cascade-persist/>
-                <!--<cascade-merge />-->
-                <!--<cascade-remove />-->
-                <!--<cascade-refresh />-->
-            </cascade>
-        </many-to-one>
-
-
-        <many-to-one
-                field="rubric"
-                target-entity="Application\Iphp\CoreBundle\Entity\Rubric"
-                >
-            <cascade>
-                <cascade-persist/>
-
-            </cascade>
-        </many-to-one>
 
         <unique-constraints>
             <unique-constraint columns="rubric_id,slug" name="rubricslug_idx"/>

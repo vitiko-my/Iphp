@@ -41,8 +41,9 @@ abstract class Content implements ContentInterface
 
     protected $images;
 
-    protected $date;
+    protected $image;
 
+    protected $date;
 
     protected $rubric;
 
@@ -448,6 +449,17 @@ abstract class Content implements ContentInterface
     public function getDate()
     {
         return $this->date;
+    }
+
+    public function setImage($image)
+    {
+        $this->image = $image;
+        return $this;
+    }
+
+    public function getImage()
+    {
+        return $this->image;
     }
 
 

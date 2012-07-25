@@ -28,9 +28,8 @@ abstract class BaseEntityQueryBuilder extends QueryBuilder
 
     public function prepareDefaultQuery()
     {
-        $this->select($this->currentAlias)
+        return $this->select($this->currentAlias)
                 ->from($this->entityName, $this->currentAlias);
-        return $this;
     }
 
 
@@ -48,7 +47,7 @@ abstract class BaseEntityQueryBuilder extends QueryBuilder
                 break;
 
             case (substr($method, 0, 4) == 'join'):
-                $fieldName =  lcfirst(substr($method, 4, strlen($method)));
+                $fieldName = lcfirst(substr($method, 4, strlen($method)));
                 $method = 'join';
                 break;
 
@@ -75,7 +74,7 @@ abstract class BaseEntityQueryBuilder extends QueryBuilder
         else if ($method == 'join' /*&& $this->_class->hasField($fieldName) || $this->_class->hasAssociation($fieldName)*/) {
 
             //return $this;
-           return $this->innerJoin ($this->currentAlias . '.' .$fieldName, $fieldName);
+            return $this->innerJoin($this->currentAlias . '.' . $fieldName, $fieldName);
         }
 
         throw new \BadMethodCallException(

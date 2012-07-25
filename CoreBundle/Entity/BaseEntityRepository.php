@@ -19,12 +19,19 @@ abstract class BaseEntityRepository extends EntityRepository
      */
     public function createQueryBuilder($alias = '', \Closure $prepareQueryBuidler = null)
     {
+
+
         $qb = $this->getDefaultQueryBuilder($this->_em)
                 ->setEntityName($this->_entityName)
                 ->setCurrentAlias($alias)
                 ->prepareDefaultQuery ();
 
         if ($prepareQueryBuidler) $prepareQueryBuidler($qb);
+
+
+
+       // print $qb->getDql();
+       // exit();
         return $qb;
     }
 

@@ -8,7 +8,8 @@ use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
-use Sonata\FormatterBundle\Formatter\Pool as FormatterPool;
+
+//use Sonata\FormatterBundle\Formatter\Pool as FormatterPool;
 
 use Knp\Menu\ItemInterface as MenuItemInterface;
 
@@ -61,15 +62,12 @@ class ContentAdmin extends Admin
                 ->with('Основные')
                 ->add('enabled', null, array('required' => false, 'label' => 'Показывать на сайте'))
 
-        //  ->add('rubric', 'sonata_type_model', array('label' => 'Рубрика', 'required' => true), array('edit' => 'list'))
-
 
                 ->add('rubric', 'rubricchoice')
 
 
-        // ->add('author', 'sonata_type_model', array( 'label' => 'Автор'), array('edit' => 'list'))
-        //  ->add('images', 'sonata_type_model', array(), array('edit' => 'inline' /*,
-        //                                                    'inline' => 'table' */))
+                ->add('author', 'sonata_type_model', array('label' => 'Автор'), array('edit' => 'list'))
+
                 ->add('title', null, array('label' => 'Заголовок'))
                 ->add('date', 'genemu_jquerydate', array(
             'required' => false, 'widget' => 'single_text'))
@@ -81,15 +79,22 @@ class ContentAdmin extends Admin
             'label' => 'Форматирование'
         ))*/
                 ->add('content', 'genemu_tinymce', array('label' => 'Текст'))
-                ->add('image', 'sonata_type_model', array(),
-            array('edit' => 'list', 'link_parameters' => array('context' => 'competition')))
-                ->end()// ->with('Options', array('collapsed' => true))
-            //  ->add('commentsCloseAt')
-            //  ->add('commentsEnabled', null, array('required' => false))
-            // ->add('commentsDefaultStatus', 'choice', array('choices' => Comment::getStatusList(), 'expanded' => true))
-            //   ->end();
+               ->add('image', 'sonata_type_model', array(),
+            array('edit' => 'list', 'link_parameters' => array('context' => 'contentimage')))
 
-        ;
+         /*       ->add('image', 'sonata_media_type', array(
+                  'provider' => 'sonata.media.provider.image',
+                   'context' => 'contentimage'))*/
+         /*       ->add('images', 'sonata_type_collection', array(),
+            array('edit' => 'list',  'link_parameters' => array('context' => 'contentimage'),
+                                                                        'inline' => 'table'  ))*/
+                ->end() // ->with('Options', array('collapsed' => true))
+        //  ->add('commentsCloseAt')
+        //  ->add('commentsEnabled', null, array('required' => false))
+        // ->add('commentsDefaultStatus', 'choice', array('choices' => Comment::getStatusList(), 'expanded' => true))
+        //   ->end();
+
+    ;
     }
 
     /**
@@ -128,8 +133,7 @@ class ContentAdmin extends Admin
         ))
                 ->add('title')
                 ->add('enabled')
-                ->add('date')
-               // ->add('author')
+                ->add('date')// ->add('author')
         ;
     }
 

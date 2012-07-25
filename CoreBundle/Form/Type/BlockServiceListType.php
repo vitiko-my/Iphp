@@ -19,6 +19,13 @@ class BlockServiceListType extends BaseServiceListType
         $this->blocksSource = $blocksSource;
     }
 
+
+    public function __construct(BlockServiceManagerInterface $manager, array $contexts = array())
+    {
+        parent::__construct($manager, $contexts);
+        $this->contexts = array ('cms' => 1,'admin' => 1);
+    }
+
     /**
      * @param array $options
      * @return array
