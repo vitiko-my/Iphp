@@ -133,7 +133,7 @@ class ContentAdmin extends Admin
         ))
                 ->add('title')
                 ->add('enabled')
-                ->add('date')// ->add('author')
+           //     ->add('date')// ->add('author')
         ;
     }
 
