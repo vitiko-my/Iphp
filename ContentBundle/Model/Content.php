@@ -9,7 +9,7 @@ abstract class Content implements ContentInterface
 {
     protected $title;
 
-    protected $slug;
+    protected $slug = '';
 
     protected $abstract;
 
@@ -61,6 +61,11 @@ abstract class Content implements ContentInterface
     }
 
 
+
+    public function getSitePath()
+    {
+        return $this->getRubric()->getFullPath(). ($this->getSlug() ? $this->getSlug().'/' : '');
+    }
     /**
      * source : http://snipplr.com/view/22741/slugify-a-string-in-php/
      *
@@ -194,6 +199,7 @@ abstract class Content implements ContentInterface
      */
     public function setSlug($slug)
     {
+        if (is_null($slug)) $slug = '';
         $this->slug = $slug;
     }
 
@@ -289,20 +295,7 @@ abstract class Content implements ContentInterface
         $this->setUpdatedAt(new \DateTime);
     }
 
-    public function getYear()
-    {
-        return $this->getCreatedAt()->format('Y');
-    }
 
-    public function getMonth()
-    {
-        return $this->getCreatedAt()->format('m');
-    }
-
-    public function getDay()
-    {
-        return $this->getCreatedAt()->format('d');
-    }
 
     /**
      * Set comments_enabled

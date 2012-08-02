@@ -17,6 +17,12 @@
         </service>
 
 
+
+        <service id="iphp.core.entity.router" class="Iphp\CoreBundle\Routing\EntityRouter">
+            <argument type="service" id="router"/>
+
+        </service>
+
         <!--
         <service id="iphp.core.orm.listener.updatedBy" class="Iphp\CoreBundle\Listener\UpdatedByListener">
             <tag name="doctrine.event_listener" event="preUpdate"/>

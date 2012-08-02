@@ -12,7 +12,7 @@ class RubricController extends RubricAwareController
 
     public function indexSubrubricsAction()
     {
-        $rubrics = $this->getRubricManager()->getCurrent()->getChildren();
+        $rubrics = $this->getCurrentRubric()->getChildren();
 
         return $this->render('IphpCoreBundle::indexSubrubrics.html.twig', array('rubrics' => $rubrics));
     }

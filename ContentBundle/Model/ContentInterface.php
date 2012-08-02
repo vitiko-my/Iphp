@@ -120,12 +120,6 @@ interface ContentInterface
 
 
 
-    function getYear();
-
-    function getMonth();
-
-    function getDay();
-
     /**
      * Set comments_enabled
      *

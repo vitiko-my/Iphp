@@ -2,6 +2,7 @@
 
 namespace Iphp\CoreBundle\Twig;
 
+use \Iphp\CoreBundle\Routing\EntityRouter;
 use Iphp\CoreBundle\Manager\RubricManager;
 use Symfony\Component\Security\Core\SecurityContextInterface;
 
@@ -18,17 +19,17 @@ class TwigExtension extends \Twig_Extension
     protected $rubricManager;
 
     /**
-     * @var \Symfony\Component\Security\Core\SecurityContextInterface;
+     * @var  \Iphp\CoreBundle\Routing\EntityRouter;
      */
-    protected  $securityContext;
+    protected $entityRouter;
 
     public function __construct(\Twig_Environment $twigEnviroment,
-                                RubricManager $rubricManager,
-                                SecurityContextInterface $securityContext)
+                                 RubricManager $rubricManager,
+                                 EntityRouter $entityRouter)
     {
         $this->twigEnviroment = $twigEnviroment;
         $this->rubricManager = $rubricManager;
-        $this->securityContext = $securityContext;
+        $this->entityRouter = $entityRouter;
 
         $twigEnviroment->addGlobal('iphp', new TemplateHelper($rubricManager));
     }
@@ -36,17 +37,15 @@ class TwigExtension extends \Twig_Extension
     public function getFunctions()
     {
         return array(
-            // 'strtr' => new \Twig_Filter_Function('strtr'),
-
             'sonata_block_by_name' => new \Twig_Function_Method($this, 'sonataBlockByName'),
 
-            'entitypath' => new \Twig_Function_Method($this, 'getEntityUrl'),
+            'entitypath' => new \Twig_Function_Method($this, 'getEntityPath'),
             'inlineedit' => new \Twig_Function_Method($this, 'getInlineEditStr', array('is_safe' => array('html'))),
-
-
-            //Заменить entitypath
             'rpath' => new \Twig_Function_Method($this, 'getRubricPath'),
-            'cpath' => new \Twig_Function_Method($this, 'getContentPath'),
+
+            //Заменены entitypath
+
+            //'cpath' => new \Twig_Function_Method($this, 'getContentPath'),
 
         );
     }
@@ -63,12 +62,7 @@ class TwigExtension extends \Twig_Extension
     }
 
 
-    public function getContentPath($content)
-    {
-        return $this->rubricManager->generatePath($content->getRubric()) . $content->getSlug();
-    }
-
-    public function getEntityUrl($entity, $arg1 = null, $arg2 = null, $arg3 = null)
+    public function getEntityPath($entity, $arg1 = null, $arg2 = null, $arg3 = null)
     {
 
         /*        $args = func_get_args();
@@ -83,15 +77,36 @@ class TwigExtension extends \Twig_Extension
         }
 
 
-        return $this->rubricManager->getBaseUrl() . $entity->getSitePath($arg1, $arg2, $arg3);
+
+
+      //  print get_class ($entity);
+
+        $methodData = new \ReflectionMethod($entity, 'getSitePath');
+        $parameters =   $methodData->getParameters();
+
+       // print  sizeof($parameters);
+
+
+        $args = array ( $arg1, $arg2, $arg3);
+        if (sizeof($parameters) > 0 && $parameters[0]->getClass() &&
+                $parameters[0]->getClass()->isInstance ($this->entityRouter))
+        {
+           array_unshift($args,$this->entityRouter);
+        }
+
+
+        return /*$this->rubricManager->getBaseUrl() .*/
+                call_user_func_array(array ($entity, 'getSitePath'),   $args );
+
+
     }
 
 
     public function getInlineEditStr($entity)
     {
-        return $this->securityContext->isGranted(array ('ROLE_ADMIN'/*,'ROLE_SUPER_ADMIN'*/)) ?
-        '<a href="#" onClick="return inlineEdit (\'' . addslashes(get_class($entity)) . '\',' . $entity->getId() .
-                ')">edit</a>' : '';
+        return $this->securityContext->isGranted(array('ROLE_ADMIN' /*,'ROLE_SUPER_ADMIN'*/)) ?
+                '<a href="#" onClick="return inlineEdit (\'' . addslashes(get_class($entity)) . '\',' . $entity->getId() .
+                        ')">edit</a>' : '';
     }
 
 
@@ -103,11 +118,6 @@ class TwigExtension extends \Twig_Extension
         return 'iphpp';
     }
 
-
-/*    public function getUser()
-    {
-        return $this->securityContext->getToken()->getUser();
-    }*/
 }
 
 

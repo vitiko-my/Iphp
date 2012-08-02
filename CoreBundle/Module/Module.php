@@ -27,6 +27,8 @@ abstract class Module
 
 
     /**
+     * Доступ к ModuleManager нужен для того чтобы можно было загрузить внешние ресурсы с роутингом
+     * а также для получения доступа к Container
      * @var Iphp\CoreBundle\Module\ModuleManager
      */
     protected $moduleManager;
@@ -43,7 +45,11 @@ abstract class Module
 
 
 
+    /**
+     * @var \Iphp\CoreBundle\Model\Rubric
+     */
     protected $rubric = null;
+
 
     abstract protected function registerRoutes();
 
@@ -87,13 +93,13 @@ abstract class Module
       $this->routeCollection->add($name, $route);
     }
 
-    protected function suggestRouteName(Route $route)
+    /*protected function suggestRouteName(Route $route)
     {
       $controller = $route->getDefault('_controller');
 
       $pattern = $route->getPattern();
       if ($pattern == '/') return 'index';
-    }
+    }*/
 
 
 

@@ -60,15 +60,16 @@ class ContentAdmin extends Admin
 
         $formMapper
                 ->with('Основные')
+                ->add('title', null, array('label' => 'Заголовок'))
                 ->add('enabled', null, array('required' => false, 'label' => 'Показывать на сайте'))
-
+                ->add('slug')
 
                 ->add('rubric', 'rubricchoice')
 
 
-                ->add('author', 'sonata_type_model', array('label' => 'Автор'), array('edit' => 'list'))
+                ->add('author', 'sonata_type_model_list', array('required' => false)/*, array('edit' => 'list')*/)
 
-                ->add('title', null, array('label' => 'Заголовок'))
+
                 ->add('date', 'genemu_jquerydate', array(
             'required' => false, 'widget' => 'single_text'))
                 ->add('abstract', null, array('label' => 'Анонс'))
@@ -79,8 +80,8 @@ class ContentAdmin extends Admin
             'label' => 'Форматирование'
         ))*/
                 ->add('content', 'genemu_tinymce', array('label' => 'Текст'))
-               ->add('image', 'sonata_type_model', array(),
-            array('edit' => 'list', 'link_parameters' => array('context' => 'contentimage')))
+               ->add('image', 'sonata_type_model_list', array('required' => false),
+            array(/*'edit' => 'list',*/ 'link_parameters' => array('context' => 'contentimage')))
 
          /*       ->add('image', 'sonata_media_type', array(
                   'provider' => 'sonata.media.provider.image',

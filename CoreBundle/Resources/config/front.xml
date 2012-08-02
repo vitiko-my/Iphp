@@ -6,14 +6,17 @@
 
     <services>
 
-         <service id="iphp.core.route_loader" class="Iphp\CoreBundle\Routing\RubricRouteLoader">
+        <service id="iphp.core.route_loader" class="Iphp\CoreBundle\Routing\RubricRouteLoader">
 
-            <argument type="service" id="kernel" />
-            <argument type="service" id="doctrine.orm.entity_manager" />
-            <argument type="service" id="service_container" />
+            <argument type="service" id="kernel"/>
+            <argument type="service" id="doctrine.orm.entity_manager"/>
+            <argument type="service" id="service_container"/>
 
-            <tag name="routing.loader" />
+            <tag name="routing.loader"/>
         </service>
+
+
+
 
     </services>
 

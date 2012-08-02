@@ -66,6 +66,11 @@ abstract class Rubric implements RubricInterface, \Iphp\TreeBundle\Model\TreeNod
     }
 
 
+    public function getSitePath()
+    {
+        return $this->getFullPath();
+    }
+
     /**
      * Get title
      *

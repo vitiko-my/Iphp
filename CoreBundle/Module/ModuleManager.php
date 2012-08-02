@@ -15,37 +15,51 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Finder\Finder;
 
-class ModuleManager  extends ContainerAware
+class ModuleManager extends ContainerAware
 {
 
-    function __construct( ContainerInterface $container)
-    {
-          $this->setContainer($container);
-    }
 
     protected $modulesPath = 'Module';
 
-    function modules()
-    {
-        $modules = array();
-        foreach ($this->container->get ('kernel')->getBundles() as $bundle)
-        $modules = array_merge($modules, $this->bundleModules($bundle));
 
-        return $modules;
+    function __construct(ContainerInterface $container)
+    {
+        $this->setContainer($container);
     }
 
-    function loadRoutes ($resource, $type = null)
+
+    /**
+     * @return \Iphp\CoreBundle\Routing\EntityRouter
+     */
+    public function getEntityRouter()
     {
-     return $this->getRoutingLoader()->load ($resource, $type);
+        return $this->container->get ('iphp.core.entity.router');
     }
 
     /**
      * @return \Symfony\Bundle\FrameworkBundle\Routing\DelegatingLoader
      */
-    function getRoutingLoader()
+    public function getRoutingLoader()
     {
-        return $this->container->get ('routing.loader');
+        return $this->container->get('routing.loader');
     }
+
+
+    public function modules()
+    {
+        $modules = array();
+        foreach ($this->container->get('kernel')->getBundles() as $bundle)
+            $modules = array_merge($modules, $this->bundleModules($bundle));
+
+        return $modules;
+    }
+
+    public function loadRoutes($resource, $type = null)
+    {
+        return $this->getRoutingLoader()->load($resource, $type);
+    }
+
+
 
     function bundleModuleDir($bundle)
     {
@@ -82,17 +96,21 @@ class ModuleManager  extends ContainerAware
         $moduleClassName = $rubric->getControllerName();
         if (!$moduleClassName) return null;
 
-        $module = $this->getModuleInstance($moduleClassName );
+        $module = $this->getModuleInstance($moduleClassName);
         if (!$module) return null;
 
-        return $module->setRubric ($rubric);
+        return $module->setRubric($rubric);
     }
 
+    /**
+     * @param $moduleClassName
+     * @return \Iphp\CoreBundle\Module\Module
+     */
     function getModuleInstance($moduleClassName)
     {
-       if (!class_exists($moduleClassName, true)) return null;
-       $module =  new $moduleClassName ();
-       $module->setManager ($this);
-       return $module;
+        if (!class_exists($moduleClassName, true)) return null;
+        $module = new $moduleClassName ();
+        $module->setManager($this);
+        return $module;
     }
 }

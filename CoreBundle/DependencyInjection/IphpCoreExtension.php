@@ -5,6 +5,7 @@
 namespace Iphp\CoreBundle\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
+
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\Config\FileLocator;
@@ -28,6 +29,8 @@ class IphpCoreExtension extends Extension
 
         $loader->load('twig.xml');
         $loader->load('services.xml');
+
+
 
         if ($config['separate_admin_env']) {
             if (array_key_exists ('SonataAdminBundle', $container->getParameter('kernel.bundles'))) $loader->load('admin.xml');
