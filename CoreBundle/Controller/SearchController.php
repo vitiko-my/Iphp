@@ -28,7 +28,7 @@ class SearchController extends RubricAwareController
 
         $searchString = trim($request->get('search'));
 
-        print '"' . $searchString . '"';
+
         $finder = $this->getFinder('iphp'/*,'content'*/);
 
 
@@ -37,7 +37,10 @@ class SearchController extends RubricAwareController
             $query = Elastica_Query::create($searchString);
             //$query->addParam('analyzer', 'ru_analyzer');
             $paginator = $this->get('knp_paginator');
-            $results = $paginator->paginate($finder->createPaginatorAdapter($query ));
+            $results = $paginator->paginate(
+                $finder->createPaginatorAdapter($query ),
+                $this->get('request')->query->get('page', 1) /*page number*/,
+                 20);
         }
         else $results = null;
 
