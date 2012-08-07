@@ -83,6 +83,15 @@ class ContentAdmin extends Admin
                ->add('image', 'sonata_type_model_list', array('required' => false),
             array(/*'edit' => 'list',*/ 'link_parameters' => array('context' => 'contentimage')))
 
+
+                ->add('files', 'sonata_type_collection',
+              array('label' => 'Файлы', 'by_reference' => false),
+              array(
+                  'edit' => 'inline',
+               //   'sortable' => 'pos',
+                  'inline' => 'table',
+              ))
+
          /*       ->add('image', 'sonata_media_type', array(
                   'provider' => 'sonata.media.provider.image',
                    'context' => 'contentimage'))*/

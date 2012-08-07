@@ -30,8 +30,6 @@ class IphpContentExtension extends Extension
         $loader->load('block.xml');
 
 
-
-
         $this->registerDoctrineMapping($config);
 
         //$container->getDefinition('iphp.')
@@ -96,7 +94,7 @@ class IphpContentExtension extends Extension
         }
 
 
-        if (class_exists($config['class']['media'])) {
+        if (class_exists($config['class']['media']) && $config['class']['media']) {
 
             $collector->addAssociation($config['class']['content'], 'mapManyToOne', array(
                 'fieldName' => 'image',
@@ -119,7 +117,7 @@ class IphpContentExtension extends Extension
         }
 
 
-        if (class_exists($config['class']['author'])) {
+        if (class_exists($config['class']['author']) && $config['class']['author']) {
 
             $collector->addAssociation($config['class']['content'], 'mapManyToOne', array(
                 'fieldName' => 'author',
@@ -138,6 +136,44 @@ class IphpContentExtension extends Extension
                 ),
                 'orphanRemoval' => false,
             ));
+        }
+
+        if (class_exists($config['class']['contentfile']) && $config['class']['contentfile']) {
+
+            $collector->addAssociation($config['class']['content'], 'mapOneToMany', array(
+                'fieldName' => 'files',
+                'targetEntity' => $config['class']['contentfile'],
+                'cascade' => array(
+                    'remove',
+                    'persist',
+                ),
+                'mappedBy' => 'content',
+                'orphanRemoval' => true,
+                'orderBy' => array(
+                    'id' => 'ASC',
+                ),
+
+            ));
+
+
+            $collector->addAssociation($config['class']['contentfile'], 'mapManyToOne', array(
+                'fieldName' => 'content',
+                'targetEntity' => $config['class']['content'],
+                'cascade' => array(
+                    'persist',
+                ),
+                'mappedBy' => NULL,
+                'inversedBy' => NULL,
+                'joinColumns' => array(
+                    array(
+                        'name' => 'content_id',
+                        'referencedColumnName' => 'id',
+                        'onDelete' => 'SET NULL',
+                    ),
+                ),
+               // 'orphanRemoval' => false,
+            ));
+
         }
     }
 

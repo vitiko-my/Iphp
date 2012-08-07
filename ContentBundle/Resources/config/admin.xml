@@ -11,6 +11,10 @@
         <parameter key="iphp.content.admin.content.translation_domain">messages</parameter>
 
 
+        <parameter key="iphp.content.admin.contentfile.class">Iphp\ContentBundle\Admin\ContentFileAdmin</parameter>
+        <parameter key="iphp.content.admin.contentfile.controller">SonataAdminBundle:CRUD</parameter>
+        <parameter key="iphp.content.admin.contentfile.entity">Application\Iphp\ContentBundle\Entity\ContentFile</parameter>
+
     </parameters>
 
     <services>
@@ -36,6 +40,15 @@
                 <argument>%iphp.content.admin.content.translation_domain%</argument>
             </call>
             -->
+        </service>
+
+
+        <service id="iphp.content.admin.contentfile" class="%iphp.content.admin.contentfile.class%">
+            <tag name="sonata.admin" manager_type="orm"  show_in_dashboard="false"/>
+            <argument/>
+            <argument>%iphp.content.admin.contentfile.entity%</argument>
+            <argument>%iphp.content.admin.contentfile.controller%</argument>
+
         </service>
 
     </services>

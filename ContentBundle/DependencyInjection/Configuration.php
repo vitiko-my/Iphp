@@ -36,6 +36,7 @@ class Configuration implements ConfigurationInterface
                     ->scalarNode('content')->defaultValue('Application\\Iphp\\ContentBundle\\Entity\\Content')->end()
                     ->scalarNode('media')->defaultValue('Application\\Sonata\\MediaBundle\\Entity\\Media')->end()
                     ->scalarNode('author')->defaultValue('Application\\Iphp\\UserBundle\\Entity\\User')->end()
+                    ->scalarNode('contentfile')->defaultValue('Application\Iphp\\ContentBundle\\Entity\\ContentFile')->end()
                 ->end()
                 ->end();
 

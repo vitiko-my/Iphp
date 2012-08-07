@@ -5,6 +5,9 @@
 namespace Iphp\ContentBundle\Model;
 
 
+use Iphp\ContentBundle\Entity\BaseContentFile;
+
+
 abstract class Content implements ContentInterface
 {
     protected $title;
@@ -47,6 +50,8 @@ abstract class Content implements ContentInterface
 
     protected $rubric;
 
+    protected $files;
+
     /**
      * Set title
      *
@@ -61,11 +66,11 @@ abstract class Content implements ContentInterface
     }
 
 
-
     public function getSitePath()
     {
-        return $this->getRubric()->getFullPath(). ($this->getSlug() ? $this->getSlug().'/' : '');
+        return $this->getRubric()->getFullPath() . ($this->getSlug() ? $this->getSlug() . '/' : '');
     }
+
     /**
      * source : http://snipplr.com/view/22741/slugify-a-string-in-php/
      *
@@ -296,7 +301,6 @@ abstract class Content implements ContentInterface
     }
 
 
-
     /**
      * Set comments_enabled
      *
@@ -455,5 +459,24 @@ abstract class Content implements ContentInterface
         return $this->image;
     }
 
+    public function setFiles($files)
+    {
+        $this->files = $files;
 
+        foreach ($this->files as $pos => $file) {
+            $file->setContent ($this); //->setPos ($pos);
+        }
+        return $this;
+    }
+
+    public function getFiles()
+    {
+        return $this->files;
+    }
+
+
+    public function addFiles(BaseContentFile $file)
+    {
+        $this->files[] = $file;
+    }
 }

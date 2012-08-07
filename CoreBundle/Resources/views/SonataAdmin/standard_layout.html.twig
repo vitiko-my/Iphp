@@ -1,62 +1,71 @@
- {% extends 'SonataAdminBundle::standard_layout.html.twig' %}
- {% block footer %}
-   <div class="pull-right clearfix">
-      <span class="label"><a href="http://informika.ru" rel="noreferrer" style="text-decoration: none; color: black">Informika</a></span>
-   </div>
- {% endblock %}
+{% extends 'SonataAdminBundle::standard_layout.html.twig' %}
 
 
- {% block javascripts %}
+{% block javascripts %}
+{{ parent() }}
+<script>
 
-    {{ parent() }}
-    <script src="{{ asset('asset/tiny_mce/jquery.tinymce.js') }}"></script>
-
-    {# для genemu#}
-    {#{% if form is defined and  form_javascript%}{{ form_javascript(form) }}{% endif %}#}
- {% block stylesheets %}
-    {{ parent() }}
-   {#{% if form is defined %}{{ form_stylesheet(form) }}{% endif %}#}
-     <style>
-         label.label_hidden { display: none }
-         .mceLayout { width: 500px}
-     </style>
- {% endblock %}
-
-   <script>
-
-       $(function() {
-
-         //аццкий хак!
-         $('.uploadfilepath').each  ( function () {
-             if (!$(this).val()) return;
-             var href =  $(this).attr ('filepath')+$(this).val();
-             $(this).hide().parent().append ('<a target="_blank" href="'+href+'">'+href+'</a>');
-         });
+    $(function () {
+ 
+        //аццкий хак!
+        $('.uploadfilepath').each(function () {
+            if (!$(this).val()) return;
+            var href = $(this).attr('filepath') + $(this).val();
+            $(this).hide().parent().append('<a target="_blank" href="' + href + '">' + href + '</a>');
+        });
 
 
+        $('.uploadfile').live('change', function () {
+            var val = ($(this).val());
+            $(this).parent().next().find('.uploadfilepath').show().val(val);
+        })
+    });
+</script>
+<script src="/bundles/stfalcontinymce/vendor/tiny_mce/jquery.tinymce.js"></script>
+{# для genemu#}
+{% if form is defined %}{{ form_javascript(form) }}{% endif %}
 
 
-         $('.uploadfile').live ('change', function() {
-             var val =  ($(this).val());
-             $(this).parent().next().find('.uploadfilepath').show().val (val);
-         })
-       });
-   </script>
-
-
- <style>
-
-
-     .sonata-ba-list-actions label { float: left; margin:10px;padding-left: 10px}
-     .sonata-ba-list-actions select {  float: left;margin:10px}
-     .sonata-ba-list-actions input {  float: left; margin:10px;padding-right:10px}
-
- </style>
-
- {% endblock %}
+{% endblock %}
 
 
 
 
 
 
+
+{% block stylesheets %}
+{{ parent() }}
+{% if form is defined %}{{ form_stylesheet(form) }}{% endif %}
+<style>
+    label.label_hidden {
+        display: none
+    }
+
+    .mceLayout {
+        width: 500px
+    }
+</style>
+<!--
+<style>
+    .sonata-ba-list-actions label {
+        float: left;
+        margin: 10px;
+        padding-left: 10px
+    }
+
+    .sonata-ba-list-actions select {
+        float: left;
+        margin: 10px
+    }
+
+    .sonata-ba-list-actions input {
+        float: left;
+        margin: 10px;
+        padding-right: 10px
+    }
+
+</style>
+-->
+
+{% endblock %}
