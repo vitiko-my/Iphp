@@ -23,13 +23,21 @@ class TwigExtension extends \Twig_Extension
      */
     protected $entityRouter;
 
+
+    /**
+     * @var  \Symfony\Component\Security\Core\SecurityContextInterface
+     */
+    protected $securityContext;
+
     public function __construct(\Twig_Environment $twigEnviroment,
-                                 RubricManager $rubricManager,
-                                 EntityRouter $entityRouter)
+                                RubricManager $rubricManager,
+                                EntityRouter $entityRouter,
+                                SecurityContextInterface $securityContext)
     {
         $this->twigEnviroment = $twigEnviroment;
         $this->rubricManager = $rubricManager;
         $this->entityRouter = $entityRouter;
+        $this->securityContext = $securityContext;
 
         $twigEnviroment->addGlobal('iphp', new TemplateHelper($rubricManager));
     }
@@ -77,26 +85,24 @@ class TwigExtension extends \Twig_Extension
         }
 
 
-
-
-      //  print get_class ($entity);
+        //  print get_class ($entity);
 
         $methodData = new \ReflectionMethod($entity, 'getSitePath');
-        $parameters =   $methodData->getParameters();
+        $parameters = $methodData->getParameters();
 
-       // print  sizeof($parameters);
+        // print  sizeof($parameters);
 
 
-        $args = array ( $arg1, $arg2, $arg3);
+        $args = array($arg1, $arg2, $arg3);
         if (sizeof($parameters) > 0 && $parameters[0]->getClass() &&
-                $parameters[0]->getClass()->isInstance ($this->entityRouter))
-        {
-           array_unshift($args,$this->entityRouter);
+                $parameters[0]->getClass()->isInstance($this->entityRouter)
+        ) {
+            array_unshift($args, $this->entityRouter);
         }
 
 
         return /*$this->rubricManager->getBaseUrl() .*/
-                call_user_func_array(array ($entity, 'getSitePath'),   $args );
+                call_user_func_array(array($entity, 'getSitePath'), $args);
 
 
     }

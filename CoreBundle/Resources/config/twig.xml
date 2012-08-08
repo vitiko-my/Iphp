@@ -9,6 +9,7 @@
             <argument type="service" id="twig"/>
             <argument type="service" id="iphp.core.rubric.manager"/>
             <argument type="service" id="iphp.core.entity.router" />
+            <argument type="service" id="security.context" />
 
             <tag name="twig.extension"/>
         </service>
