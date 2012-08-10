@@ -1,0 +1,45 @@
+{% block iphp_file_widget %}
+
+
+{% set fileData = form.vars.value %}
+<div {{ block('widget_container_attributes') }}>
+
+    <div>{{ form_widget(form.file) }}</div>
+
+    {% if fileData %}
+    {% set imgUrl =  fileData.path ~ '/' ~ fileData.fileName|url_encode()  %}
+
+    <table>
+        <tr>
+            <td><a href="{{ imgUrl }}" target="_blank" class="full-img-link"><img
+                    src="{{ imgUrl }}" width="200" border="0"></a></td><td>&nbsp;&nbsp;&nbsp;</td>
+            <td style="vertical-align: top;">
+
+
+
+                    {{ form_row (form.delete, {'label_attr' : { 'style' :'width:auto;padding-right:10px'}})}}
+
+                <br> {{ fileData.size /1000}}кб
+
+
+                <br>   <a href="{{ imgUrl }}" target="_blank" class="full-img-link">{{ fileData.fileName }}</a>
+                <br>   {{  fileData.width is defined ? fileData.width ~ 'x' ~ fileData.height : ""}}
+
+
+
+            </td>
+
+</tr>
+</table>
+
+
+{% endif %}
+
+
+{# dump(form.vars.value) #}
+
+
+</div>
+
+
+        {% endblock iphp_file_widget%}
