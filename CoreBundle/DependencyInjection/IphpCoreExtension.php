@@ -31,9 +31,8 @@ class IphpCoreExtension extends Extension
         $loader->load('services.xml');
 
 
-
         if ($config['separate_admin_env']) {
-            if (array_key_exists ('SonataAdminBundle', $container->getParameter('kernel.bundles'))) $loader->load('admin.xml');
+            if (array_key_exists('SonataAdminBundle', $container->getParameter('kernel.bundles'))) $loader->load('admin.xml');
             else   $loader->load('front.xml');
         }
         else
@@ -43,6 +42,9 @@ class IphpCoreExtension extends Extension
         }
         $loader->load('block.xml');
         $this->registerDoctrineMapping($config);
+
+        $container->setParameter('iphp.web_dir',
+            str_replace('\\', '/', realpath($container->getParameter('kernel.root_dir') . '/../web/')));
 
         //  $loader->load('twig.xml');
         //  $loader->load('form.xml');
@@ -86,11 +88,11 @@ class IphpCoreExtension extends Extension
 
 
         //ИНДЕКСЫ
-        $collector->addIndex($config['class']['rubric'], 'lftrgt', array ('lft','rgt'));
-        $collector->addIndex($config['class']['rubric'], 'lvl', array ('lvl'));
-        $collector->addIndex($config['class']['rubric'], 'created_at', array ('created_at'));
-        $collector->addIndex($config['class']['rubric'], 'updated_at', array ('updated_at'));
-        $collector->addIndex($config['class']['rubric'], 'full_path', array ('full_path'));
+        $collector->addIndex($config['class']['rubric'], 'lftrgt', array('lft', 'rgt'));
+        $collector->addIndex($config['class']['rubric'], 'lvl', array('lvl'));
+        $collector->addIndex($config['class']['rubric'], 'created_at', array('created_at'));
+        $collector->addIndex($config['class']['rubric'], 'updated_at', array('updated_at'));
+        $collector->addIndex($config['class']['rubric'], 'full_path', array('full_path'));
         /*
         $collector->addAssociation($config['class']['rubric'], 'mapManyToOne', array(
             'fieldName' => 'parent',
