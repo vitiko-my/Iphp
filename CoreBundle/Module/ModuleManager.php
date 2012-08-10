@@ -33,7 +33,7 @@ class ModuleManager extends ContainerAware
      */
     public function getEntityRouter()
     {
-        return $this->container->get ('iphp.core.entity.router');
+        return $this->container->get('iphp.core.entity.router');
     }
 
     /**
@@ -60,7 +60,6 @@ class ModuleManager extends ContainerAware
     }
 
 
-
     function bundleModuleDir($bundle)
     {
         return $bundle->getPath() . DIRECTORY_SEPARATOR . $this->modulesPath;
@@ -80,7 +79,10 @@ class ModuleManager extends ContainerAware
                     substr($file->getRealpath(), strlen($dir) + 1, -4);
 
             if (class_exists($moduleClass)) {
-                $modules[] = new $moduleClass();
+
+
+                $classInfo= new \ReflectionClass($moduleClass);
+                if (!$classInfo->isAbstract()) $modules[] = new $moduleClass();
             }
         }
         return $modules;

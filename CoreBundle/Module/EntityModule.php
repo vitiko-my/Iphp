@@ -7,12 +7,13 @@
 
 namespace Iphp\CoreBundle\Module;
 
-class EntityModule extends Module
+abstract class EntityModule extends Module
 {
 
     protected $entityName;
 
     protected $controllerName;
+
 
     protected $entityActions = array(
         'index' => '/',

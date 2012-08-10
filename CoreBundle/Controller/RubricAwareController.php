@@ -5,6 +5,10 @@ namespace Iphp\CoreBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
+
+/**
+ * Todo: move to trait
+ */
 class RubricAwareController extends Controller
 {
 

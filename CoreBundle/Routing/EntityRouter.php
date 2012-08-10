@@ -1,14 +1,14 @@
 <?php
-
-namespace Iphp\CoreBundle\Routing;
-
-use Iphp\CoreBundle\Model\Rubric;
-use Symfony\Bundle\FrameworkBundle\Routing\Router;
 /**
  * Created by Vitiko
  * Date: 02.08.12
  * Time: 10:26
  */
+
+namespace Iphp\CoreBundle\Routing;
+
+use Iphp\CoreBundle\Model\Rubric;
+use Symfony\Bundle\FrameworkBundle\Routing\Router;
 
 class EntityRouter
 {
@@ -22,7 +22,7 @@ class EntityRouter
 
 
 
-    public function generateEntityActionPath ($entity, $action = 'view', Rubric $rubric = null)
+    public function generateEntityActionPath ($entity, $action = 'view', $params = array())
     {
 
        // print get_class ($this->router);
@@ -30,15 +30,11 @@ class EntityRouter
        // $this->generate($name
        // print get_class ($entity);
 
-
-
-       return $this->router->generate (
-           $this->routeNameForEntityAction ($entity, $action),
-           array ('id' => $entity->getId())
-
-       );
-
-
+       if ($action == 'view' && !$params)
+       {
+           $params =  array ('id' => method_exists($entity, 'getSlug') ? $entity->getSlug() : $entity->getId());
+       }
+       return $this->router->generate ($this->routeNameForEntityAction ($entity, $action), $params);
     }
 
     public function routeNameForEntityAction ($entity, $action,Rubric $rubric = null)

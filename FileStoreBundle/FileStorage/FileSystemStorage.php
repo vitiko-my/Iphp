@@ -44,11 +44,12 @@ class FileSystemStorage implements FileStorageInterface
             'originalName' => $file->getClientOriginalName(),
             'dir' => str_replace('\\', '/', realpath($uploadDir)),
             'mimeType' => $file->getClientMimeType(),
-            'size' => filesize($uploadDir . '/' . $name)
+            'size' => filesize($uploadDir . '/' . $name),
         );
 
 
         $fileData['path'] = substr($fileData['dir'], strlen($this->webDir));
+        $fileData['url'] =  $fileData['path'].'/'.$fileData['fileName'];
 
         if (in_array($fileData['mimeType'], array('image/png', 'image/jpeg', 'image/pjpeg'))
                 && function_exists('getimagesize')
