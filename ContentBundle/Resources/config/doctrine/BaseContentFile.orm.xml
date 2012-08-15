@@ -6,7 +6,7 @@
 
 
         <field name="title" type="string" column="title"/>
-        <field name="path" type="string" column="path" length="512"/>
+        <field name="file" type="array" column="file" nullable="true"/>
         <field name="description" type="text" column="description" nullable="true"/>
 
         <field name="createdAt" type="datetime" column="created_at"/>
@@ -15,8 +15,6 @@
         <lifecycle-callbacks>
             <lifecycle-callback type="prePersist" method="prePersist"/>
             <lifecycle-callback type="preUpdate" method="preUpdate"/>
-            <lifecycle-callback type="postUpdate" method="postUpdate"/>
-            <lifecycle-callback type="postPersist" method="postUpdate"/>
         </lifecycle-callbacks>
 
 

@@ -60,9 +60,6 @@ class PropertyMappingFactory
     }
 
 
-
-
-
     /**
      * Creates an array of PropetyMapping objects which contain the
      * configuration for the uploadable fields in the specified
@@ -142,7 +139,7 @@ class PropertyMappingFactory
      * @return \Iphp\FileStoreBundle\Mapping\PropertyMapping     The property mapping.
      * @throws \InvalidArgumentException
      */
-    protected  function createMapping($obj, UploadableField $field)
+    protected function createMapping($obj, UploadableField $field)
     {
         $class = $this->dataStorage->getReflectionClass($obj);
 
@@ -160,16 +157,19 @@ class PropertyMappingFactory
         $mapping->setMappingName($field->getMapping());
         $mapping->setMapping($config);
 
-        if ($config['namer']['service']) {
+        if ($config['namer']['service'] && $config['namer']['method']) {
             $mapping->setNamer(
                 $this->container->get($config['namer']['service']),
                 $config['namer']['method'],
                 $config['namer']['params']);
         }
-
-        if ($config['directory_namer']) {
-            $mapping->setDirectoryNamer($this->container->get($config['directory_namer']));
+        if ($config['directory_namer']['service'] && $config['directory_namer']['method']) {
+            $mapping->setDirectoryNamer(
+                $this->container->get($config['directory_namer']['service']),
+                $config['directory_namer']['method'],
+                $config['directory_namer']['params']);
         }
+
 
         return $mapping;
     }

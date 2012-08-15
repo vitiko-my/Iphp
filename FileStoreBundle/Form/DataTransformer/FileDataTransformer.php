@@ -19,8 +19,8 @@ class FileDataTransformer implements DataTransformerInterface
         {
 
 
-         //   print 'transform';
-         //   var_dump ($fileDataFromDb);
+         //  print 'transform';
+         //  var_dump ($fileDataFromDb);
             return $fileDataFromDb;
         }
 
@@ -32,16 +32,17 @@ class FileDataTransformer implements DataTransformerInterface
          */
         public function reverseTransform($fileDataFromForm)
         {
-     /*       print 'reverseTransform';
+         print 'reverseTransform';
                         var_dump ($fileDataFromForm);
-*/
 
+//exit();
+
+///            if (isset($fileDataFromForm['fileName']) && !isset($fileDataFromForm['file'])) return $fileDataFromForm;
 
 
             if  ($fileDataFromForm['delete'])
             {
 
-                //Возвращается объект наследующий Http\File чтобы проходилы проверки валидации на файл
 
                 if (isset($fileDataFromForm['dir']))
                 {

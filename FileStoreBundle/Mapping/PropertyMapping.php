@@ -38,9 +38,14 @@ class PropertyMapping
     protected $namerParams;
 
     /**
-     * @var DirectoryNamerInterface $directoryNamer
+     * @var  \Closure
      */
     protected $directoryNamer;
+
+    /**
+     * @var array
+     */
+    protected $directoryNamerParams;
 
     /**
      * @var array $mapping
@@ -96,11 +101,46 @@ class PropertyMapping
     public function useFileNamer($fileName)
     {
         if ($this->hasNamer()) {
-            $this->namer[0]->setObj($this->obj);
-            return call_user_func($this->namer, $fileName, $this->namerParams);
+            return call_user_func($this->namer, $this,$fileName, $this->namerParams);
         }
         return $fileName;
 
+    }
+
+
+    /**
+     * Gets the configured upload directory.
+     *
+     * @return string The configured upload directory.
+     */
+    public function useDirectoryNamer($fileName, $clientOriginalName)
+    {
+        if ($this->hasDirectoryNamer()) {
+            return call_user_func($this->directoryNamer, $this, $fileName, $clientOriginalName);
+        }
+        return $this->mapping['upload_dir'];
+    }
+
+
+    public function needResolveCollision()
+    {
+      return !$this->isOverwriteDuplicates();
+    }
+
+
+    public function resolveFileCollision($fileName, $clientOriginalName, $attempt = 1)
+    {
+       if ($this->hasNamer())  return  array (
+               $this->useDirectoryNamer($fileName, $clientOriginalName),
+               call_user_func(array ($this->namer[0],'resolveCollision'),$fileName, $attempt));
+
+       throw new \Exception ('Filename resolving collision not supported (namer is empty)');
+    }
+
+
+    public function getUploadDir()
+    {
+        return $this->mapping['upload_dir'];
     }
 
 
@@ -158,12 +198,11 @@ class PropertyMapping
 
     /**
      * Sets the directory namer.
-     *
-     * @param DirectoryNamerInterface $directoryNamer The directory namer.
      */
-    public function setDirectoryNamer(DirectoryNamerInterface $directoryNamer)
+    public function setDirectoryNamer($namer, $method, $params)
     {
-        $this->directoryNamer = $directoryNamer;
+        $this->directoryNamer = array($namer, $method . 'Rename');
+        $this->directoryNamerParams = $params;
     }
 
     /**
@@ -226,7 +265,7 @@ class PropertyMapping
     }
 
 
-    public function setPropertyValue( $value)
+    public function setPropertyValue($value)
     {
         return $this->fileNameProperty->setValue($this->obj, $value);
     }
@@ -242,18 +281,6 @@ class PropertyMapping
         return $this->fileNameProperty->getName();
     }
 
-    /**
-     * Gets the configured upload directory.
-     *
-     * @return string The configured upload directory.
-     */
-    public function getUploadDir($fileName, $clientOriginalName)
-    {
-        return  $this->hasDirectoryNamer() ?
-        call_user_func($this->directoryNamer, $this->mapping['upload_dir'], $this->obj, $fileName, $clientOriginalName):
-        $this->mapping['upload_dir'];
-    }
-
 
     /**
      * Determines if the file should be deleted upon removal of the
@@ -266,6 +293,12 @@ class PropertyMapping
         return $this->mapping['delete_on_remove'];
     }
 
+
+    public function isOverwriteDuplicates()
+    {
+        return $this->mapping['overwrite_duplicates'];
+    }
+
     /**
      * Determines if the uploadable field should be injected with a
      * Symfony\Component\HttpFoundation\File\File instance when
@@ -276,5 +309,26 @@ class PropertyMapping
     public function getInjectOnLoad()
     {
         return $this->mapping['inject_on_load'];
+    }
+
+    /**
+     * @return array
+     */
+    public function getDirectoryNamerParams()
+    {
+        return $this->directoryNamerParams;
+    }
+
+    public function getObj()
+    {
+        return $this->obj;
+    }
+
+    /**
+     * @return array
+     */
+    public function getNamerParams()
+    {
+        return $this->namerParams;
     }
 }

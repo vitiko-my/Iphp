@@ -32,9 +32,8 @@ class Configuration implements ConfigurationInterface
                     ->prototype('array')
                         ->children()
                             ->scalarNode('upload_dir')->isRequired()->end()
+
                             ->arrayNode('namer')
-
-
                                ->treatFalseLike(array ('service' => null, 'method' => null))
                                ->addDefaultsIfNotSet()
                                ->children()
@@ -46,8 +45,23 @@ class Configuration implements ConfigurationInterface
                                 ->end()
                                ->end()
                             ->end()
-                            ->scalarNode('directory_namer')->defaultNull()->end()
+
+                            ->arrayNode('directory_namer')
+                                ->treatFalseLike(array ('service' => null, 'method' => null))
+                                ->addDefaultsIfNotSet()
+                                ->children()
+                                    ->scalarNode('service')->defaultValue('iphp.filestore.directory_namer.default')->end()
+                                    ->scalarNode('method')->defaultValue("")->end()
+                                    ->arrayNode('params')
+                                         ->useAttributeAsKey('name')
+                                         ->prototype('scalar')->end()
+                                    ->end()
+                                ->end()
+
+                            ->end()
+
                             ->scalarNode('delete_on_remove')->defaultTrue()->end()
+                            ->scalarNode('overwrite_duplicates')->defaultFalse()->end()
                             //->scalarNode('inject_on_load')->defaultTrue()->end()
                         ->end()
                     ->end()

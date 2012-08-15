@@ -4,39 +4,38 @@
 {% set fileData = form.vars.value %}
 <div {{ block('widget_container_attributes') }}>
 
-    <div>{{ form_widget(form.file) }}</div>
+    <div style="float:left">{{ form_widget(form.file) }}</div>
 
     {% if fileData %}
-    {% set imgUrl =  fileData.path ~ '/' ~ fileData.fileName|url_encode()  %}
+    {% set fileUrl =  fileData.path ~ '/' ~ fileData.fileName|url_encode()  %}
 
+
+    <div style="float:left">
     <table>
         <tr>
-            <td><a href="{{ imgUrl }}" target="_blank" class="full-img-link"><img
-                    src="{{ imgUrl }}" width="200" border="0"></a></td><td>&nbsp;&nbsp;&nbsp;</td>
+            {% if fileData.width is defined %}
+            <td><a href="{{ fileUrl }}" target="_blank" class="full-img-link"><img
+                    src="{{ fileUrl }}" width="200" border="0"></a></td>
+            <td>&nbsp;&nbsp;&nbsp;</td>
+            {% endif %}
             <td style="vertical-align: top;">
 
+                <a href="{{ fileUrl }}" target="_blank" class="full-img-link">{{ fileData.originalName }}</a>,
+                <span style="white-space: nowrap">{{ fileData.size /1000}}кб</span>
+                <br> {{  fileData.width is defined ? fileData.width ~ 'x' ~ fileData.height : ""}}
 
-
-                    {{ form_row (form.delete, {'label_attr' : { 'style' :'width:auto;padding-right:10px'}})}}
-
-                <br> {{ fileData.size /1000}}кб
-
-
-                <br>   <a href="{{ imgUrl }}" target="_blank" class="full-img-link">{{ fileData.fileName }}</a>
-                <br>   {{  fileData.width is defined ? fileData.width ~ 'x' ~ fileData.height : ""}}
-
-
+                {{ form_row (form.delete, {'label_attr' : { 'style' :'width:auto;padding-right:10px'}})}}
 
             </td>
 
-</tr>
-</table>
+        </tr>
+    </table>
+    </div>
+
+    {% endif %}
 
 
-{% endif %}
-
-
-{# dump(form.vars.value) #}
+    {# dump(form.vars.value) #}
 
 
 </div>

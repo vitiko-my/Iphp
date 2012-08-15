@@ -2,8 +2,13 @@
 
 namespace Iphp\ContentBundle\Entity;
 
+use Iphp\FileStoreBundle\Mapping\Annotation as FileStore;
+use Symfony\Component\Validator\Constraints as Assert;
 
-abstract class BaseContentFile extends \Iphp\CoreBundle\Entity\BaseFileEntity
+/**
+ *  @FileStore\Uploadable
+ */
+abstract class BaseContentFile
 {
     /**
      * @var string $title
@@ -23,17 +28,20 @@ abstract class BaseContentFile extends \Iphp\CoreBundle\Entity\BaseFileEntity
     protected $content;
 
 
+    /**
+     * @Assert\File(
+     *     maxSize="20M"
+     * )
+     * @FileStore\UploadableField(mapping="content_file", fileNameProperty="file")
+     *
+     * @var File $file
+     */
+    protected $file;
+
 
     protected $createdAt;
 
     protected $updatedAt;
-
-
-    function getFilesPath()
-    {
-        // get rid of the __DIR__ so it doesn't screw when displaying uploaded doc/image in the view.
-        return '/files/content/';
-    }
 
 
 
@@ -124,7 +132,6 @@ abstract class BaseContentFile extends \Iphp\CoreBundle\Entity\BaseFileEntity
 
     public function prePersist()
     {
-        parent::preUpload();
         if (!$this->getCreatedAt()) $this->setCreatedAt(new \DateTime);
         if (!$this->getUpdatedAt()) $this->setUpdatedAt(new \DateTime);
     }
@@ -133,6 +140,17 @@ abstract class BaseContentFile extends \Iphp\CoreBundle\Entity\BaseFileEntity
     function preUpdate()
     {
         $this->setUpdatedAt(new \DateTime);
+    }
+
+    public function setFile($file)
+    {
+        $this->file = $file;
+        return $this;
+    }
+
+    public function getFile()
+    {
+        return $this->file;
     }
 
 }

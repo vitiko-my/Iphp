@@ -191,6 +191,11 @@
                 <target>Изображение</target>
             </trans-unit>
 
+            <trans-unit id="File">
+                <source>File</source>
+                <target>Файл</target>
+            </trans-unit>
+
             <trans-unit id="Images">
                 <source>Images</source>
                 <target>Изображения</target>

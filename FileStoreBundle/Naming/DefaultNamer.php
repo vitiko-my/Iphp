@@ -1,26 +1,14 @@
 <?php
-namespace Iphp\FileStoreBundle\Naming;
 
 /**
  *  @author Vitiko <vitiko@mail.ru>
  */
+namespace Iphp\FileStoreBundle\Naming;
+use Iphp\FileStoreBundle\Mapping\PropertyMapping;
 
 class DefaultNamer
 {
 
-
-    protected $obj;
-
-    public function setObj($obj)
-    {
-        $this->obj = $obj;
-        return $this;
-    }
-
-    public function getObj()
-    {
-        return $this->obj;
-    }
 
 
     /**
@@ -28,7 +16,7 @@ class DefaultNamer
      * @param $name
      * @return string
      */
-    function translitRename($name)
+    function translitRename(PropertyMapping $propertyMapping, $name)
     {
 
         $name = preg_replace('/[^\\pL\d.]+/u', '-', $name);
@@ -69,11 +57,14 @@ class DefaultNamer
      * @param $params
      * @return string
      */
-    function propertyRename($name, $params)
+    function propertyRename(PropertyMapping $propertyMapping, $name)
     {
+        $params = $propertyMapping->getNamerParams();
+        $obj = $propertyMapping->getObj();
+
         $field = isset($params['field']) && $params['field'] ? $params['field'] : 'id';
-        $fieldValue = $this->obj->{'get' . ucfirst($field)}();
-        if (!$fieldValue) $fieldValue = $this->obj->getId();
+        $fieldValue = $obj->{'get' . ucfirst($field)}();
+        if (!$fieldValue) $fieldValue = $obj->getId();
         if ($fieldValue) $name = $fieldValue . substr($name, strrpos($name, '.'));
         return $name;
     }
@@ -82,7 +73,12 @@ class DefaultNamer
     // Разрешение коллизий с одинаковыми названиями файлов
     function resolveCollision($name, $attempt = 1)
     {
+       $addition = $attempt;
+       if ($attempt > 10) $addition = date ('Y_m_d_H_i_s');
 
+       $ppos = strrpos ($name,'.');
+
+        return substr ($name, $ppos-1).'_'.$addition.''.substr ($name, $ppos);
     }
 
 

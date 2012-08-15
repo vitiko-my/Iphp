@@ -19,15 +19,15 @@ class ContentFileAdmin extends IphpAdmin
      */
     protected function configureFormFields(FormMapper $formMapper)
     {
-        $formMapper->add('title', 'text')
-                ->add('file', 'file', array('required' => false, 'attr' => array('class' => 'uploadfile')))
-                ->add('path', 'text', array(
+        $formMapper->add('title', 'text', array ('attr' => array ('style' => 'width:200px')))
+                ->add('file', 'iphp_file', array('required' => false, 'attr' => array('class' => 'uploadfile')))
+             /*   ->add('path', 'text', array(
 
 
             'required' => false,
             'attr' => array(
                 'class' => 'uploadfilepath',
                 'readonly' => true,
-                'filepath' => $this->getSubject() ? $this->getSubject()->getFilesPath() : '')));
+                'filepath' => $this->getSubject() ? $this->getSubject()->getFilesPath() : '')))*/;
     }
 }

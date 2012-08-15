@@ -38,7 +38,7 @@ class FileType extends AbstractType
 
         $builder->add('file', 'file')
                 ->add('delete', 'checkbox', array('label' => 'Удалить'))
-                ->addModelTransformer(new FileDataTransformer());
+                ->addViewTransformer(new FileDataTransformer());
     }
 
     /**

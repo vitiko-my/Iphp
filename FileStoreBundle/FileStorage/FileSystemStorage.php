@@ -34,17 +34,33 @@ class FileSystemStorage implements FileStorageInterface
     public function upload(PropertyMapping $mapping, UploadedFile $file)
     {
         //transform filename and directory name if namer exists in mapping definition
-        $name = $mapping->useFileNamer($file->getClientOriginalName());
-        $uploadDir = $mapping->getUploadDir($name, $file->getClientOriginalName());
+        $fileName = $origName =  $mapping->useFileNamer($file->getClientOriginalName());
+        $uploadDir = $mapping->useDirectoryNamer($fileName, $file->getClientOriginalName());
 
-        $file->move($uploadDir, $name);
+
+
+        //print $uploadDir.'/'.$fileName.'--';
+       // print file_exists($uploadDir.'/'.$fileName);
+      //  exit();
+        $try = 0;
+
+        while ($mapping->needResolveCollision() && file_exists($uploadDir.'/'.$fileName))
+        {
+           if ($try > 15)
+               throw new \Exception ("Can't resolve collision for file upload ".$uploadDir.'/'.$fileName );
+
+           list ($uploadDir, $fileName) = $mapping->resolveFileCollision($origName, $try++);
+
+        }
+
+        $file->move($uploadDir, $fileName);
 
         $fileData = array(
-            'fileName' => $name,
+            'fileName' => $fileName,
             'originalName' => $file->getClientOriginalName(),
             'dir' => str_replace('\\', '/', realpath($uploadDir)),
             'mimeType' => $file->getClientMimeType(),
-            'size' => filesize($uploadDir . '/' . $name),
+            'size' => filesize($uploadDir . '/' . $fileName),
         );
 
 
@@ -76,7 +92,7 @@ class FileSystemStorage implements FileStorageInterface
     {
 
 
-        //print 'ремув';
+
 
         //var_dump ($fileData);
 
@@ -108,7 +124,7 @@ class FileSystemStorage implements FileStorageInterface
     }
 
     /**
-     * Используется в UploaderHelper
+     * пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ UploaderHelper
      * {@inheritDoc}
      */
 /*    public function resolvePath($obj, $field)
