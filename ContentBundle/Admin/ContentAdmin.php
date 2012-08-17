@@ -62,7 +62,11 @@ class ContentAdmin extends Admin
                 ->with('Основные')
                 ->add('title', null, array('label' => 'Заголовок'))
                 ->add('enabled', null, array('required' => false, 'label' => 'Показывать на сайте'))
-                ->add('slug')
+                ->add('slug','slug_text', array (
+                        'blank_title' => 'индекс рубрики (код не вводится)',
+                        'source_field' => 'title',
+                        'usesource_title' => 'Использовать заголовок материала'
+                       ))
 
                 ->add('rubric', 'rubricchoice')
 
@@ -187,6 +191,13 @@ class ContentAdmin extends Admin
             $this->trans('Content Show'),
             array('uri' => $admin->generateUrl('show', array('id' => $id)))
         );
+
+
+        $menu->addChild(
+            $this->trans('Content Site Show'),
+            array('uri' => $admin->getSubject()->getSitePath(), 'linkAttributes' => array ('target' => '_blank'))
+        );
+
 
         /*   $menu->addChild(
             $this->trans('sidemenu.link_view_comments'),

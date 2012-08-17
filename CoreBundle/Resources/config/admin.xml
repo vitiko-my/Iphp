@@ -97,6 +97,11 @@
         </service>
 
 
+        <service id="iphp.core.form.type.slug_text" class="Iphp\CoreBundle\Form\Type\SlugTextType">
+            <tag name="form.type" alias="slug_text"/>
+        </service>
+
+
         <!-- TODO:  в BlockBundle/ServiceFormType происходит наполнение списком сервисов блоков
          в SonataBlockExtension. Пока получается через вызов сервиса  sonata.block.form.type.block
          (который наполнен как сказано выше -->

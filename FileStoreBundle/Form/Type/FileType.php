@@ -19,9 +19,22 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\OptionsResolver\Exception\InvalidOptionsException;
 
 use Iphp\FileStoreBundle\Form\DataTransformer\FileDataTransformer;
+use Iphp\FileStoreBundle\Form\DataTransformer\FileDataViewTransformer;
 
 class FileType extends AbstractType
 {
+
+
+    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    {
+        $resolver->setDefaults(array(
+         'read_only' => false,
+         'upload' => true,
+         'show_uploaded' => true
+
+        ));
+    }
+
 
     /**
      * {@inheritdoc}
@@ -37,8 +50,11 @@ class FileType extends AbstractType
 
 
         $builder->add('file', 'file')
-                ->add('delete', 'checkbox', array('label' => 'Удалить'))
-                ->addViewTransformer(new FileDataTransformer());
+            ->add('delete', 'checkbox', array('label' => 'Удалить'))
+            ->addViewTransformer(new FileDataTransformer())
+
+        //for sonata admin
+            ->addViewTransformer(new FileDataViewTransformer());
     }
 
     /**

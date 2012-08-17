@@ -1,7 +1,7 @@
 {% block iphp_file_widget %}
 
 
-{% set fileData = form.vars.value %}
+{% set fileData = value %}
 <div {{ block('widget_container_attributes') }}>
 
     <div style="float:left">{{ form_widget(form.file) }}</div>
@@ -35,9 +35,9 @@
     {% endif %}
 
 
-    {# dump(form.vars.value) #}
 
 
+    {# dump( value) #}
 </div>
 
 

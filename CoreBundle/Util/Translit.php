@@ -30,6 +30,18 @@ class Translit
         );
         $str  = strtr($str , $iso);
 
+        $str = trim($str, '-');
+
+        // transliterate
+        if (function_exists('iconv')) {
+            $str = iconv('utf-8', 'us-ascii//TRANSLIT', $str);
+        }
+
+        $str = strtolower($str);
+
+        // remove unwanted characters
+        $str = preg_replace('~[^-\w]+~', '', $str);
+
         return $str;
     }
 }

@@ -12,7 +12,7 @@ abstract class Content implements ContentInterface
 {
     protected $title;
 
-    protected $slug = '';
+    protected $slug = null;
 
     protected $abstract;
 
@@ -52,6 +52,15 @@ abstract class Content implements ContentInterface
 
     protected $files;
 
+
+
+
+    public function getSitePath()
+    {
+        return $this->getRubric()->getFullPath() . ($this->getSlug() ? $this->getSlug() . '/' : '');
+    }
+
+
     /**
      * Set title
      *
@@ -60,69 +69,8 @@ abstract class Content implements ContentInterface
     public function setTitle($title)
     {
         $this->title = $title;
-
-
         return $this;
     }
-
-
-    public function getSitePath()
-    {
-        return $this->getRubric()->getFullPath() . ($this->getSlug() ? $this->getSlug() . '/' : '');
-    }
-
-    /**
-     * source : http://snipplr.com/view/22741/slugify-a-string-in-php/
-     *
-     * @static
-     * @param  $text
-     * @return mixed|string
-     */
-    static public function slugify($text)
-    {
-        // replace non letter or digits by -
-        $text = preg_replace('~[^\\pL\d]+~u', '-', $text);
-
-
-        $iso = array(
-            "Є" => "YE", "І" => "I", "Ѓ" => "G", "і" => "i", "№" => "N", "є" => "ye", "ѓ" => "g",
-            "А" => "A", "Б" => "B", "В" => "V", "Г" => "G", "Д" => "D",
-            "Е" => "E", "Ё" => "YO", "Ж" => "ZH",
-            "З" => "Z", "И" => "I", "Й" => "J", "К" => "K", "Л" => "L",
-            "М" => "M", "Н" => "N", "О" => "O", "П" => "P", "Р" => "R",
-            "С" => "S", "Т" => "T", "У" => "U", "Ф" => "F", "Х" => "H",
-            "Ц" => "C", "Ч" => "CH", "Ш" => "SH", "Щ" => "SHH", "Ъ" => "'",
-            "Ы" => "Y", "Ь" => "", "Э" => "E", "Ю" => "YU", "Я" => "YA",
-            "а" => "a", "б" => "b", "в" => "v", "г" => "g", "д" => "d",
-            "е" => "e", "ё" => "yo", "ж" => "zh",
-            "з" => "z", "и" => "i", "й" => "j", "к" => "k", "л" => "l",
-            "м" => "m", "н" => "n", "о" => "o", "п" => "p", "р" => "r",
-            "с" => "s", "т" => "t", "у" => "u", "ф" => "f", "х" => "h",
-            "ц" => "c", "ч" => "ch", "ш" => "sh", "щ" => "shh", "ъ" => "",
-            "ы" => "y", "ь" => "", "э" => "e", "ю" => "yu", "я" => "ya", "«" => "", "»" => "", "—" => "-"
-        );
-        $text = strtr($text, $iso);
-        // trim
-        $text = trim($text, '-');
-
-        // transliterate
-        if (function_exists('iconv')) {
-            $text = iconv('utf-8', 'us-ascii//TRANSLIT', $text);
-        }
-
-        // lowercase
-        $text = strtolower($text);
-
-        // remove unwanted characters
-        $text = preg_replace('~[^-\w]+~', '', $text);
-
-        if (empty($text)) {
-            return 'n-a';
-        }
-
-        return $text;
-    }
-
 
     /**
      * Get title
@@ -290,16 +238,26 @@ abstract class Content implements ContentInterface
         if (!$this->getCreatedAt()) $this->setCreatedAt(new \DateTime);
         if (!$this->getUpdatedAt()) $this->setUpdatedAt(new \DateTime);
 
-        if (!$this->getSlug())
-            $this->setSlug( /*$this->getCreatedAt()->format ('Y-m-d').'-'.*/
-                self::slugify($this->getTitle()));
+        $this->checkSlug();
+
+        /*if (!$this->getSlug())
+            $this->setSlug(  self::slugify($this->getTitle()));*/
     }
 
     public function preUpdate()
     {
         $this->setUpdatedAt(new \DateTime);
+
+        $this->checkSlug();
+
     }
 
+
+    protected function checkSlug()
+    {
+        if ($this->slug === null)
+            $this->slug = \Iphp\CoreBundle\Util\Translit :: translit($this->getTitle());
+    }
 
     /**
      * Set comments_enabled
