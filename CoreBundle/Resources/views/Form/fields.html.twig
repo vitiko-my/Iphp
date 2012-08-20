@@ -23,15 +23,7 @@
     {% if source_field  %}
     <span id="usesource_span_{{ id }}" {{ is_blank and not is_new  ? 'style="display:none"' : ''}}>
     <input type="checkbox" id="usesource_{{ id }}" {{ is_new  ? 'checked':''}}
-           onchange="if (this.checked)
-                   {
-                    $('#{{ id }}').val (toTranslit ($('#{{ source_field_id }}').val()));
-                    $('#{{ source_field_id }}').on ('keyup', function() {$('#{{ id }}').val (toTranslit ($('#{{ source_field_id }}').val()))} )
-                   }
-                   else
-                   {
-                   $('#{{ source_field_id }}').on ('keyup',null);
-                   }"
+           onchange="if (this.checked) onlineTranslit_{{ id}}();"
 }>
 
     <label for="usesource_{{ id }}" style="display:inline;">
@@ -48,7 +40,17 @@
 </div>
 
 <script>
-    function toTranslit(text) {
+
+
+    function onlineTranslit_{{ id}} ()
+    {
+        if ($('#usesource_{{ id }}').attr ('checked'))
+        $('#{{ id }}').val (toTranslit ($('#{{ source_field_id }}').val(),50));
+    }
+
+    $('#{{ source_field_id }}').on ('keyup', onlineTranslit_{{ id}} );
+
+    function toTranslit(text, limit) {
         return text.replace(/([а-яё])|([\s_-])|([^a-z\d])/gi,
                 function (all, ch, space, words, i) {
                     if (space || words) {
@@ -63,7 +65,7 @@
                                 'shch', '', 'y', '', 'e', 'yu', 'ya'
                             ];
                     return t[index];
-                });
+                }).toLowerCase().substring (0,limit) ;
     }
 </script>
 {% endblock slug_text_widget %}
