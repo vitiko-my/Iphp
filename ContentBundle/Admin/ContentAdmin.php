@@ -9,7 +9,6 @@ use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 
-//use Sonata\FormatterBundle\Formatter\Pool as FormatterPool;
 
 use Knp\Menu\ItemInterface as MenuItemInterface;
 
@@ -32,7 +31,7 @@ class ContentAdmin extends Admin
      * @return void
      */
 
-/*    function configure()
+    /*    function configure()
     {
         $this->configurationPool->getAdminByAdminCode('iphp.core.admin.rubric')
                 ->addExtension( new RubricAdminExtension);
@@ -43,10 +42,10 @@ class ContentAdmin extends Admin
     {
         $showMapper
         // ->add('author')
-                ->add('enabled', null, array('label' => 'Показывать на сайте'))
-                ->add('title', null, array('label' => 'Заголовок'))
-                ->add('abstract', null, array('label' => 'Анонс'))
-                ->add('content', null, array('label' => 'Текст'));
+            ->add('enabled', null, array('label' => 'Показывать на сайте'))
+            ->add('title', null, array('label' => 'Заголовок'))
+            ->add('abstract', null, array('label' => 'Анонс'))
+            ->add('content', null, array('label' => 'Текст'));
 
     }
 
@@ -59,56 +58,40 @@ class ContentAdmin extends Admin
     {
 
         $formMapper
-                ->with('Основные')
-                ->add('title', null, array('label' => 'Заголовок'))
-                ->add('enabled', null, array('required' => false, 'label' => 'Показывать на сайте'))
-                ->add('slug','slug_text', array (
-                        'blank_title' => 'индекс рубрики (код не вводится)',
-                        'source_field' => 'title',
-                        'usesource_title' => 'Использовать заголовок материала'
-                       ))
+            ->with('Основные')
+            ->add('title', null, array('label' => 'Заголовок'))
+            ->add('enabled', null, array('required' => false, 'label' => 'Показывать на сайте'))
+            ->add('slug', 'slug_text', array(
+            'blank_title' => 'индекс рубрики (код не вводится)',
+            'source_field' => 'title',
+            'usesource_title' => 'Использовать заголовок материала'
+        ))
 
-                ->add('rubric', 'rubricchoice')
-
-
-                ->add('author', 'sonata_type_model_list', array('required' => false)/*, array('edit' => 'list')*/)
+            ->add('rubric', 'rubricchoice')
+            ->add('author', 'sonata_type_model_list', array('required' => false) /*, array('edit' => 'list')*/)
 
 
-                ->add('date', 'genemu_jquerydate', array(
+            ->add('date', 'genemu_jquerydate', array(
             'required' => false, 'widget' => 'single_text'))
-                ->add('abstract', null, array('label' => 'Анонс'))
-        /*      ->add('contentFormatter', 'sonata_formatter_type_selector',
-        array(
-            'source' => 'rawContent',
-            'target' => 'content',
-            'label' => 'Форматирование'
-        ))*/
-                ->add('content', 'genemu_tinymce', array('label' => 'Текст'))
-               ->add('image', 'sonata_type_model_list', array('required' => false),
-            array(/*'edit' => 'list',*/ 'link_parameters' => array('context' => 'contentimage')))
+            ->add('abstract', null, array('label' => 'Анонс'))
+            ->add('content', 'genemu_tinymce', array('label' => 'Текст'))
+            ->add('image', 'sonata_type_model_list', array('required' => false),
+            array('link_parameters' => array('context' => 'contentimage')))
 
 
-                ->add('files', 'sonata_type_collection',
-              array('label' => 'Файлы', 'by_reference' => false),
-              array(
-                  'edit' => 'inline',
-               //   'sortable' => 'pos',
-                  'inline' => 'table',
-              ))
+            ->add('files', 'sonata_type_collection',
+            array('label' => 'Файлы', 'by_reference' => false),
+            array(
+                'edit' => 'inline',
+                //   'sortable' => 'pos',
+                'inline' => 'table',
+            ))
 
-         /*       ->add('image', 'sonata_media_type', array(
-                  'provider' => 'sonata.media.provider.image',
-                   'context' => 'contentimage'))*/
-         /*       ->add('images', 'sonata_type_collection', array(),
-            array('edit' => 'list',  'link_parameters' => array('context' => 'contentimage'),
-                                                                        'inline' => 'table'  ))*/
-                ->end() // ->with('Options', array('collapsed' => true))
-        //  ->add('commentsCloseAt')
-        //  ->add('commentsEnabled', null, array('required' => false))
-        // ->add('commentsDefaultStatus', 'choice', array('choices' => Comment::getStatusList(), 'expanded' => true))
-        //   ->end();
 
-    ;
+        /*       ->add('images', 'sonata_type_collection', array(),
+array('edit' => 'list',  'link_parameters' => array('context' => 'contentimage'),
+    'inline' => 'table'  ))*/
+            ->end();
     }
 
     /**
@@ -119,14 +102,13 @@ class ContentAdmin extends Admin
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-                ->addIdentifier('title', null, array('label' => 'Заголовок'))
-                ->add('date')
-                ->add('image', 'text', array(
+            ->addIdentifier('title', null, array('label' => 'Заголовок'))
+            ->add('date')
+            ->add('image', 'text', array(
             'template' => 'IphpCoreBundle::image_preview.html.twig'
         ))
-                ->add('rubric', null, array('label' => 'Рубрика'))
-                ->add('enabled', null, array('label' => 'Показывать на сайте'));
-        // ->add('commentsEnabled');
+            ->add('rubric', null, array('label' => 'Рубрика'))
+            ->add('enabled', null, array('label' => 'Показывать на сайте'));
     }
 
     /**
@@ -137,38 +119,19 @@ class ContentAdmin extends Admin
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
-                ->add('rubric', null, array(), null, array(
+            ->add('rubric', null, array(), null, array(
             'property' => 'TitleLevelIndented',
             'query_builder' => function(\Doctrine\ORM\EntityRepository $er)
             {
                 return $er->createQueryBuilder('r')
-                        ->orderBy('r.left', 'ASC');
+                    ->orderBy('r.left', 'ASC');
             }
         ))
-                ->add('title')
-                ->add('enabled')
-           //     ->add('date')// ->add('author')
+            ->add('title')
+            ->add('enabled')//     ->add('date')// ->add('author')
         ;
     }
 
-    /**
-     * @param $queryBuilder
-     * @param $alias
-     * @param $field
-     * @param $value
-     *
-     * @return void
-     *
-    public function getWithOpenCommentFilter($queryBuilder, $alias, $field, $value)
-    {
-    if (!$value) {
-    return;
-    }
-
-    $queryBuilder->leftJoin(sprintf('%s.comments', $alias), 'c');
-    $queryBuilder->andWhere('c.status = :status');
-    $queryBuilder->setParameter('status', Comment::STATUS_MODERATE);
-    }*/
 
     /**
      * @param \Knp\Menu\ItemInterface $menu
@@ -192,17 +155,11 @@ class ContentAdmin extends Admin
             array('uri' => $admin->generateUrl('show', array('id' => $id)))
         );
 
-
         $menu->addChild(
             $this->trans('Content Site Show'),
-            array('uri' => $admin->getSubject()->getSitePath(), 'linkAttributes' => array ('target' => '_blank'))
+            array('uri' => $admin->getSubject()->getSitePath(), 'linkAttributes' => array('target' => '_blank'))
         );
 
-
-        /*   $menu->addChild(
-            $this->trans('sidemenu.link_view_comments'),
-            array('uri' => $admin->generateUrl('sonata.news.admin.comment.list', array('id' => $id)))
-        );*/
     }
 
     public function setUserManager($userManager)
@@ -215,40 +172,4 @@ class ContentAdmin extends Admin
         return $this->userManager;
     }
 
-    /**
-     * @param \Sonata\FormatterBundle\Formatter\Pool $formatterPool
-     *
-     * @return void
-     */
-    public function setPoolFormatter(FormatterPool $formatterPool)
-    {
-        $this->formatterPool = $formatterPool;
-    }
-
-    /**
-     * @return \Sonata\FormatterBundle\Formatter\Pool
-     */
-    public function getPoolFormatter()
-    {
-        return $this->formatterPool;
-    }
-
-    /**
-     * @param ContentInterface $content
-     */
-    public function prePersist($content)
-    {
-        // $content->setContentFormatter('raw');
-
-        //    $content->setContent($this->getPoolFormatter()->transform($content->getContentFormatter(), $content->getRawContent()));
-    }
-
-    /**
-     * @param ContentInterface $content
-     */
-    public function preUpdate($content)
-    {
-        //  $content->setContentFormatter('raw');
-        //  $content->setContent($this->getPoolFormatter()->transform($content->getContentFormatter(), $content->getRawContent()));
-    }
 }
