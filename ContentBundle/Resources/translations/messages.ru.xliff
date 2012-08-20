@@ -25,6 +25,10 @@
                 <target>Просмотр материала</target>
             </trans-unit>
 
+            <trans-unit id="Content Site Show">
+                <source>Content Site Show</source>
+                <target>Просмотр материала на сайте</target>
+            </trans-unit>
 
             <trans-unit id="Links">
                 <source>Links</source>
