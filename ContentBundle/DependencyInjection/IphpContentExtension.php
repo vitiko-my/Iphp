@@ -150,7 +150,7 @@ class IphpContentExtension extends Extension
                 'mappedBy' => 'content',
                 'orphanRemoval' => true,
                 'orderBy' => array(
-                    'id' => 'ASC',
+                    'pos' => 'ASC',
                 ),
 
             ));
@@ -172,6 +172,45 @@ class IphpContentExtension extends Extension
                     ),
                 ),
                // 'orphanRemoval' => false,
+            ));
+
+        }
+
+
+
+        if (class_exists($config['class']['contentlink']) && $config['class']['contentlink']) {
+
+            $collector->addAssociation($config['class']['content'], 'mapOneToMany', array(
+                'fieldName' => 'links',
+                'targetEntity' => $config['class']['contentlink'],
+                'cascade' => array(
+                    'all',
+                ),
+                'mappedBy' => 'content',
+                'orphanRemoval' => true,
+                'orderBy' => array(
+                    'pos' => 'ASC',
+                ),
+
+            ));
+
+
+            $collector->addAssociation($config['class']['contentlink'], 'mapManyToOne', array(
+                'fieldName' => 'content',
+                'targetEntity' => $config['class']['content'],
+                'cascade' => array(
+                    'persist',
+                ),
+                'mappedBy' => NULL,
+                'inversedBy' => NULL,
+                'joinColumns' => array(
+                    array(
+                        'name' => 'content_id',
+                        'referencedColumnName' => 'id',
+                        'onDelete' => 'SET NULL',
+                    ),
+                ),
+                // 'orphanRemoval' => false,
             ));
 
         }

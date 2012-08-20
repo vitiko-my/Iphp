@@ -19,7 +19,10 @@ abstract class BaseContentFile
      * @var integer $id
      */
     protected $id;
-
+    /**
+     * @var integer $pos
+     */
+    protected $pos;
 
     protected $description;
     /**
@@ -151,6 +154,23 @@ abstract class BaseContentFile
     public function getFile()
     {
         return $this->file;
+    }
+
+    /**
+     * @param int $pos
+     */
+    public function setPos($pos)
+    {
+        $this->pos = $pos;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPos()
+    {
+        return $this->pos;
     }
 
 }

@@ -50,9 +50,9 @@ class RubricRouteLoader implements LoaderInterface
     protected $container;
 
     /**
-     * \Iphp\CoreBundle\Module\ModuleFactory
+     * @var \Iphp\CoreBundle\Module\ModuleManager
      */
-    protected $moduleFactory;
+    protected $moduleManager;
 
     public function __construct(Kernel $kernel, EntityManager $em, ContainerInterface $container)
     {

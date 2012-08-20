@@ -52,6 +52,8 @@ abstract class Content implements ContentInterface
 
     protected $files;
 
+    protected $links;
+
 
 
 
@@ -437,4 +439,25 @@ abstract class Content implements ContentInterface
     {
         $this->files[] = $file;
     }
+
+    public function setLinks($links)
+    {
+        $this->links = $links;
+        foreach ($this->links as $pos => $link) {
+            $link->setContent ($this); //->setPos ($pos);
+        }
+        return $this;
+    }
+
+    public function getLinks()
+    {
+        return $this->links;
+    }
+
+    public function addLinks ($link)
+    {
+        $this->links[] = $link;
+    }
+
+
 }

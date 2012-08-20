@@ -75,19 +75,35 @@ class ContentAdmin extends Admin
             'required' => false, 'widget' => 'single_text'))
             ->add('abstract', null, array('label' => 'Анонс'))
             ->add('content', 'genemu_tinymce', array('label' => 'Текст'))
+
+
+
+
+            ->with('Изображения', array('collapsed' => true))
             ->add('image', 'sonata_type_model_list', array('required' => false),
             array('link_parameters' => array('context' => 'contentimage')))
+            ->end()
 
-
+            ->with('Files', array('collapsed' => true))
             ->add('files', 'sonata_type_collection',
-            array('label' => 'Файлы', 'by_reference' => false),
+            array('by_reference' => false),
             array(
                 'edit' => 'inline',
-                //   'sortable' => 'pos',
+                'sortable' => 'pos',
                 'inline' => 'table',
             ))
+            ->end()
 
 
+            ->with('Links', array('collapsed' => true))
+            ->add('links', 'sonata_type_collection',
+            array( 'by_reference' => false),
+            array(
+                'edit' => 'inline',
+                'sortable' => 'pos',
+                'inline' => 'table',
+            ))
+            ->end()
         /*       ->add('images', 'sonata_type_collection', array(),
 array('edit' => 'list',  'link_parameters' => array('context' => 'contentimage'),
     'inline' => 'table'  ))*/

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <mapped-superclass name="Iphp\ContentBundle\Entity\BaseContentLink">
+
+        <field name="pos" type="integer" column="pos" nullable="true"/>
+        <field name="title" type="string" column="title"/>
+        <field name="url" type="string" column="url"/>
+        <field name="date" type="datetime" column="date" nullable="true"/>
+
+    </mapped-superclass>
+</doctrine-mapping>

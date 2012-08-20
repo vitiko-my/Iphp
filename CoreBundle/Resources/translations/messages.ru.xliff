@@ -196,6 +196,11 @@
                 <target>Файл</target>
             </trans-unit>
 
+            <trans-unit id="Files">
+                <source>Files</source>
+                <target>Файлы</target>
+            </trans-unit>
+
             <trans-unit id="Images">
                 <source>Images</source>
                 <target>Изображения</target>
@@ -210,6 +215,12 @@
             <trans-unit id="Slug">
                 <source>Slug</source>
                 <target>Код на сайте (slug)</target>
+            </trans-unit>
+
+
+            <trans-unit id="Pos">
+                <source>Pos</source>
+                <target>&#9650;&#9660;</target>
             </trans-unit>
         </body>
     </file>

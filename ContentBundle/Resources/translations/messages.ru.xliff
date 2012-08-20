@@ -1,31 +1,35 @@
 <?xml version="1.0"?>
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
-    <file source-language="ru" datatype="plaintext" original="" >
+    <file source-language="ru" datatype="plaintext" original="">
         <body>
-           <trans-unit id="Content List">
+            <trans-unit id="Content List">
                 <source>Content List</source>
                 <target>Список материалов</target>
             </trans-unit>
-           <trans-unit id="Content Create">
+            <trans-unit id="Content Create">
                 <source>Content Create</source>
                 <target>Новый материал</target>
-           </trans-unit>
-           <trans-unit id="Content Edit">
+            </trans-unit>
+            <trans-unit id="Content Edit">
                 <source>Content Edit</source>
                 <target>Редактирование материала</target>
-           </trans-unit>
+            </trans-unit>
 
-           <trans-unit id="Content Delete">
+            <trans-unit id="Content Delete">
                 <source>Content Delete</source>
                 <target>Удаление материала</target>
-           </trans-unit>
+            </trans-unit>
 
-    <trans-unit id="Content Show">
+            <trans-unit id="Content Show">
                 <source>Content Show</source>
                 <target>Просмотр материала</target>
-           </trans-unit>
+            </trans-unit>
 
 
+            <trans-unit id="Links">
+                <source>Links</source>
+                <target>Ссылки</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

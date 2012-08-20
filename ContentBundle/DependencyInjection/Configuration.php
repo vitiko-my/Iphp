@@ -30,21 +30,17 @@ class Configuration implements ConfigurationInterface
         $node = $treeBuilder->root('iphp_content')->children();
 
         $node->arrayNode('class')
-                ->addDefaultsIfNotSet()
-                ->children()
-                    ->scalarNode('rubric')->defaultValue('Application\\Iphp\\CoreBundle\\Entity\\Rubric')->end()
-                    ->scalarNode('content')->defaultValue('Application\\Iphp\\ContentBundle\\Entity\\Content')->end()
-                    ->scalarNode('media')->defaultValue('Application\\Sonata\\MediaBundle\\Entity\\Media')->end()
-                    ->scalarNode('author')->defaultValue('Application\\Iphp\\UserBundle\\Entity\\User')->end()
-                    ->scalarNode('contentfile')->defaultValue('Application\Iphp\\ContentBundle\\Entity\\ContentFile')->end()
-                ->end()
-                ->end();
-
-
-        /*$node->arrayNode ('field')
             ->addDefaultsIfNotSet()
             ->children()
-            ->arrayNode('exclude');*/
+            ->scalarNode('rubric')->defaultValue('Application\\Iphp\\CoreBundle\\Entity\\Rubric')->end()
+            ->scalarNode('content')->defaultValue('Application\\Iphp\\ContentBundle\\Entity\\Content')->end()
+            ->scalarNode('media')->defaultValue('Application\\Sonata\\MediaBundle\\Entity\\Media')->end()
+            ->scalarNode('author')->defaultValue('Application\\Iphp\\UserBundle\\Entity\\User')->end()
+            ->scalarNode('contentfile')->defaultValue('Application\Iphp\\ContentBundle\\Entity\\ContentFile')->end()
+            ->scalarNode('contentlink')->defaultValue('Application\Iphp\\ContentBundle\\Entity\\ContentLink')->end()
+            ->end()
+            ->end();
+
 
         return $treeBuilder;
     }
