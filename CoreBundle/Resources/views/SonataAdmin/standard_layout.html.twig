@@ -3,29 +3,10 @@
 
 {% block javascripts %}
 {{ parent() }}
-<script>
 
-    $(function () {
-
-        //аццкий хак!
-        $('.uploadfilepath').each(function () {
-            if (!$(this).val()) return;
-            var href = $(this).attr('filepath') + $(this).val();
-            $(this).hide().parent().append('<a target="_blank" href="' + href + '">' + href + '</a>');
-        });
-
-
-        $('.uploadfile').live('change', function () {
-            var val = ($(this).val());
-            $(this).parent().next().find('.uploadfilepath').show().val(val);
-        })
-    });
-</script>
 <script src="/bundles/stfalcontinymce/vendor/tiny_mce/jquery.tinymce.js"></script>
 {# для genemu#}
 {% if form is defined %}{{ form_javascript(form) }}{% endif %}
-
-
 {% endblock %}
 
 

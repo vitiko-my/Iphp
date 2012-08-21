@@ -61,13 +61,20 @@ class RubricAdmin extends TreeAdmin
         $this->addMenuRelatedFields($rubric,$formMapper);
 
 
-        $formMapper->add('title', null, array('label' => 'Заголовок'));
+        $formMapper->add('title');
 
 
         if (!$rubric->isRoot())
             $formMapper->add('parent', 'rubricchoice', array('label' => 'Parent Rubric'))
-                    ->add('path', 'text', array('label' => 'Директория'))
+                    ->add('path',  'slug_text', array(
+                           'source_field' => 'title',
+                           'usesource_title' => 'Использовать название рубрики'
+                     ))
                     ->setHelps(array('path' => 'На основе директорий строится адресация разделов сайта'));
+
+
+
+
 
 
         $formMapper->add('abstract', null, array('label' => 'Анонс'))

@@ -222,6 +222,12 @@
                 <source>Pos</source>
                 <target>&#9650;&#9660;</target>
             </trans-unit>
+
+
+            <trans-unit id="Path">
+                <source>Path</source>
+                <target>Директория</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>
