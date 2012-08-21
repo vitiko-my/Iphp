@@ -20,10 +20,7 @@ class ContentAdmin extends Admin
      */
     protected $userManager;
 
-    /**
-     * @var Pool
-     */
-    protected $formatterPool;
+
 
     /**
      * @param \Sonata\AdminBundle\Show\ShowMapper $showMapper
