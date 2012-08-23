@@ -101,8 +101,16 @@ class TwigExtension extends \Twig_Extension
         }
 
 
-        return /*$this->rubricManager->getBaseUrl() .*/
-                call_user_func_array(array($entity, 'getSitePath'), $args);
+
+        //Нельзя автоматом подставлять $this->rubricManager->getBaseUrl() т.к. метод getSitePath\
+        //может использовать entityRouter который сгенерирует путь уже с базовым урлом (app_dev.php)
+
+        $path = call_user_func_array(array($entity, 'getSitePath'), $args);
+
+        if (substr($path,0, strlen($this->rubricManager->getBaseUrl())) !=  $this->rubricManager->getBaseUrl())
+         $path = $this->rubricManager->getBaseUrl().$path;
+
+        return $path;
 
 
     }
