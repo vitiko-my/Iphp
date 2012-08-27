@@ -16,6 +16,17 @@ class PropertyMapping
 
 
     protected $obj;
+
+    /**
+     * @var array $config
+     */
+    protected $config;
+
+    /**
+     * @var ContainerInterface $container
+     */
+    protected $container;
+
     /**
      * @var \ReflectionProperty $property
      */
@@ -26,16 +37,6 @@ class PropertyMapping
      */
     protected $fileNameProperty;
 
-    /**
-     * @var  \Closure
-     */
-    protected $namer;
-
-
-    /**
-     * @var array
-     */
-    protected $namerParams;
 
     /**
      * @var  \Closure
@@ -47,10 +48,6 @@ class PropertyMapping
      */
     protected $directoryNamerParams;
 
-    /**
-     * @var array $mapping
-     */
-    protected $mapping;
 
     /**
      * @var string $mappingName
@@ -58,9 +55,11 @@ class PropertyMapping
     protected $mappingName;
 
 
-    function __construct($obj)
+    function __construct($obj, $config, $container)
     {
         $this->obj = $obj;
+        $this->setConfig($config);
+        $this->container = $container;
     }
 
     /**
@@ -69,7 +68,7 @@ class PropertyMapping
      *
      * @return \ReflectionProperty The property.
      */
-/*    public function getProperty()
+    /*    public function getProperty()
     {
         return $this->property;
     }*/
@@ -101,12 +100,31 @@ class PropertyMapping
     public function useFileNamer($fileName)
     {
         if ($this->hasNamer()) {
-            return call_user_func($this->namer, $this,$fileName, $this->namerParams);
+
+
+            foreach($this->config['namer'] as $method => $namer)
+            {
+                $fileName = call_user_func(
+                    array($this->container->get($namer['service']), $method . 'Rename'),
+                    $this,
+                    $fileName,
+                    isset($namer['params']) ? $namer['params'] : array());
+            }
+
         }
         return $fileName;
-
     }
 
+
+    /**
+     * Determines if the mapping has a custom namer configured.
+     *
+     * @return bool True if has namer, false otherwise.
+     */
+    public function hasNamer()
+    {
+        return isset($this->config['namer']) && $this->config['namer'];
+    }
 
     /**
      * Gets the configured upload directory.
@@ -118,29 +136,29 @@ class PropertyMapping
         if ($this->hasDirectoryNamer()) {
             return call_user_func($this->directoryNamer, $this, $fileName, $clientOriginalName);
         }
-        return $this->mapping['upload_dir'];
+        return $this->config['upload_dir'];
     }
 
 
     public function needResolveCollision()
     {
-      return !$this->isOverwriteDuplicates();
+        return !$this->isOverwriteDuplicates();
     }
 
 
     public function resolveFileCollision($fileName, $clientOriginalName, $attempt = 1)
     {
-       if ($this->hasNamer())  return  array (
-               $this->useDirectoryNamer($fileName, $clientOriginalName),
-               call_user_func(array ($this->namer[0],'resolveCollision'),$fileName, $attempt));
+   /*     if ($this->hasNamer()) return array(
+            $this->useDirectoryNamer($fileName, $clientOriginalName),
+            call_user_func(array($this->namer[0], 'resolveCollision'), $fileName, $attempt));*/
 
-       throw new \Exception ('Filename resolving collision not supported (namer is empty)');
+        throw new \Exception ('Filename resolving collision not supported (namer is empty)');
     }
 
 
     public function getUploadDir()
     {
-        return $this->mapping['upload_dir'];
+        return $this->config['upload_dir'];
     }
 
 
@@ -156,42 +174,15 @@ class PropertyMapping
         $this->fileNameProperty->setAccessible(true);
     }
 
-    /**
-     * Gets the configured namer.
-     *
-     * @return \Closure
-     */
-/*    public function getNamer()
-    {
-        return $this->namer;
-    }*/
 
-    /**
-     * Sets the namer.
-     *
-     */
-    public function setNamer($namer, $method, $params)
-    {
-        $this->namer = array($namer, $method . 'Rename');
-        $this->namerParams = $params;
-    }
 
-    /**
-     * Determines if the mapping has a custom namer configured.
-     *
-     * @return bool True if has namer, false otherwise.
-     */
-    public function hasNamer()
-    {
-        return null !== $this->namer;
-    }
 
     /**
      * Gets the configured directory namer.
      *
      * @return null|DirectoryNamerInterface The directory namer.
      */
-/*    public function getDirectoryNamer()
+    /*    public function getDirectoryNamer()
     {
         return $this->directoryNamer;
     }*/
@@ -220,9 +211,11 @@ class PropertyMapping
      *
      * @param array $mapping The mapping;
      */
-    public function setMapping(array $mapping)
+    public function setConfig(array $config)
     {
-        $this->mapping = $mapping;
+        $this->config = $config;
+
+
     }
 
     /**
@@ -290,13 +283,13 @@ class PropertyMapping
      */
     public function getDeleteOnRemove()
     {
-        return $this->mapping['delete_on_remove'];
+        return $this->config['delete_on_remove'];
     }
 
 
     public function isOverwriteDuplicates()
     {
-        return $this->mapping['overwrite_duplicates'];
+        return $this->config['overwrite_duplicates'];
     }
 
     /**
@@ -308,7 +301,7 @@ class PropertyMapping
      */
     public function getInjectOnLoad()
     {
-        return $this->mapping['inject_on_load'];
+        return $this->config['inject_on_load'];
     }
 
     /**
@@ -324,11 +317,5 @@ class PropertyMapping
         return $this->obj;
     }
 
-    /**
-     * @return array
-     */
-    public function getNamerParams()
-    {
-        return $this->namerParams;
-    }
+
 }

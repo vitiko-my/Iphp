@@ -31,18 +31,31 @@ class Configuration implements ConfigurationInterface
                     ->useAttributeAsKey('id')
                     ->prototype('array')
                         ->children()
-                            ->scalarNode('upload_dir')->isRequired()->end()
+                            ->scalarNode('upload_dir')->end()
 
                             ->arrayNode('namer')
-                               ->treatFalseLike(array ('service' => null, 'method' => null))
+                               ->treatFalseLike(array ())
+                               ->defaultValue(array ('translit' => array('service' => 'iphp.filestore.namer.default')))
+
+                               ->useAttributeAsKey('id')
+                               ->prototype('array')
                                ->addDefaultsIfNotSet()
-                               ->children()
-                                ->scalarNode('service')->defaultValue('iphp.filestore.namer.default')->end()
-                                ->scalarNode('method')->defaultValue('translit')->end()
-                                ->arrayNode('params')
-                                    ->useAttributeAsKey('name')
-                                    ->prototype('scalar')->end()
-                                ->end()
+                                  ->children()
+
+                                     ->scalarNode('service')->defaultValue('iphp.filestore.namer.default')->end()
+                                     ->arrayNode('params')
+                                        ->useAttributeAsKey('name')
+                                        ->prototype('scalar')->end()
+                                     ->end()
+                           //    ->treatFalseLike(array ('service' => null, 'method' => null))
+                            //   ->addDefaultsIfNotSet()
+
+                             /*  ->children()
+
+
+
+                               ->end()*/
+                                 ->end()
                                ->end()
                             ->end()
 
@@ -62,7 +75,7 @@ class Configuration implements ConfigurationInterface
 
                             ->scalarNode('delete_on_remove')->defaultTrue()->end()
                             ->scalarNode('overwrite_duplicates')->defaultFalse()->end()
-                            //->scalarNode('inject_on_load')->defaultTrue()->end()
+
                         ->end()
                     ->end()
                 ->end()

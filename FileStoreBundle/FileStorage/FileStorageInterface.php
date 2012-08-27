@@ -3,7 +3,7 @@
 namespace Iphp\FileStoreBundle\FileStorage;
 
 use Iphp\FileStoreBundle\Mapping\PropertyMapping;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\File\File;
 
 /**
  * StorageInterface.
@@ -18,7 +18,7 @@ interface FileStorageInterface
      *
      * @param object $obj The object.
      */
-    public function upload(PropertyMapping $mapping, UploadedFile $file);
+    public function upload(PropertyMapping $mapping, File $file);
 
     /**
      * Removes the files associated with the object if configured to

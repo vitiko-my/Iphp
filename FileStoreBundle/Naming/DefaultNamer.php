@@ -57,9 +57,9 @@ class DefaultNamer
      * @param $params
      * @return string
      */
-    function propertyRename(PropertyMapping $propertyMapping, $name)
+    function propertyRename(PropertyMapping $propertyMapping, $name, $params)
     {
-        $params = $propertyMapping->getNamerParams();
+
         $obj = $propertyMapping->getObj();
 
         $field = isset($params['field']) && $params['field'] ? $params['field'] : 'id';
@@ -68,6 +68,22 @@ class DefaultNamer
         if ($fieldValue) $name = $fieldValue . substr($name, strrpos($name, '.'));
         return $name;
     }
+
+
+    function propertyPrefixRename(PropertyMapping $propertyMapping, $name, $params)
+    {
+
+        $obj = $propertyMapping->getObj();
+
+        $field = isset($params['field']) && $params['field'] ? $params['field'] : 'id';
+        $delimiter= isset($params['delimiter']) && $params['delimiter'] ? $params['delimiter'] : '-';
+        $fieldValue = $obj->{'get' . ucfirst($field)}();
+
+
+        if (!$fieldValue) $fieldValue = $obj->getId();
+        return $fieldValue. $delimiter. $name;
+    }
+
 
 
     // Разрешение коллизий с одинаковыми названиями файлов

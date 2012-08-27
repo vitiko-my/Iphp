@@ -49,8 +49,8 @@ class FileType extends AbstractType
                  ->add('delete', 'checkbox')->addModelTransformer(new FileDataTransformer());*/
 
 
-        $builder->add('file', 'file')
-            ->add('delete', 'checkbox', array('label' => 'Удалить'))
+        $builder->add('file', 'file', array ( 'required' => false))
+            ->add('delete', 'checkbox', array('label' => 'Удалить', 'required' => false))
             ->addViewTransformer(new FileDataTransformer())
 
         //for sonata admin

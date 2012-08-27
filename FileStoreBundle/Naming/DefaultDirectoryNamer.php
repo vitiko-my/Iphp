@@ -19,13 +19,24 @@ class DefaultDirectoryNamer
         $obj = $propertyMapping->getObj();
         $field = isset($params['field']) && $params['field'] ? $params['field'] : 'id';
 
-        if (strpos($field, '.')) {
-            $str = 'return $obj->get' . implode('()->get', array_map('ucfirst', explode('.', $field))) . '();';
-            $fieldValue  = @eval ($str);
-        }
-        else $fieldValue = $obj->{'get' . ucfirst($field)}();
 
-        if ($fieldValue) return $propertyMapping->getUploadDir() . '/' . $fieldValue;
+        $fields = explode('/', $field);
+
+
+        $path = '';
+
+
+        foreach ($fields as $f) {
+
+
+            if (strpos($f, '.')) {
+                $str = 'return $obj->get' . implode('()->get', array_map('ucfirst', explode('.', $f))) . '();';
+                $fieldValue = @eval ($str);
+            } else $fieldValue = $obj->{'get' . ucfirst($f)}();
+            $path.= ($path ? '/':'').$fieldValue ;
+        }
+
+        if ($path) return $propertyMapping->getUploadDir() . '/' . $path;
 
 
         return $propertyMapping->getUploadDir();

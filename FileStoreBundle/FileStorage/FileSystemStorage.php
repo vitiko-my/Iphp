@@ -28,47 +28,66 @@ class FileSystemStorage implements FileStorageInterface
         $this->webDir = $webDir;
     }
 
+
+    protected function getOriginalName(File $file)
+    {
+        return $file instanceof UploadedFile ?
+            $file->getClientOriginalName() : $file->getFilename();
+    }
+
+
+    protected function getMimeType(File $file)
+    {
+        return $file instanceof UploadedFile ?
+            $file->getClientMimeType() : $file->getMimeType();
+    }
+
     /**
      * {@inheritDoc}
+     * File may be \Symfony\Component\HttpFoundation\File\File or \Symfony\Component\HttpFoundation\File\UploadedFile
      */
-    public function upload(PropertyMapping $mapping, UploadedFile $file)
+    public function upload(PropertyMapping $mapping, File $file)
     {
-        //transform filename and directory name if namer exists in mapping definition
-        $fileName = $origName =  $mapping->useFileNamer($file->getClientOriginalName());
-        $uploadDir = $mapping->useDirectoryNamer($fileName, $file->getClientOriginalName());
 
+        $originalName = $this->getOriginalName($file);
+
+         //transform filename and directory name if namer exists in mapping definition
+        $fileName = $origName = $mapping->useFileNamer($originalName);
+        $directoryName = $mapping->useDirectoryNamer($fileName, $originalName);
 
 
         //print $uploadDir.'/'.$fileName.'--';
-       // print file_exists($uploadDir.'/'.$fileName);
-      //  exit();
+        // print file_exists($uploadDir.'/'.$fileName);
+        //  exit();
         $try = 0;
 
-        while ($mapping->needResolveCollision() && file_exists($uploadDir.'/'.$fileName))
-        {
-           if ($try > 15)
-               throw new \Exception ("Can't resolve collision for file upload ".$uploadDir.'/'.$fileName );
+        while ($mapping->needResolveCollision() && file_exists($directoryName . '/' . $fileName)) {
+            if ($try > 15)
+                throw new \Exception ("Can't resolve collision for file  " . $directoryName . '/' . $fileName);
 
-           list ($uploadDir, $fileName) = $mapping->resolveFileCollision($origName, $try++);
+            list ($directoryName, $fileName) = $mapping->resolveFileCollision($origName, $try++);
 
         }
 
-        $file->move($uploadDir, $fileName);
+        $mimeType = $this->getMimeType($file);
+
+        $file->move($directoryName, $fileName);
+
 
         $fileData = array(
             'fileName' => $fileName,
-            'originalName' => $file->getClientOriginalName(),
-            'dir' => str_replace('\\', '/', realpath($uploadDir)),
-            'mimeType' => $file->getClientMimeType(),
-            'size' => filesize($uploadDir . '/' . $fileName),
+            'originalName' => $originalName,
+            'dir' => str_replace('\\', '/', realpath($directoryName)),
+            'mimeType' => $mimeType,
+            'size' => filesize($directoryName . '/' . $fileName),
         );
 
 
-        $fileData['path'] = substr($fileData['dir'], strlen($this->webDir));
-        $fileData['url'] =  $fileData['path'].'/'.$fileData['fileName'];
+        $fileData['path'] = substr($fileData['dir'], strlen($this->webDir)) . '/' . urlencode($fileName);
+       // $fileData['url'] = $fileData['path'] . '/' . $fileData['fileName'];
 
         if (in_array($fileData['mimeType'], array('image/png', 'image/jpeg', 'image/pjpeg'))
-                && function_exists('getimagesize')
+            && function_exists('getimagesize')
         ) {
 
 
@@ -92,15 +111,12 @@ class FileSystemStorage implements FileStorageInterface
     {
 
 
-
-
         //var_dump ($fileData);
 
         @unlink($fileData['dir'] . '/' . $fileData['fileName']);
         return !file_exists($fileData['dir'] . '/' . $fileData['fileName']);
         //exit();
     }
-
 
 
     public function checkFileExists($fileData)
@@ -115,7 +131,7 @@ class FileSystemStorage implements FileStorageInterface
     {
 
         if ($mapping->getDeleteOnRemove()) {
-            $fileData= $mapping->getPropertyValue();
+            $fileData = $mapping->getPropertyValue();
 
             if ($fileData && file_exists($fileData['dir'] . '/' . $fileData['fileName']))
                 @unlink($fileData['dir'] . '/' . $fileData['fileName']);
@@ -127,7 +143,7 @@ class FileSystemStorage implements FileStorageInterface
      * ������������ � UploaderHelper
      * {@inheritDoc}
      */
-/*    public function resolvePath($obj, $field)
+    /*    public function resolvePath($obj, $field)
     {
         $mapping = $this->factory->fromField($obj, $field);
         if (null === $mapping) {

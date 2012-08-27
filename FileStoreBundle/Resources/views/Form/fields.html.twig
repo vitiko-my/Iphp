@@ -7,7 +7,8 @@
     <div style="float:left">{{ form_widget(form.file) }}</div>
 
     {% if fileData %}
-    {% set fileUrl =  fileData.path ~ '/' ~ fileData.fileName|url_encode()  %}
+    {% set fileUrl =  fileData.path  %}
+   {# |url_encode() #}
 
 
     <div style="float:left">
@@ -20,9 +21,13 @@
             {% endif %}
             <td style="vertical-align: top;">
 
-                <a href="{{ fileUrl }}" target="_blank" class="full-img-link">{{ fileData.originalName }}</a>,
-                <span style="white-space: nowrap">{{ fileData.size /1000}}кб</span>
-                <br> {{  fileData.width is defined ? fileData.width ~ 'x' ~ fileData.height : ""}}
+                <a href="{{ fileUrl }}" target="_blank" class="full-img-link">{{ fileData.fileName }}</a>
+                <br>{{ fileData.size /1000}}кб
+                   {{  fileData.width is defined ? ', ' ~ fileData.width ~ 'x' ~ fileData.height : ""}}
+
+                {% if fileData.originalName !=  fileData.fileName %}
+                <br>Исходное название файла: {{ fileData.originalName }}
+                {% endif %}
 
                 {{ form_row (form.delete, {'label_attr' : { 'style' :'width:auto;padding-right:10px'}})}}
 

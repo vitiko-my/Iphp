@@ -43,6 +43,9 @@ class IphpFileStoreExtension extends Extension
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
 
+
+
+
         $driver = strtolower($config['db_driver']);
         if (!in_array($driver, array_keys($this->tagMap))) {
             throw new \InvalidArgumentException(

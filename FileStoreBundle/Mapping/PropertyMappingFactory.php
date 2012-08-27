@@ -151,18 +151,12 @@ class PropertyMappingFactory
 
         $config = $this->mappings[$field->getMapping()];
 
-        $mapping = new PropertyMapping($obj);
+        $mapping = new PropertyMapping($obj, $config, $this->container);
         $mapping->setProperty($class->getProperty($field->getPropertyName()));
         $mapping->setFileNameProperty($class->getProperty($field->getFileNameProperty()));
         $mapping->setMappingName($field->getMapping());
-        $mapping->setMapping($config);
 
-        if ($config['namer']['service'] && $config['namer']['method']) {
-            $mapping->setNamer(
-                $this->container->get($config['namer']['service']),
-                $config['namer']['method'],
-                $config['namer']['params']);
-        }
+
         if ($config['directory_namer']['service'] && $config['directory_namer']['method']) {
             $mapping->setDirectoryNamer(
                 $this->container->get($config['directory_namer']['service']),
