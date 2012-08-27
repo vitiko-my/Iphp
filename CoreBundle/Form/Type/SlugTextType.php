@@ -13,8 +13,8 @@ class SlugTextType extends AbstractType
     {
         $resolver->setDefaults(array(
             'blank_title' => '',
-            'source_field' => '',
-            'usesource_title' => ''
+            'source_field' => 'title',
+            'usesource_title' => 'Использовать название'
 
         ));
     }

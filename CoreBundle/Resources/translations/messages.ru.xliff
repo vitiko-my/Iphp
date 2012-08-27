@@ -228,6 +228,17 @@
                 <source>Path</source>
                 <target>Директория</target>
             </trans-unit>
+
+            <trans-unit id="Url">
+                <source>Url</source>
+                <target>Ссылка</target>
+            </trans-unit>
+
+
+            <trans-unit id="Status">
+                <source>Status</source>
+                <target>Статус</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>
