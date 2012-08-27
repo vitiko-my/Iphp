@@ -29,7 +29,7 @@ abstract class BaseEntityQueryBuilder extends QueryBuilder
     public function prepareDefaultQuery()
     {
         return $this->select($this->currentAlias)
-                ->from($this->entityName, $this->currentAlias);
+            ->from($this->entityName, $this->currentAlias);
     }
 
 
@@ -51,10 +51,15 @@ abstract class BaseEntityQueryBuilder extends QueryBuilder
                 $method = 'join';
                 break;
 
+            case (substr($method, 0, 8) == 'searchBy'):
+                $fieldName = lcfirst(substr($method, 8, strlen($method)));
+                $method = 'searchBy';
+                break;
+
             default:
                 throw new \BadMethodCallException(
                     "Undefined method '$method'. The method name must start with " .
-                            "either where or join!"
+                        "either where , join, searchBy!"
                 );
         }
 
@@ -69,13 +74,15 @@ abstract class BaseEntityQueryBuilder extends QueryBuilder
         if ($method == 'where' /*&& $this->_class->hasField($fieldName) || $this->_class->hasAssociation($fieldName)*/) {
 
             return $this->andWhere($this->currentAlias . '.' . $fieldName . ' = :' . $fieldName)
-                    ->setParameter($fieldName, $arguments[0]);
-        }
-        else if ($method == 'join' /*&& $this->_class->hasField($fieldName) || $this->_class->hasAssociation($fieldName)*/) {
+                ->setParameter($fieldName, $arguments[0]);
+        } else if ($method == 'join' /*&& $this->_class->hasField($fieldName) || $this->_class->hasAssociation($fieldName)*/) {
 
             //return $this;
             return $this->innerJoin($this->currentAlias . '.' . $fieldName, $fieldName);
+        } else if ($method == 'searchBy') {
+            return $this->andWhere($this->expr()->like($this->currentAlias . '.'.$fieldName, $this->expr()->literal('' . $arguments[0] . '%')));
         }
+
 
         throw new \BadMethodCallException(
             "Method '$method' not found!"
