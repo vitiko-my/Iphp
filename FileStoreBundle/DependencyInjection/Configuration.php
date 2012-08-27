@@ -25,14 +25,17 @@ class Configuration implements ConfigurationInterface
         $root
             ->children()
                 ->scalarNode('db_driver')->isRequired()->end()
-                ->scalarNode('web_dir_name')->defaultValue('web')->end()
-                ->scalarNode('twig')->defaultTrue()->end()
+                //->scalarNode('web_dir_name')->defaultValue('web')->end()
+               // ->scalarNode('twig')->defaultTrue()->end()
+
                 ->arrayNode('mappings')
                     ->useAttributeAsKey('id')
                     ->prototype('array')
                         ->children()
                             ->scalarNode('upload_dir')->end()
 
+                         /* can differ from iphp.web_dir if use capifony shared folders */
+                            ->scalarNode ('base_web_dir') ->end()
                             ->arrayNode('namer')
                                ->treatFalseLike(array ())
                                ->defaultValue(array ('translit' => array('service' => 'iphp.filestore.namer.default')))

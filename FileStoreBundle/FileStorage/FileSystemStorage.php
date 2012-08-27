@@ -55,10 +55,6 @@ class FileSystemStorage implements FileStorageInterface
         $fileName = $origName = $mapping->useFileNamer($originalName);
         $directoryName = $mapping->useDirectoryNamer($fileName, $originalName);
 
-
-        //print $uploadDir.'/'.$fileName.'--';
-        // print file_exists($uploadDir.'/'.$fileName);
-        //  exit();
         $try = 0;
 
         while ($mapping->needResolveCollision() && file_exists($directoryName . '/' . $fileName)) {
@@ -74,16 +70,22 @@ class FileSystemStorage implements FileStorageInterface
         $file->move($directoryName, $fileName);
 
 
+
         $fileData = array(
             'fileName' => $fileName,
             'originalName' => $originalName,
-            'dir' => str_replace('\\', '/', realpath($directoryName)),
+            'dir' => $directoryName,
             'mimeType' => $mimeType,
             'size' => filesize($directoryName . '/' . $fileName),
         );
 
+ 
 
         $fileData['path'] = substr($fileData['dir'], strlen($this->webDir)) . '/' . urlencode($fileName);
+
+
+
+
        // $fileData['url'] = $fileData['path'] . '/' . $fileData['fileName'];
 
         if (in_array($fileData['mimeType'], array('image/png', 'image/jpeg', 'image/pjpeg'))

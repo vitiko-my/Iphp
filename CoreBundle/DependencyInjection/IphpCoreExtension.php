@@ -43,7 +43,9 @@ class IphpCoreExtension extends Extension
         $loader->load('block.xml');
         $this->registerDoctrineMapping($config);
 
-        $container->setParameter('iphp.web_dir',
+
+        if (!$container->has ('iphp.web_dir') || !$container->getParameter('iphp.web_dir'))
+            $container->setParameter('iphp.web_dir',
             str_replace('\\', '/', realpath($container->getParameter('kernel.root_dir') . '/../web/')));
 
         //  $loader->load('twig.xml');
