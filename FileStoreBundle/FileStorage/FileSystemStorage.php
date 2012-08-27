@@ -42,33 +42,36 @@ class FileSystemStorage implements FileStorageInterface
             $file->getClientMimeType() : $file->getMimeType();
     }
 
+
+    public function   isSameFile(File $file, $fileData)
+    {
+        return $file->getRealPath() == realpath($fileData['dir'] . '/' . $fileData['fileName']);
+    }
+
     /**
      * {@inheritDoc}
      * File may be \Symfony\Component\HttpFoundation\File\File or \Symfony\Component\HttpFoundation\File\UploadedFile
      */
     public function upload(PropertyMapping $mapping, File $file)
     {
-
         $originalName = $this->getOriginalName($file);
+        $mimeType = $this->getMimeType($file);
 
-         //transform filename and directory name if namer exists in mapping definition
+        //transform filename and directory name if namer exists in mapping definition
         $fileName = $origName = $mapping->useFileNamer($originalName);
         $directoryName = $mapping->useDirectoryNamer($fileName, $originalName);
 
-        $try = 0;
 
-        while ($mapping->needResolveCollision() && file_exists($directoryName . '/' . $fileName)) {
-            if ($try > 15)
-                throw new \Exception ("Can't resolve collision for file  " . $directoryName . '/' . $fileName);
+        if (!$this->isSameFile($file, array('dir' => $directoryName, 'fileName' => $fileName))) {
+            $try = 0;
+            while ($mapping->needResolveCollision() && file_exists($directoryName . '/' . $fileName)) {
+                if ($try > 15)
+                    throw new \Exception ("Can't resolve collision for file  " . $directoryName . '/' . $fileName);
 
-            list ($directoryName, $fileName) = $mapping->resolveFileCollision($origName, $try++);
-
+                list ($directoryName, $fileName) = $mapping->resolveFileCollision($origName, $try++);
+            }
+            $file->move($directoryName, $fileName);
         }
-
-        $mimeType = $this->getMimeType($file);
-
-        $file->move($directoryName, $fileName);
-
 
 
         $fileData = array(
@@ -79,14 +82,11 @@ class FileSystemStorage implements FileStorageInterface
             'size' => filesize($directoryName . '/' . $fileName),
         );
 
- 
 
         $fileData['path'] = substr($fileData['dir'], strlen($this->webDir)) . '/' . urlencode($fileName);
 
 
-
-
-       // $fileData['url'] = $fileData['path'] . '/' . $fileData['fileName'];
+        // $fileData['url'] = $fileData['path'] . '/' . $fileData['fileName'];
 
         if (in_array($fileData['mimeType'], array('image/png', 'image/jpeg', 'image/pjpeg'))
             && function_exists('getimagesize')

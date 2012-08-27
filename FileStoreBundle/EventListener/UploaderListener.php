@@ -117,13 +117,17 @@ class UploaderListener implements EventSubscriber
                 if ($this->fileStorage->removeFile($currentFileData)) $mapping->setPropertyValue(null);
             }
             else {
-                if ($currentFileData) $this->fileStorage->removeFile($currentFileData);
+                if ($currentFileData && !$this->fileStorage->isSameFile ($file,$currentFileData))
+                        $this->fileStorage->removeFile($currentFileData);
+
                 $fileData = $this->fileStorage->upload($mapping, $file);
                 $mapping->setPropertyValue($fileData);
             }
         }
         $this->dataStorage->recomputeChangeSet($args);
     }
+
+
 
 
     /**
