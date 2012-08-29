@@ -28,9 +28,11 @@ interface FileStorageInterface
      */
     public function removeByMapping(PropertyMapping $mapping);
 
-    public function removeFile($fileData);
+    public function removeFile(array $fileData);
 
-    public function checkFileExists($fileData);
+    public function checkFileExists(array $fileData);
+
+    public function isSameFile (File $file, array $currentFileData);
 
     /**
      * Resolves the path for a file based on the specified object

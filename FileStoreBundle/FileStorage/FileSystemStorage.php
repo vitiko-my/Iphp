@@ -43,7 +43,7 @@ class FileSystemStorage implements FileStorageInterface
     }
 
 
-    public function   isSameFile(File $file, $fileData)
+    public function   isSameFile(File $file, array $fileData)
     {
         return $file->getRealPath() == realpath($fileData['dir'] . '/' . $fileData['fileName']);
     }
@@ -109,7 +109,7 @@ class FileSystemStorage implements FileStorageInterface
     }
 
 
-    public function removeFile($fileData)
+    public function removeFile(array $fileData)
     {
 
 
@@ -121,7 +121,7 @@ class FileSystemStorage implements FileStorageInterface
     }
 
 
-    public function checkFileExists($fileData)
+    public function checkFileExists(array $fileData)
     {
         return file_exists($fileData['dir'] . '/' . $fileData['fileName']);
     }
@@ -133,7 +133,7 @@ class FileSystemStorage implements FileStorageInterface
     {
 
         if ($mapping->getDeleteOnRemove()) {
-            $fileData = $mapping->getPropertyValue();
+            $fileData = $mapping->getFileDataPropertyValue();
 
             if ($fileData && file_exists($fileData['dir'] . '/' . $fileData['fileName']))
                 @unlink($fileData['dir'] . '/' . $fileData['fileName']);

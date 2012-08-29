@@ -39,6 +39,9 @@ class UploaderListener implements EventSubscriber
      */
     protected $mappingFactory;
 
+    protected $deferredFiles;
+
+
     /**
      * Constructs a new instance of UploaderListener.
      *
@@ -53,6 +56,8 @@ class UploaderListener implements EventSubscriber
         $this->dataStorage = $dataStorage;
         $this->fileStorage = $fileStorage;
         $this->mappingFactory = $mappingFactory;
+
+        $this->deferredFiles = new \SplObjectStorage();
     }
 
     /**
@@ -64,6 +69,7 @@ class UploaderListener implements EventSubscriber
     {
         return array(
             'prePersist',
+            'postFlush',
             'preUpdate',
             'postRemove',
         );
@@ -71,25 +77,52 @@ class UploaderListener implements EventSubscriber
 
 
     /**
-     * Checks for for file to upload.
+     * Checks for for file to upload and store it for store at postFlush event
      *
      * @param \Doctrine\Common\EventArgs $args The event arguments.
      */
     public function prePersist(LifecycleEventArgs $args)
     {
-        $mappings = $this->mappingFactory->fromEventArgs ($args);
+        $mappings = $this->mappingFactory->fromEventArgs($args);
 
+
+        $curFiles = array();
         foreach ($mappings as $mapping) {
+            $file = $mapping->getFilePropertyValue();
+            if ($file instanceof File)
+                $curFiles[$mapping->getPropertyName()] = $file;
+            $mapping->setFilePropertyValue(null);
+        }
 
-            $file = $mapping->getPropertyValue();
+        if ($curFiles) $this->deferredFiles [$mappings[0]->getObj()] = $curFiles;
+    }
 
-            if ($file instanceof File) {
-                $fileData = $this->fileStorage->upload($mapping, $file);
-                $mapping->setPropertyValue($fileData);
+
+    /**
+     * Store at postFlush event because file namer mey need entity id, at prePersist event
+     * system does not now auto generated entity id
+     * @param \Doctrine\ORM\Event\PostFlushEventArgs $args
+     */
+    public function postFlush(\Doctrine\ORM\Event\PostFlushEventArgs $args)
+    {
+        if (!$this->deferredFiles) return;
+
+        foreach ($this->deferredFiles as $entity) {
+            if (!$this->deferredFiles[$entity]) continue;
+
+            foreach ($this->deferredFiles[$entity] as $propertyName => $file) {
+                if ($mapping = $this->mappingFactory->fromField($entity, $propertyName)) {
+                    $fileData = $this->fileStorage->upload($mapping, $file);
+                    $mapping->setFileDataPropertyValue($fileData);
+                }
             }
-            else $mapping->setPropertyValue(null);
+
+            $args->getEntityManager()->persist($entity);
+            unset($this->deferredFiles[$entity]);
+            $args->getEntityManager()->flush();
         }
     }
+
 
     /**
      * Update the mapped file for Entity (obj)
@@ -98,36 +131,36 @@ class UploaderListener implements EventSubscriber
      */
     public function preUpdate(PreUpdateEventArgs $args)
     {
-        $mappings = $this->mappingFactory->fromEventArgs ($args);
+        $mappings = $this->mappingFactory->fromEventArgs($args);
 
         foreach ($mappings as $mapping) {
 
             //Uploaded or setted file
-            $file = $mapping->getPropertyValue();
-            $currentFileData = $args->getOldValue($mapping->getPropertyName());
+            $file = $mapping->getFilePropertyValue();
+
+
+            $currentFileData = $args->hasChangedField($mapping->getPropertyName()) ?
+                $args->getOldValue($mapping->getPropertyName()) : null;
+
 
             //If no new file
             if (is_null($file) || !($file instanceof File)) {
                 //Preserve old fileData if current file exists, else null
-                $mapping->setPropertyValue(
+                if ($currentFileData) $mapping->setFileDataPropertyValue(
                     $this->fileStorage->checkFileExists($currentFileData) ? $currentFileData : null
                 );
-            }
-            else if ($file instanceof \Iphp\FileStoreBundle\File\File && $file->isDeleted()) {
-                if ($this->fileStorage->removeFile($currentFileData)) $mapping->setPropertyValue(null);
-            }
-            else {
-                if ($currentFileData && !$this->fileStorage->isSameFile ($file,$currentFileData))
-                        $this->fileStorage->removeFile($currentFileData);
+            } else if ($file instanceof \Iphp\FileStoreBundle\File\File && $file->isDeleted()) {
+                if ($this->fileStorage->removeFile($currentFileData)) $mapping->setFileDataPropertyValue(null);
+            } else {
+                if ($currentFileData && !$this->fileStorage->isSameFile($file, $currentFileData))
+                    $this->fileStorage->removeFile($currentFileData);
 
                 $fileData = $this->fileStorage->upload($mapping, $file);
-                $mapping->setPropertyValue($fileData);
+                $mapping->setFileDataPropertyValue($fileData);
             }
         }
         $this->dataStorage->recomputeChangeSet($args);
     }
-
-
 
 
     /**
@@ -137,7 +170,7 @@ class UploaderListener implements EventSubscriber
      */
     public function postRemove(LifecycleEventArgs $args)
     {
-        $mappings = $this->mappingFactory->fromEventArgs ($args);
+        $mappings = $this->mappingFactory->fromEventArgs($args);
 
         foreach ($mappings as $mapping) {
             $this->fileStorage->removeByMapping($mapping);

@@ -45,6 +45,8 @@ class RepairFileDataCommand extends GenerateDoctrineCommand
 
 
         foreach ($ids as $pos => $e) {
+
+            $toFlush = false;
             $entity = $repo->findOneById($e['id']);
 
 
@@ -88,30 +90,6 @@ class RepairFileDataCommand extends GenerateDoctrineCommand
 
             if (!$byFilePathExists && $byFileNameExists )
             {
-    /*            print "\n".'fix file path';
-
-                if (substr($filename, 0, strlen($webDir)) != $webDir)
-                {
-                    $newFilename = str_replace ('/shared/','/current/', $filename);
-                    if ($newFilename != $filename && file_exists($newFilename))
-                    {
-                        print "\n".'change file name ->'.$newFilename;
-                        $filename = $newFilename;
-                    }
-                }
-
-                if (substr($filename, 0, strlen($webDir)) != $webDir)
-                {
-
-                    die ("\ncan't ".$filename." collate to web dir ".$webDir);
-                }
-
-                $fileData['path'] = substr ($filename, strlen($webDir));
-
-                print_r ($fileData);
-                $entity->{'set' . ucfirst($field)}($fileData);
-                $em->persist ($entity);
-                $em->flush();*/
 
 
                 print  "\nresave ".$filename;
@@ -122,11 +100,15 @@ class RepairFileDataCommand extends GenerateDoctrineCommand
                 print "\n Obj created";
                 $entity->{'set' . ucfirst($field)} ( $fileObj);
                 $em->persist ($entity);
-                $em->flush();
+                $toFlush = true;
                 print 'saved';
             }
 
 
+
+           if ($pos%20 == 0 && $toFlush) $em->flush();
+
+            if ($pos%100 == 0) $em->clear();
         }
     }
 

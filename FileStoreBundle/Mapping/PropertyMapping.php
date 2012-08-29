@@ -5,6 +5,7 @@ namespace Iphp\FileStoreBundle\Mapping;
 use Iphp\FileStoreBundle\Naming\NamerInterface;
 use Iphp\FileStoreBundle\Naming\DirectoryNamerInterface;
 
+use Symfony\Component\HttpFoundation\File\File;
 /**
  * PropertyMapping.
  *
@@ -252,16 +253,48 @@ class PropertyMapping
      * Gets the value of the annotated property.
      * @return \Symfony\Component\HttpFoundation\File\UploadedFile
      */
-    public function getPropertyValue()
+    public function getFilePropertyValue()
     {
         return $this->property->getValue($this->obj);
     }
 
 
-    public function setPropertyValue($value)
+
+    public function setFilePropertyValue( $file)
     {
-        return $this->fileNameProperty->setValue($this->obj, $value);
+        return $this->property->setValue($this->obj, $file);
     }
+
+    public function setFileDataPropertyValue($fileData)
+    {
+        return $this->fileNameProperty->setValue($this->obj, $fileData);
+    }
+
+
+    public function getFileDataPropertyValue()
+    {
+        return  $this->fileNameProperty->getValue($this->obj);
+    }
+
+
+    public function needPostPersistResaveFile()
+    {
+        if (!$this->hasNamer()) return false;
+        $fileData = $this->getFileDataPropertyValue();
+
+        if ($fileData && file_exists($fileData['dir'].'/'.$fileData['fileName']))
+        {
+          return new File ($fileData['dir'].'/'.$fileData['fileName']);
+        }
+
+        return false;
+    }
+
+
+
+
+
+
 
 
     /**
@@ -269,7 +302,7 @@ class PropertyMapping
      *
      * @return string The name.
      */
-    public function getFileNamePropertyName()
+    public function getFileDataPropertyName()
     {
         return $this->fileNameProperty->getName();
     }
