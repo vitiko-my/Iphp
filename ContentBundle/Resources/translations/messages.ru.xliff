@@ -34,6 +34,11 @@
                 <source>Links</source>
                 <target>Ссылки</target>
             </trans-unit>
+
+            <trans-unit id="Redirect Url">
+                <source>Redirect Url</source>
+                <target>Редирект</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

@@ -34,6 +34,20 @@ class ContentAdmin extends Admin
                 ->addExtension( new RubricAdminExtension);
     }*/
 
+    public function __construct($code, $class, $baseControllerName)
+    {
+        parent::__construct($code, $class, $baseControllerName);
+
+        if (!$this->hasRequest()) {
+            $this->datagridValues = array(
+                '_page' => 1,
+                '_sort_order' => 'DESC', // sort direction
+                '_sort_by' => 'updatedAt' // field name
+            );
+        }
+    }
+
+
 
     protected function configureShowField(ShowMapper $showMapper)
     {
@@ -65,6 +79,7 @@ class ContentAdmin extends Admin
         ))
 
             ->add('rubric', 'rubricchoice')
+            ->add ('redirectUrl')
             ->add('author', 'sonata_type_model_list', array('required' => false) /*, array('edit' => 'list')*/)
 
 
@@ -116,12 +131,14 @@ array('edit' => 'list',  'link_parameters' => array('context' => 'contentimage')
     {
         $listMapper
             ->addIdentifier('title', null, array('label' => 'Заголовок'))
-            ->add('date')
+            ->add('enabled', null, array('label' => 'Показывать на сайте'))
+            ->add('rubric', null, array('label' => 'Рубрика'))
             ->add('image', 'text', array(
             'template' => 'IphpCoreBundle::image_preview.html.twig'
         ))
-            ->add('rubric', null, array('label' => 'Рубрика'))
-            ->add('enabled', null, array('label' => 'Показывать на сайте'));
+
+
+            ->add('updatedAt');
     }
 
     /**

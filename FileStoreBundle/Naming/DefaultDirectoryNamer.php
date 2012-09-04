@@ -31,7 +31,7 @@ class DefaultDirectoryNamer
 
             if (strpos($f, '.')) {
                 $str = 'return $obj->get' . implode('()->get', array_map('ucfirst', explode('.', $f))) . '();';
-                $fieldValue = @eval ($str);
+                $fieldValue = eval ($str);
             } else $fieldValue = $obj->{'get' . ucfirst($f)}();
             $path.= ($path ? '/':'').$fieldValue ;
         }
