@@ -239,6 +239,12 @@
                 <source>Status</source>
                 <target>Статус</target>
             </trans-unit>
+
+            <trans-unit id="View on site">
+                <source>View on site</source>
+                <target>Просмотр на сайте</target>
+            </trans-unit>
+
         </body>
     </file>
 </xliff>
