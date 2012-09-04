@@ -54,6 +54,8 @@ abstract class Content implements ContentInterface
 
     protected $links;
 
+    protected $redirectUrl;
+
 
 
 
@@ -156,6 +158,7 @@ abstract class Content implements ContentInterface
     {
         if (is_null($slug)) $slug = '';
         $this->slug = $slug;
+        return $this;
     }
 
     /**
@@ -457,6 +460,17 @@ abstract class Content implements ContentInterface
     public function addLinks ($link)
     {
         $this->links[] = $link;
+    }
+
+    public function setRedirectUrl($redirectUrl)
+    {
+        $this->redirectUrl = $redirectUrl;
+        return $this;
+    }
+
+    public function getRedirectUrl()
+    {
+        return $this->redirectUrl;
     }
 
 

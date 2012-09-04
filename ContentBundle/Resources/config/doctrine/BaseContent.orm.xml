@@ -7,6 +7,7 @@
         <field name="abstract"          type="text"         column="abstract"   nullable="true"/>
         <field name="content"           type="text"         column="content"   nullable="true" />
         <field name="rawContent"        type="text"         column="raw_content"  nullable="true"/>
+        <field name="redirectUrl"        type="string"         column="redirect_url"  nullable="true"/>
         <field name="contentFormatter"  type="string"       column="content_formatter" nullable="true"/>
 
         <field name="enabled"           type="boolean"      column="enabled"        default="false" />

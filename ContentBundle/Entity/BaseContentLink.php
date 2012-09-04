@@ -95,6 +95,7 @@ abstract class BaseContentLink
     public function setDate($date)
     {
         $this->date = $date;
+        return $this;
     }
 
     /**
@@ -108,6 +109,7 @@ abstract class BaseContentLink
     public function setUrl($url)
     {
         $this->url = $url;
+        return $this;
     }
 
     public function getUrl()
@@ -121,6 +123,7 @@ abstract class BaseContentLink
     public function setPos($pos)
     {
         $this->pos = $pos;
+        return $this;
     }
 
     /**
