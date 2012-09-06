@@ -94,7 +94,7 @@ class DefaultNamer
 
        $ppos = strrpos ($name,'.');
 
-        return substr ($name, $ppos-1).'_'.$addition.''.substr ($name, $ppos);
+        return substr ($name, 0, $ppos).'_'.$addition.''.substr ($name, $ppos);
     }
 
 

@@ -149,11 +149,16 @@ class PropertyMapping
 
     public function resolveFileCollision($fileName, $clientOriginalName, $attempt = 1)
     {
-   /*     if ($this->hasNamer()) return array(
-            $this->useDirectoryNamer($fileName, $clientOriginalName),
-            call_user_func(array($this->namer[0], 'resolveCollision'), $fileName, $attempt));*/
 
-        throw new \Exception ('Filename resolving collision not supported (namer is empty)');
+      if ($this->hasNamer())
+      {
+          $firstNamer =current ($this->config['namer']);
+          return array(
+              $this->useDirectoryNamer($fileName, $clientOriginalName),
+              call_user_func(array($this->container->get( $firstNamer['service']), 'resolveCollision'), $fileName, $attempt));
+      }
+
+        throw new \Exception ('Filename resolving collision not supported (namer is empty).Duplicate filename '.$fileName);
     }
 
 

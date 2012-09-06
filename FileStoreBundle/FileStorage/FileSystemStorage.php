@@ -61,14 +61,15 @@ class FileSystemStorage implements FileStorageInterface
         $fileName = $origName = $mapping->useFileNamer($originalName);
         $directoryName = $mapping->useDirectoryNamer($fileName, $originalName);
 
-
+        //check if file already placed in needed position
         if (!$this->isSameFile($file, array('dir' => $directoryName, 'fileName' => $fileName))) {
             $try = 0;
             while ($mapping->needResolveCollision() && file_exists($directoryName . '/' . $fileName)) {
-                if ($try > 15)
-                    throw new \Exception ("Can't resolve collision for file  " . $directoryName . '/' . $fileName);
 
-                list ($directoryName, $fileName) = $mapping->resolveFileCollision($origName, $try++);
+                if ($try > 15)
+                    throw new \Exception ("Can't resolve collision for file  " . $directoryName . '/' . $origName);
+
+                list ($directoryName, $fileName) = $mapping->resolveFileCollision($origName,  $originalName, ++$try);
             }
             $file->move($directoryName, $fileName);
         }

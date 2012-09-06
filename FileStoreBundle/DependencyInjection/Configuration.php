@@ -38,11 +38,11 @@ class Configuration implements ConfigurationInterface
                             ->scalarNode ('base_web_dir') ->end()
                             ->arrayNode('namer')
                                ->treatFalseLike(array ())
-                               ->defaultValue(array ('translit' => array('service' => 'iphp.filestore.namer.default')))
-
+                               ->treatNullLike(array ('translit' => array('service' => 'iphp.filestore.namer.default')))
+                               ->treatTrueLike(array ('translit' => array('service' => 'iphp.filestore.namer.default')))
                                ->useAttributeAsKey('id')
                                ->prototype('array')
-                               ->addDefaultsIfNotSet()
+
                                   ->children()
 
                                      ->scalarNode('service')->defaultValue('iphp.filestore.namer.default')->end()
