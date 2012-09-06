@@ -44,6 +44,8 @@ abstract class Content implements ContentInterface
 
     protected $images;
 
+
+
     protected $image;
 
     protected $date;

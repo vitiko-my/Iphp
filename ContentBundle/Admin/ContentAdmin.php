@@ -75,7 +75,8 @@ class ContentAdmin extends Admin
             ->add('slug', 'slug_text', array(
             'blank_title' => 'индекс рубрики (код не вводится)',
             'source_field' => 'title',
-            'usesource_title' => 'Использовать заголовок материала'
+            'usesource_title' => 'Использовать заголовок материала',
+            'required' => false
         ))
 
             ->add('rubric', 'rubricchoice')
@@ -92,8 +93,11 @@ class ContentAdmin extends Admin
 
 
             ->with('Изображения', array('collapsed' => true))
-            ->add('image', 'sonata_type_model_list', array('required' => false),
-            array('link_parameters' => array('context' => 'contentimage')))
+          /*  ->add('image', 'sonata_type_model_list', array('required' => false),
+            array('link_parameters' => array('context' => 'contentimage')))*/
+
+            ->add('image', 'iphp_file')
+
             ->end()
 
             ->with('Files', array('collapsed' => true))
@@ -133,9 +137,9 @@ array('edit' => 'list',  'link_parameters' => array('context' => 'contentimage')
             ->addIdentifier('title', null, array('label' => 'Заголовок'))
             ->add('enabled', null, array('label' => 'Показывать на сайте'))
             ->add('rubric', null, array('label' => 'Рубрика'))
-            ->add('image', 'text', array(
+     /*       ->add('image', 'text', array(
             'template' => 'IphpCoreBundle::image_preview.html.twig'
-        ))
+        ))*/
 
 
             ->add('updatedAt');

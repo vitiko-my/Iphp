@@ -93,7 +93,7 @@ class IphpContentExtension extends Extension
             ));
         }
 
-
+/*
         if (class_exists($config['class']['media']) && $config['class']['media']) {
 
             $collector->addAssociation($config['class']['content'], 'mapManyToOne', array(
@@ -114,7 +114,7 @@ class IphpContentExtension extends Extension
                 'orphanRemoval' => false,
             ));
 
-        }
+        }*/
 
 
         if (class_exists($config['class']['author']) && $config['class']['author']) {
