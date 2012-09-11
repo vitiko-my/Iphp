@@ -33,7 +33,7 @@ class Configuration implements ConfigurationInterface
                     ->prototype('array')
                         ->children()
                             ->scalarNode('upload_dir')->end()
-
+                            ->scalarNode('upload_path')->end()
                          /* can differ from iphp.web_dir if use capifony shared folders */
                             ->scalarNode ('base_web_dir') ->end()
                             ->arrayNode('namer')

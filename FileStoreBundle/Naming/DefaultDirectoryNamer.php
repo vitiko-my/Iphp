@@ -25,8 +25,6 @@ class DefaultDirectoryNamer
 
 
         foreach ($fields as $f) {
-
-
             if (strpos($f, '.')) {
                 $str = 'return $obj->get' . implode('()->get', array_map('ucfirst', explode('.', $f))) . '();';
                 $fieldValue = eval ($str);
@@ -34,10 +32,7 @@ class DefaultDirectoryNamer
             $path .= ($path ? '/' : '') . $fieldValue;
         }
 
-        if ($path) return $propertyMapping->getUploadDir() . '/' . $path;
-
-
-        return $propertyMapping->getUploadDir();
+        return '/' . $path;
     }
 
 
@@ -58,7 +53,7 @@ class DefaultDirectoryNamer
 
         $dirName = date ($tpl,  $date );
 
-        return $propertyMapping->getUploadDir() . '/' . $dirName;
+        return  '/' . $dirName;
     }
 
 

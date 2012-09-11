@@ -59,7 +59,7 @@ class FileSystemStorage implements FileStorageInterface
 
         //transform filename and directory name if namer exists in mapping definition
         $fileName = $origName = $mapping->useFileNamer($originalName);
-        $directoryName = $mapping->useDirectoryNamer($fileName, $originalName);
+        list ($directoryName, $path) = $mapping->useDirectoryNamer($fileName, $originalName);
 
         //check if file already placed in needed position
         if (!$this->isSameFile($file, array('dir' => $directoryName, 'fileName' => $fileName))) {
@@ -69,7 +69,7 @@ class FileSystemStorage implements FileStorageInterface
                 if ($try > 15)
                     throw new \Exception ("Can't resolve collision for file  " . $directoryName . '/' . $origName);
 
-                list ($directoryName, $fileName) = $mapping->resolveFileCollision($origName,  $originalName, ++$try);
+                list ($directoryName, $path, $fileName) = $mapping->resolveFileCollision($origName,  $originalName, ++$try);
             }
             $file->move($directoryName, $fileName);
         }
@@ -81,10 +81,16 @@ class FileSystemStorage implements FileStorageInterface
             'dir' => $directoryName,
             'mimeType' => $mimeType,
             'size' => filesize($directoryName . '/' . $fileName),
+            'path' => $path
         );
 
 
-        $fileData['path'] = substr($fileData['dir'], strlen($this->webDir)) . '/' . urlencode($fileName);
+
+       // print_r ($fileData);
+      //  exit();
+
+       if (!$fileData['path'])
+       $fileData['path'] = substr($fileData['dir'], strlen($this->webDir)) . '/' . urlencode($fileName);
 
 
         // $fileData['url'] = $fileData['path'] . '/' . $fileData['fileName'];

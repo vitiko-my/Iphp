@@ -134,10 +134,12 @@ class PropertyMapping
      */
     public function useDirectoryNamer($fileName, $clientOriginalName)
     {
-        if ($this->hasDirectoryNamer()) {
-            return call_user_func($this->directoryNamer, $this, $fileName, $clientOriginalName);
-        }
-        return $this->config['upload_dir'];
+        $subPath = $this->hasDirectoryNamer() ?
+            call_user_func($this->directoryNamer, $this, $fileName, $clientOriginalName) :'';
+
+        return array ($this->getUploadDir().$subPath,
+
+            $this->getUploadPath() ? $this->getUploadPath().$subPath.'/'.urlencode($fileName) : '');
     }
 
 
@@ -153,9 +155,14 @@ class PropertyMapping
       if ($this->hasNamer())
       {
           $firstNamer =current ($this->config['namer']);
-          return array(
-              $this->useDirectoryNamer($fileName, $clientOriginalName),
-              call_user_func(array($this->container->get( $firstNamer['service']), 'resolveCollision'), $fileName, $attempt));
+
+          $newFileName = call_user_func(
+              array($this->container->get( $firstNamer['service']), 'resolveCollision'), $fileName, $attempt);
+
+          //return dirName and path
+          $resolveData = $this->useDirectoryNamer($newFileName, $clientOriginalName);
+          $resolveData[] = $newFileName ;
+          return $resolveData;
       }
 
         throw new \Exception ('Filename resolving collision not supported (namer is empty).Duplicate filename '.$fileName);
@@ -165,6 +172,12 @@ class PropertyMapping
     public function getUploadDir()
     {
         return $this->config['upload_dir'];
+    }
+
+
+    public function getUploadPath()
+    {
+        return $this->config['upload_path'];
     }
 
 
