@@ -34,7 +34,11 @@ class EntityRouter
        {
            $params =  array ('id' => method_exists($entity, 'getSlug') ? $entity->getSlug() : $entity->getId());
        }
-       return $this->router->generate ($this->routeNameForEntityAction ($entity, $action), $params);
+
+
+       $path = $this->router->generate ($this->routeNameForEntityAction ($entity, $action), $params);
+
+       return $path;
     }
 
     public function routeNameForEntityAction ($entity, $action,Rubric $rubric = null)
