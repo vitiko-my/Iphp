@@ -8,6 +8,9 @@ use Iphp\FileStoreBundle\Mapping\PropertyMapping;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\File\File;
 
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\HttpFoundation\File\Exception\FileNotFoundException;
+
 /**
  * FileSystemStorage.
  *
@@ -48,6 +51,31 @@ class FileSystemStorage implements FileStorageInterface
         return $file->getRealPath() == realpath($fileData['dir'] . '/' . $fileData['fileName']);
     }
 
+
+
+
+    protected function copyFile ($source,  $directory, $name )
+    {
+        if (!is_dir($directory)) {
+            if (false === @mkdir($directory, 0777, true)) {
+                throw new FileException(sprintf('Unable to create the "%s" directory', $directory));
+            }
+        } elseif (!is_writable($directory)) {
+            throw new FileException(sprintf('Unable to write in the "%s" directory', $directory));
+        }
+
+        $target = $directory.DIRECTORY_SEPARATOR. basename($name);
+
+        if (!@copy($source, $target)) {
+            $error = error_get_last();
+            throw new FileException(sprintf('Could not copy the file "%s" to "%s" (%s)', $source, $target, strip_tags($error['message'])));
+        }
+
+        @chmod($target, 0666 & ~umask());
+
+        return new File($target);
+    }
+
     /**
      * {@inheritDoc}
      * File may be \Symfony\Component\HttpFoundation\File\File or \Symfony\Component\HttpFoundation\File\UploadedFile
@@ -71,7 +99,10 @@ class FileSystemStorage implements FileStorageInterface
 
                 list ($directoryName, $path, $fileName) = $mapping->resolveFileCollision($origName,  $originalName, ++$try);
             }
-            $file->move($directoryName, $fileName);
+
+            if ($file instanceof UploadedFile)  $file->move($directoryName, $fileName);
+            else  $this->copyFile ($file->getPathname(), $directoryName,$fileName);
+
         }
 
 
