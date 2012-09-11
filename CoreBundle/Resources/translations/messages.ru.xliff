@@ -245,6 +245,12 @@
                 <target>Просмотр на сайте</target>
             </trans-unit>
 
+            <trans-unit id="Annotation">
+                <source>Annotation</source>
+                <target>Аннотация</target>
+            </trans-unit>
+
+
         </body>
     </file>
 </xliff>

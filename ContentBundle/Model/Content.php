@@ -263,7 +263,7 @@ abstract class Content implements ContentInterface
     protected function checkSlug()
     {
         if ($this->slug === null)
-            $this->slug = \Iphp\CoreBundle\Util\Translit :: translit($this->getTitle());
+            $this->slug = substr (\Iphp\CoreBundle\Util\Translit :: translit($this->getTitle()),0,50);
     }
 
     /**
