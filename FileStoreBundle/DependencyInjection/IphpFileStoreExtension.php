@@ -64,6 +64,8 @@ class IphpFileStoreExtension extends Extension
 
 
         $container->setParameter('iphp.filestore.datastorage.class', $this->adapterMap[$driver]);
+
+        //Add tag orm or mongodb to listener service
         $container->getDefinition('iphp.filestore.event_listener.uploader')->addTag($this->tagMap[$driver]);
     }
 }

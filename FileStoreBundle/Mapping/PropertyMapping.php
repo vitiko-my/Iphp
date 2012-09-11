@@ -6,6 +6,7 @@ use Iphp\FileStoreBundle\Naming\NamerInterface;
 use Iphp\FileStoreBundle\Naming\DirectoryNamerInterface;
 
 use Symfony\Component\HttpFoundation\File\File;
+
 /**
  * PropertyMapping.
  *
@@ -37,18 +38,6 @@ class PropertyMapping
      * @var \ReflectionProperty $fileNameProperty
      */
     protected $fileNameProperty;
-
-
-    /**
-     * @var  \Closure
-     */
-    protected $directoryNamer;
-
-    /**
-     * @var array
-     */
-    protected $directoryNamerParams;
-
 
     /**
      * @var string $mappingName
@@ -101,10 +90,7 @@ class PropertyMapping
     public function useFileNamer($fileName)
     {
         if ($this->hasNamer()) {
-
-
-            foreach($this->config['namer'] as $method => $namer)
-            {
+            foreach ($this->config['namer'] as $method => $namer) {
                 $fileName = call_user_func(
                     array($this->container->get($namer['service']), $method . 'Rename'),
                     $this,
@@ -128,18 +114,49 @@ class PropertyMapping
     }
 
     /**
-     * Gets the configured upload directory.
+     * Determines if the mapping has a custom directory namer configured.
      *
-     * @return string The configured upload directory.
+     * @return bool True if has directory namer, false otherwise.
+     */
+    public function hasDirectoryNamer()
+    {
+        return isset($this->config['directory_namer']) && $this->config['directory_namer'];
+    }
+
+    /**
+     * create subdirectory name based on chain of directory namers
+     *
+     * @return array directory name and web path to file
      */
     public function useDirectoryNamer($fileName, $clientOriginalName)
     {
-        $subPath = $this->hasDirectoryNamer() ?
-            call_user_func($this->directoryNamer, $this, $fileName, $clientOriginalName) :'';
 
-        return array ($this->getUploadDir().$subPath,
+        $path = '';
 
-            $this->getUploadPath() ? $this->getUploadPath().$subPath.'/'.urlencode($fileName) : '');
+
+        if ($this->hasDirectoryNamer()) {
+            foreach ($this->config['directory_namer'] as $method => $namer) {
+
+                $replaceMode = $method == 'replace' ||
+                    (isset($namer['params']['replace']) && $namer['params']['replace']);
+
+
+                $subPath = call_user_func(
+                    array($this->container->get($namer['service']), $method . 'Rename'),
+                    $this,
+                    $replaceMode ? $path : $fileName,
+                    isset($namer['params']) ? $namer['params'] : array());
+
+
+                if ($replaceMode) $path = $subPath;
+                else $path .= ($subPath ? '/' : '') . $subPath;
+            }
+
+        }
+
+        return array(
+            $this->getUploadDir() . $path,
+            $this->getUploadPath() ? $this->getUploadPath() . $path . '/' . urlencode($fileName) : '');
     }
 
 
@@ -152,20 +169,19 @@ class PropertyMapping
     public function resolveFileCollision($fileName, $clientOriginalName, $attempt = 1)
     {
 
-      if ($this->hasNamer())
-      {
-          $firstNamer =current ($this->config['namer']);
+        if ($this->hasNamer()) {
+            $firstNamer = current($this->config['namer']);
 
-          $newFileName = call_user_func(
-              array($this->container->get( $firstNamer['service']), 'resolveCollision'), $fileName, $attempt);
+            $newFileName = call_user_func(
+                array($this->container->get($firstNamer['service']), 'resolveCollision'), $fileName, $attempt);
 
-          //return dirName and path
-          $resolveData = $this->useDirectoryNamer($newFileName, $clientOriginalName);
-          $resolveData[] = $newFileName ;
-          return $resolveData;
-      }
+            //return dirName and path
+            $resolveData = $this->useDirectoryNamer($newFileName, $clientOriginalName);
+            $resolveData[] = $newFileName;
+            return $resolveData;
+        }
 
-        throw new \Exception ('Filename resolving collision not supported (namer is empty).Duplicate filename '.$fileName);
+        throw new \Exception ('Filename resolving collision not supported (namer is empty).Duplicate filename ' . $fileName);
     }
 
 
@@ -194,37 +210,6 @@ class PropertyMapping
     }
 
 
-
-
-    /**
-     * Gets the configured directory namer.
-     *
-     * @return null|DirectoryNamerInterface The directory namer.
-     */
-    /*    public function getDirectoryNamer()
-    {
-        return $this->directoryNamer;
-    }*/
-
-    /**
-     * Sets the directory namer.
-     */
-    public function setDirectoryNamer($namer, $method, $params)
-    {
-        $this->directoryNamer = array($namer, $method . 'Rename');
-        $this->directoryNamerParams = $params;
-    }
-
-    /**
-     * Determines if the mapping has a custom directory namer configured.
-     *
-     * @return bool True if has directory namer, false otherwise.
-     */
-    public function hasDirectoryNamer()
-    {
-        return null !== $this->directoryNamer;
-    }
-
     /**
      * Sets the configured configuration mapping.
      *
@@ -233,8 +218,6 @@ class PropertyMapping
     public function setConfig(array $config)
     {
         $this->config = $config;
-
-
     }
 
     /**
@@ -277,8 +260,7 @@ class PropertyMapping
     }
 
 
-
-    public function setFilePropertyValue( $file)
+    public function setFilePropertyValue($file)
     {
         return $this->property->setValue($this->obj, $file);
     }
@@ -291,28 +273,8 @@ class PropertyMapping
 
     public function getFileDataPropertyValue()
     {
-        return  $this->fileNameProperty->getValue($this->obj);
+        return $this->fileNameProperty->getValue($this->obj);
     }
-
-
-    public function needPostPersistResaveFile()
-    {
-        if (!$this->hasNamer()) return false;
-        $fileData = $this->getFileDataPropertyValue();
-
-        if ($fileData && file_exists($fileData['dir'].'/'.$fileData['fileName']))
-        {
-          return new File ($fileData['dir'].'/'.$fileData['fileName']);
-        }
-
-        return false;
-    }
-
-
-
-
-
-
 
 
     /**
@@ -343,30 +305,10 @@ class PropertyMapping
         return $this->config['overwrite_duplicates'];
     }
 
-    /**
-     * Determines if the uploadable field should be injected with a
-     * Symfony\Component\HttpFoundation\File\File instance when
-     * the object is loaded from the datastore.
-     *
-     * @return bool True if the field should be injected, false otherwise.
-     */
-    public function getInjectOnLoad()
-    {
-        return $this->config['inject_on_load'];
-    }
-
-    /**
-     * @return array
-     */
-    public function getDirectoryNamerParams()
-    {
-        return $this->directoryNamerParams;
-    }
 
     public function getObj()
     {
         return $this->obj;
     }
-
 
 }

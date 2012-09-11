@@ -25,8 +25,6 @@ class Configuration implements ConfigurationInterface
         $root
             ->children()
                 ->scalarNode('db_driver')->isRequired()->end()
-                //->scalarNode('web_dir_name')->defaultValue('web')->end()
-               // ->scalarNode('twig')->defaultTrue()->end()
 
                 ->arrayNode('mappings')
                     ->useAttributeAsKey('id')
@@ -34,8 +32,10 @@ class Configuration implements ConfigurationInterface
                         ->children()
                             ->scalarNode('upload_dir')->end()
                             ->scalarNode('upload_path')->end()
-                         /* can differ from iphp.web_dir if use capifony shared folders */
-                            ->scalarNode ('base_web_dir') ->end()
+                            ->scalarNode('delete_on_remove')->defaultTrue()->end()
+                            ->scalarNode('overwrite_duplicates')->defaultFalse()->end()
+
+
                             ->arrayNode('namer')
                                ->treatFalseLike(array ())
                                ->treatNullLike(array ('translit' => array('service' => 'iphp.filestore.namer.default')))
@@ -50,34 +50,28 @@ class Configuration implements ConfigurationInterface
                                         ->useAttributeAsKey('name')
                                         ->prototype('scalar')->end()
                                      ->end()
-                           //    ->treatFalseLike(array ('service' => null, 'method' => null))
-                            //   ->addDefaultsIfNotSet()
-
-                             /*  ->children()
-
-
-
-                               ->end()*/
                                  ->end()
                                ->end()
                             ->end()
 
-                            ->arrayNode('directory_namer')
-                                ->treatFalseLike(array ('service' => null, 'method' => null))
-                                ->addDefaultsIfNotSet()
-                                ->children()
-                                    ->scalarNode('service')->defaultValue('iphp.filestore.directory_namer.default')->end()
-                                    ->scalarNode('method')->defaultValue("")->end()
-                                    ->arrayNode('params')
-                                         ->useAttributeAsKey('name')
-                                         ->prototype('scalar')->end()
-                                    ->end()
-                                ->end()
 
+
+                           ->arrayNode('directory_namer')
+
+                             ->useAttributeAsKey('id')
+                             ->prototype('array')
+
+                               ->children()
+
+                                  ->scalarNode('service')->defaultValue('iphp.filestore.directory_namer.default')->end()
+                                  ->arrayNode('params')
+                                    ->useAttributeAsKey('name')
+                                    ->prototype('scalar')->end()
+                                  ->end()
+
+                               ->end()
+                             ->end()
                             ->end()
-
-                            ->scalarNode('delete_on_remove')->defaultTrue()->end()
-                            ->scalarNode('overwrite_duplicates')->defaultFalse()->end()
 
                         ->end()
                     ->end()

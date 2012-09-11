@@ -157,14 +157,6 @@ class PropertyMappingFactory
         $mapping->setMappingName($field->getMapping());
 
 
-        if ($config['directory_namer']['service'] && $config['directory_namer']['method']) {
-            $mapping->setDirectoryNamer(
-                $this->container->get($config['directory_namer']['service']),
-                $config['directory_namer']['method'],
-                $config['directory_namer']['params']);
-        }
-
-
         return $mapping;
     }
 }

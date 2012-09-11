@@ -1,14 +1,13 @@
 <?php
 
 /**
- *  @author Vitiko <vitiko@mail.ru>
+ * @author Vitiko <vitiko@mail.ru>
  */
 namespace Iphp\FileStoreBundle\Naming;
 use Iphp\FileStoreBundle\Mapping\PropertyMapping;
 
 class DefaultNamer
 {
-
 
 
     /**
@@ -72,29 +71,57 @@ class DefaultNamer
 
     function propertyPrefixRename(PropertyMapping $propertyMapping, $name, $params)
     {
+        $fieldValue = $this->getFieldValueByParam($propertyMapping, $params);
+        $delimiter = isset($params['delimiter']) && $params['delimiter'] ? $params['delimiter'] : '-';
 
+        return $fieldValue . $delimiter . $name;
+    }
+
+    protected function getFieldValueByParam(PropertyMapping $propertyMapping, $params)
+    {
         $obj = $propertyMapping->getObj();
 
-        $field = isset($params['field']) && $params['field'] ? $params['field'] : 'id';
-        $delimiter= isset($params['delimiter']) && $params['delimiter'] ? $params['delimiter'] : '-';
-        $fieldValue = $obj->{'get' . ucfirst($field)}();
-
+        $fieldValue = '';
+        if (isset($params['use_field_name']) && $params['use_field_name']) {
+            $fieldValue = $propertyMapping->getFileDataPropertyName();
+        } else {
+            $field = isset($params['field']) && $params['field'] ? $params['field'] : 'id';
+            $fieldValue = $obj->{'get' . ucfirst($field)}();
+        }
 
         if (!$fieldValue) $fieldValue = $obj->getId();
-        return $fieldValue. $delimiter. $name;
+        return $fieldValue;
     }
+
+
+    function propertyPostfixRename(PropertyMapping $propertyMapping, $name, $params)
+    {
+        $fieldValue = $this->getFieldValueByParam($propertyMapping, $params);
+        $delimiter = isset($params['delimiter']) && $params['delimiter'] ? $params['delimiter'] : '-';
+
+        $ppos = strrpos($name, '.');
+        return substr($name, 0, $ppos) .  $delimiter . $fieldValue. '' . substr($name, $ppos);
+
+    }
+
+
+    function replaceRename (PropertyMapping $propertyMapping, $name, $params)
+    {
+       return strtr ($name, $params);
+    }
+
 
 
 
     // Разрешение коллизий с одинаковыми названиями файлов
     function resolveCollision($name, $attempt = 1)
     {
-       $addition = $attempt;
-       if ($attempt > 10) $addition = date ('Y_m_d_H_i_s');
+        $addition = $attempt;
+        if ($attempt > 10) $addition = date('Y_m_d_H_i_s');
 
-       $ppos = strrpos ($name,'.');
+        $ppos = strrpos($name, '.');
 
-        return substr ($name, 0, $ppos).'_'.$addition.''.substr ($name, $ppos);
+        return substr($name, 0, $ppos) . '_' . $addition . '' . substr($name, $ppos);
     }
 
 

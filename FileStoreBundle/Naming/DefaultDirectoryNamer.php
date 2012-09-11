@@ -12,10 +12,9 @@ class DefaultDirectoryNamer
     /**
      *
      */
-    function propertyRename(PropertyMapping $propertyMapping, $fileName, $clientOriginalName)
+    function propertyRename(PropertyMapping $propertyMapping, $fileName, $params)
     {
 
-        $params = $propertyMapping->getDirectoryNamerParams();
         $obj = $propertyMapping->getObj();
         $field = isset($params['field']) && $params['field'] ? $params['field'] : 'id';
 
@@ -32,13 +31,26 @@ class DefaultDirectoryNamer
             $path .= ($path ? '/' : '') . $fieldValue;
         }
 
-        return '/' . $path;
+        return $path;
     }
 
 
-    function dateRename(PropertyMapping $propertyMapping, $fileName, $clientOriginalName)
+
+    function entityNameRename(PropertyMapping $propertyMapping, $fileName, $params)
     {
-        $params = $propertyMapping->getDirectoryNamerParams();
+        return implode ('',array_slice( explode ('\\',get_class ($propertyMapping->getObj())),-1));
+    }
+
+
+    function replaceRename (PropertyMapping $propertyMapping, $name, $params)
+    {
+        return strtr ($name, $params);
+    }
+
+
+
+    function dateRename(PropertyMapping $propertyMapping, $fileName, $params)
+    {
         $obj = $propertyMapping->getObj();
 
         $field = isset($params['field']) && $params['field'] ? $params['field'] : 'id';
@@ -53,7 +65,7 @@ class DefaultDirectoryNamer
 
         $dirName = date ($tpl,  $date );
 
-        return  '/' . $dirName;
+        return  $dirName;
     }
 
 
