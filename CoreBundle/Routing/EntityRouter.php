@@ -17,45 +17,39 @@ class EntityRouter
 
     public function __construct(Router $router)
     {
-      $this->router = $router;
+        $this->router = $router;
     }
 
 
-
-    public function generateEntityActionPath ($entity, $action = 'view', $params = array())
+    public function generateEntityActionPath($entity, $action = 'view', $params = array())
     {
+        if ($action == 'view' && !$params) {
+            $params = array('id' => method_exists($entity, 'getSlug') ? $entity->getSlug() : $entity->getId());
+        }
 
-       // print get_class ($this->router);
+        $routeName = $this->routeNameForEntityAction($entity, $action);
+        $path = 'route-name-not-found-' . $routeName;
 
-       // $this->generate($name
-       // print get_class ($entity);
+        try {
+            $path = $this->router->generate($routeName, $params);
+        } catch (\Exception $e) {
+        }
 
-       if ($action == 'view' && !$params)
-       {
-           $params =  array ('id' => method_exists($entity, 'getSlug') ? $entity->getSlug() : $entity->getId());
-       }
-
-
-       $path = $this->router->generate ($this->routeNameForEntityAction ($entity, $action), $params);
-
-       return $path;
+        return $path;
     }
 
-    public function routeNameForEntityAction ($entity, $action,Rubric $rubric = null)
+    public function routeNameForEntityAction($entity, $action, Rubric $rubric = null)
     {
 
-        if (is_object($entity))
-        {
-         $entityPart = str_replace ('\\','',str_replace ('Entity\\','',get_class ($entity)));
-        }
-        else
-        {
-          //Todo: Хак, нужно использовать kernel->getBundle(..)->getNamespace() но доступа к kernel пока нет
-          //list ($bundleName, $entityName) = explode (':',$entity);
+        if (is_object($entity)) {
+            $entityPart = str_replace('\\', '', str_replace('Entity\\', '', get_class($entity)));
+        } else {
+            //Todo: Хак, нужно использовать kernel->getBundle(..)->getNamespace() но доступа к kernel пока нет
+            //list ($bundleName, $entityName) = explode (':',$entity);
 
-          $entityPart  = str_replace (':','',$entity);
+            $entityPart = str_replace(':', '', $entity);
         }
 
-        return $entityPart .'_'.lcfirst($action);
+        return $entityPart . '_' . lcfirst($action);
     }
 }

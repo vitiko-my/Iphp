@@ -27,6 +27,7 @@ class ContentController extends RubricAwareController
     {
         $content = $this->getRubricIndex($this->getCurrentRubric());
 
+        if (!$content->getEnabled()) $content = null;
         //if (!$content) throw $this->createNotFoundException('Индексный материал не найден');
         return $this->render('IphpContentBundle::content.html.twig',
             array('content' => $content));

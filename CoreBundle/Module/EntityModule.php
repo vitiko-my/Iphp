@@ -20,9 +20,15 @@ abstract class EntityModule extends Module
         'view' => '/{id}/'
     );
 
-    public function setEntityName($entityName)
+    protected function setEntityName($entityName)
     {
         $this->entityName = $entityName;
+        return $this;
+    }
+
+    protected function addEntityAction($name, $path = null)
+    {
+        $this->entityActions[$name] = $path ? $path : '/' . $name.'/';
         return $this;
     }
 
@@ -31,24 +37,14 @@ abstract class EntityModule extends Module
         return $this->entityName;
     }
 
+
     protected function registerRoutes()
     {
-
-        // list ($bundleName, $entityName) = explode (':',  $this->entityName);
-        //  if (!$bundleName) return false;
-
-
-        foreach ($this->entityActions as $action => $pattern)
-        {
+        foreach ($this->entityActions as $action => $pattern) {
             $routeName = $this->moduleManager->getEntityRouter()->routeNameForEntityAction($this->entityName, $action);
-            $controllerName =  $this->entityName.':'.$action;
-            //print '-' . $routeName;
-
-            $this->addRoute($routeName, $pattern, array('_controller' =>    $controllerName ));
+            $controllerName = $this->entityName . ':' . $action;
+            $this->addRoute($routeName, $pattern, array('_controller' => $controllerName));
         }
-        //forea ()
-
-        //exit();
     }
 
     public function setEntityActions($entityActions)

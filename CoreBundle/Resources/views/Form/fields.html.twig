@@ -7,13 +7,12 @@
 
     <input type="checkbox" id="blank_{{ id }}" {{ is_blank and not is_new  ? 'checked':''}}
            onchange="
-                   $('#{{ id }}').toggle ( !this.checked ).attr ('required', this.checked ? false : {{ required}} );
-                   if (this.checked) $('#{{ id }}').val('')
+                   $('#{{ id }}').toggle ( !this.checked ).attr ('required', this.checked ? false : {{ required ? 'required': 'false' }} );
+                   if (this.checked) $('#{{ id }}').val('');
 
                    {% if source_field %}
                    $('#usesource_span_{{ id }}').toggle ( !this.checked );
-                   {% endif %}
-                   ">
+                   {% endif %}">
 
     <label for="blank_{{ id }}" style="display:inline;">{{ blank_title }}</label>
 
@@ -23,8 +22,7 @@
     {% if source_field  %}
     <span id="usesource_span_{{ id }}" {{ is_blank and not is_new  ? 'style="display:none"' : ''}}>
     <input type="checkbox" id="usesource_{{ id }}" {{ is_new  ? 'checked':''}}
-           onchange="if (this.checked) onlineTranslit_{{ id}}();"
-}>
+           onchange="if (this.checked) onlineTranslit_{{ id}}();">
 
     <label for="usesource_{{ id }}" style="display:inline;">
         {{ usesource_title ? usesource_title : "Использовать поле "~source_field }}

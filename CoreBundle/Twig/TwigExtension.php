@@ -48,12 +48,11 @@ class TwigExtension extends \Twig_Extension
             'sonata_block_by_name' => new \Twig_Function_Method($this, 'sonataBlockByName'),
 
             'entitypath' => new \Twig_Function_Method($this, 'getEntityPath'),
+            'entityaction' => new \Twig_Function_Method($this, 'getEntityActionPath'),
+
             'inlineedit' => new \Twig_Function_Method($this, 'getInlineEditStr', array('is_safe' => array('html'))),
+
             'rpath' => new \Twig_Function_Method($this, 'getRubricPath'),
-
-            //Заменены entitypath
-
-            //'cpath' => new \Twig_Function_Method($this, 'getContentPath'),
 
         );
     }
@@ -72,26 +71,13 @@ class TwigExtension extends \Twig_Extension
 
     public function getEntityPath($entity, $arg1 = null, $arg2 = null, $arg3 = null)
     {
-
-        /*        $args = func_get_args();
-
-        print_r ($args);
-        print '--';
-        exit();*/
-
         if (!method_exists($entity, 'getSitePath')) {
             return 'method ' . get_class($entity) . '->getSitePath() not defined';
             throw new \Exception ('method ' . get_class($entity) . '->getSitePath() not defined');
         }
 
-
-        //  print get_class ($entity);
-
         $methodData = new \ReflectionMethod($entity, 'getSitePath');
         $parameters = $methodData->getParameters();
-
-        // print  sizeof($parameters);
-
 
         $args = array($arg1, $arg2, $arg3);
         if (sizeof($parameters) > 0 && $parameters[0]->getClass() &&
@@ -113,6 +99,11 @@ class TwigExtension extends \Twig_Extension
         return $path;
 
 
+    }
+
+    public function getEntityActionPath ($entityName, $action = 'index')
+    {
+      return  $this->entityRouter->generateEntityActionPath ($entityName, $action);
     }
 
 
