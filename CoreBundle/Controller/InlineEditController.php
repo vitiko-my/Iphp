@@ -6,7 +6,6 @@
  */
 namespace Iphp\CoreBundle\Controller;
 
-use Irr\ProjectBundle\Form\InlineEdit\ProjectType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -26,28 +25,43 @@ class InlineEditController extends Controller
 
 
         $entity = $this->getDoctrine()->getRepository($entityClassPath)->findOneById($entityId);
-        $form = $this->createForm(new ProjectType(), $entity);
+
+        if (!$entity)
+            return $this->render('IphpCoreBundle:InlineEdit:form.html.twig', array());
+
+        $formClass =  $this->getDefaultInlineFormClass($entity);
+
+        if (!class_exists ($formClass))
+        {
+            throw new \Exception ('class '.$formClass.' not found');
+        }
+        $form = $this->createForm(new $formClass (), $entity);
 
         if ($request->getMethod() == 'POST') {
-            $form->bindRequest($request);
+            $form->bind($request);
 
 
             $this->getDoctrine()->getManager()->persist($entity);
             $this->getDoctrine()->getManager()->flush();
 
             return $this->render('IphpCoreBundle:InlineEdit:form-finishedit.html.twig', array(
-                            /*'form' => $form->createView(),
-                            'entityClassPath' => $entityClassPath,
-                            'entityId' => $entityId*/
-                        ));
-        }
-        else
-        {
+                /*'form' => $form->createView(),
+              'entityClassPath' => $entityClassPath,
+              'entityId' => $entityId*/
+            ));
+        } else {
             return $this->render('IphpCoreBundle:InlineEdit:form.html.twig', array(
                 'form' => $form->createView(),
                 'entityClassPath' => $entityClassPath,
                 'entityId' => $entityId
             ));
         }
+    }
+
+
+    protected function getDefaultInlineFormClass($entity)
+    {
+
+        return str_replace ('\\Entity\\','\\Form\\InlineEdit\\',get_class ($entity)).'Type';
     }
 }
