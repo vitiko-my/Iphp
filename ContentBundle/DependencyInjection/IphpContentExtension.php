@@ -81,7 +81,7 @@ class IphpContentExtension extends Extension
                     'persist',
                 ),
                 'mappedBy' => NULL,
-                'inversedBy' => NULL,
+                'inversedBy' => 'contents',
                 'joinColumns' => array(
                     array(
                         'name' => 'rubric_id',
@@ -163,7 +163,7 @@ class IphpContentExtension extends Extension
                     'persist',
                 ),
                 'mappedBy' => NULL,
-                'inversedBy' => NULL,
+                'inversedBy' => 'files',
                 'joinColumns' => array(
                     array(
                         'name' => 'content_id',
@@ -202,7 +202,7 @@ class IphpContentExtension extends Extension
                     'persist',
                 ),
                 'mappedBy' => NULL,
-                'inversedBy' => NULL,
+                'inversedBy' => 'links',
                 'joinColumns' => array(
                     array(
                         'name' => 'content_id',

@@ -162,7 +162,7 @@ class IphpCoreExtension extends Extension
             'cascade' => array(
             ),
             'mappedBy' => NULL,
-            'inversedBy' => NULL,
+            'inversedBy' => 'children',
             'joinColumns' => array(
                 array(
                     'name' => 'parent_id',
@@ -180,7 +180,7 @@ class IphpCoreExtension extends Extension
                 'persist',
             ),
             'mappedBy' => NULL,
-            'inversedBy' => NULL,
+            'inversedBy' => 'blocks',
             'joinColumns' => array(
                 array(
                     'name' => 'rubric_id',
