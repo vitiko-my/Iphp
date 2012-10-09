@@ -26,18 +26,24 @@ class ContentQueryBuilder extends BaseEntityQueryBuilder
 
     function fromRubric($rubric)
     {
-        if (is_int($rubric)) {
-            $this->fromRubricId = $rubric;
-        }
-        else if ($rubric instanceof \Application\Iphp\CoreBundle\Entity\Rubric) {
+        if ($rubric instanceof \Application\Iphp\CoreBundle\Entity\Rubric) {
             $this->fromRubric = $rubric;
 
+        } else  {
+            $this->fromRubricId = $rubric;
+            if (!is_integer($this->fromRubricId))
+            {
+                $this->prepareFromRubric();
+                $rubric = $this->fromRubric;
+            }
         }
-        else throw new \InvalidArgumentException (
-            'Method ContentQueryBuilder::fromRubric accepts integer or \Application\Iphp\CoreBundle\Entity\Rubric object');
+        // else throw new \InvalidArgumentException (
+        //     'Method ContentQueryBuilder::fromRubric accepts integer or \Application\Iphp\CoreBundle\Entity\Rubric object');
 
-        $this->orWhere($this->currentAlias.'.rubric = :fromRubric')->setParameter('fromRubric', $rubric);
 
+         $this->orWhere($this->currentAlias . '.rubric = :fromRubric')->setParameter('fromRubric', $rubric);
+        /*else
+          $this->join('c.rubric', 'r')->andWhere('r.fullPath = :fromRubricFullPath')->setParameter('fromRubricFullPath',$rubric);*/
 
         return $this;
     }
@@ -54,25 +60,24 @@ class ContentQueryBuilder extends BaseEntityQueryBuilder
             $children = $this->getRubricRepository()->children($this->fromRubric);
 
             foreach ($children as $pos => $child)
-                $this->orWhere($this->currentAlias.'.rubric = :fromChild' . $pos)->setParameter('fromChild' . $pos, $child);
+                $this->orWhere($this->currentAlias . '.rubric = :fromChild' . $pos)->setParameter('fromChild' . $pos, $child);
         }
 
         return $this;
     }
 
 
-/*    function whereSlug($slug)
-    {
-        $this->andWhere('c.slug = :slug')->setParameter('slug', $slug);
-        return $this;
-    }*/
 
 
     protected function prepareFromRubric()
     {
         if ($this->fromRubric || !$this->fromRubricId) return;
 
-        $this->fromRubric = $this->getRubricRepository()->find($this->fromRubricId);
+
+
+        $this->fromRubric = is_integer($this->fromRubricId) ?
+            $this->getRubricRepository()->find($this->fromRubricId) :
+            $this->getRubricRepository()->findOneByFullPath($this->fromRubricId);
     }
 
 
@@ -93,9 +98,9 @@ class ContentQueryBuilder extends BaseEntityQueryBuilder
 
     protected function getSearchFields($params = array())
     {
-        return array($this->currentAlias.'.title',
-                     $this->currentAlias.'.abstract',
-                     $this->currentAlias.'.content');
+        return array($this->currentAlias . '.title',
+            $this->currentAlias . '.abstract',
+            $this->currentAlias . '.content');
     }
 
     public function search($searchStr)
@@ -104,9 +109,9 @@ class ContentQueryBuilder extends BaseEntityQueryBuilder
         $searchExpr = $this->expr()->orx();
 
         foreach ($this->getSearchFields() as $field)
-            $searchExpr->add ($this->expr()->like($field, $this->expr()->literal('%' . $searchStr . '%')));
+            $searchExpr->add($this->expr()->like($field, $this->expr()->literal('%' . $searchStr . '%')));
 
-        $this->andWhere( $searchExpr);
+        $this->andWhere($searchExpr);
         return $this;
     }
 }

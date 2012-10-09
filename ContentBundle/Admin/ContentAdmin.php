@@ -162,7 +162,8 @@ array('edit' => 'list',  'link_parameters' => array('context' => 'contentimage')
             }
         ))
             ->add('title')
-            ->add('enabled')//     ->add('date')// ->add('author')
+            ->add('enabled')
+            ->add ('id')//     ->add('date')// ->add('author')
         ;
     }
 
