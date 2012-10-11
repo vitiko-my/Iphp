@@ -14,6 +14,8 @@ abstract class Content implements ContentInterface
 
     protected $slug = null;
 
+    protected $slugPrefix;
+
     protected $abstract;
 
     protected $content;
@@ -263,7 +265,9 @@ abstract class Content implements ContentInterface
     protected function checkSlug()
     {
         if ($this->slug === null)
-            $this->slug = substr (\Iphp\CoreBundle\Util\Translit :: translit($this->getTitle()),0,50);
+            $this->slug = ($this->getSlugPrefix() ? $this->getSlugPrefix().'-' : '').
+                   \Iphp\CoreBundle\Util\Slugify::slugifyPreserveWords($this->getTitle(),50,70);
+                   //substr (\Iphp\CoreBundle\Util\Translit :: translit($this->getTitle()),0,50);
     }
 
     /**
@@ -473,6 +477,17 @@ abstract class Content implements ContentInterface
     public function getRedirectUrl()
     {
         return $this->redirectUrl;
+    }
+
+    public function setSlugPrefix($slugPrefix)
+    {
+        $this->slugPrefix = $slugPrefix;
+        return $this;
+    }
+
+    public function getSlugPrefix()
+    {
+        return $this->slugPrefix;
     }
 
 
