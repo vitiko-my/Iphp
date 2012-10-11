@@ -6,20 +6,47 @@ class Slugify
 {
 
 
-    static function slugifyPreserveWords($str, $minLen, $maxLen)
+    static function slugifyPreserveWords($str, $maxLen)
     {
+        $str = Translit::translit($str);
         if (strlen($str) >= $maxLen) {
-            $break = $minLen;
+            $words = explode ('-', $str);
 
-            for ($i = $maxLen; $i > $minLen; $i--) {
-                if ($str[$i] == ' ' || $str[$i] == "\n") {
-                    $break = $i;
-                    break;
+            //print_r ($words);
+
+            do {
+                $len = 0;
+                $useWords = sizeof($words);
+                $ok = true;
+                foreach ($words as $p => $word) {
+                   // print "\n".$word;
+                    $len += mb_strlen($word)+1;
+                  //  print ' '.$len;
+                    if ($len > $maxLen)
+                    {
+                        $useWords = $p;
+                      //  print '--'.$useWords;
+                        break;
+                    }
+
+                }
+
+                if ($useWords > 1 &&  strlen($words[$useWords-1]) < 2)
+                {
+                    unset($words[$useWords-1]);
+                    $words = array_values ($words);
+                    $ok = false;
                 }
             }
+            while (!$ok);
 
-            $str =  substr($str, 0, $break);
+           // print "\n".$str.' - use words '.$useWords.', len=';
+
+            $str = $useWords > 0 ? implode ('-', array_slice ($words,0,$useWords)) : substr ($str,0, $maxLen);
+
+           // print "\n".$str.'('.strlen($str).')';
+           // exit();
         }
-        return Translit::translit($str);
+        return $str;
     }
 }
