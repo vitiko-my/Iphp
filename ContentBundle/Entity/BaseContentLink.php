@@ -31,6 +31,10 @@ abstract class BaseContentLink
      */
     protected $date;
 
+    /**
+     * @var \Application\Iphp\ContentBundle\Entity\Content
+     */
+    protected $linkContent;
 
     /**
      * @var \Application\Iphp\ContentBundle\Entity\Content
@@ -132,6 +136,23 @@ abstract class BaseContentLink
     public function getPos()
     {
         return $this->pos;
+    }
+
+    /**
+     * @param \Application\Iphp\ContentBundle\Entity\Content $linkContent
+     */
+    public function setLinkContent($linkContent)
+    {
+        $this->linkContent = $linkContent;
+        return $this;
+    }
+
+    /**
+     * @return \Application\Iphp\ContentBundle\Entity\Content
+     */
+    public function getLinkContent()
+    {
+        return $this->linkContent;
     }
 
 

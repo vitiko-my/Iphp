@@ -266,7 +266,7 @@ abstract class Content implements ContentInterface
     {
         if ($this->slug === null)
             $this->slug = ($this->getSlugPrefix() ? $this->getSlugPrefix().'-' : '').
-                   \Iphp\CoreBundle\Util\Slugify::slugifyPreserveWords($this->getTitle(),60);
+                   \Iphp\CoreBundle\Util\Slugify::slugifyPreserveWords($this->getTitle(),45);
                    //substr (\Iphp\CoreBundle\Util\Translit :: translit($this->getTitle()),0,50);
     }
 

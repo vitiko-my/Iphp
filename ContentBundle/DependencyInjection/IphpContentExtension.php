@@ -213,6 +213,27 @@ class IphpContentExtension extends Extension
                 // 'orphanRemoval' => false,
             ));
 
+
+
+            $collector->addAssociation($config['class']['contentlink'], 'mapManyToOne', array(
+                'fieldName' => 'linkContent',
+                'targetEntity' => $config['class']['content'],
+                'cascade' => array(
+                    'persist',
+                ),
+                'mappedBy' => NULL,
+                'inversedBy' => NULL,
+                'joinColumns' => array(
+                    array(
+                        'name' => 'link_content_id',
+                        'referencedColumnName' => 'id',
+                        'onDelete' => 'SET NULL',
+                    ),
+                ),
+                // 'orphanRemoval' => false,
+            ));
+
+
         }
     }
 
