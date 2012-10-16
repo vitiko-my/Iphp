@@ -40,9 +40,10 @@ class ContentAnnouncesBlockService extends ContentBlockService
         return $this->getContents(function ($qb) use ($settings)
         {
             $qb->fromRubric($settings['rubric_id'])
-                    ->withSubrubrics( (bool) $settings['withSubrubrics']);
+                ->withSubrubrics((bool)$settings['withSubrubrics'])
+                ->orderBy('c.date', 'DESC');
 
-            if ($settings['entriesNum']) $qb->setMaxResults ($settings['entriesNum']);
+            if ($settings['entriesNum']) $qb->setMaxResults($settings['entriesNum']);
         });
     }
 
